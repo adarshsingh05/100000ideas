@@ -1,0 +1,561 @@
+[
+  {
+    "id": 1,
+    "title": "AI-Powered Personal Finance App",
+    "description": "Smart budgeting app that uses machine learning to provide personalized financial advice and investment recommendations for modern users.",
+    "icon": "Smartphone",
+    "category": "Technology",
+    "investment": "₹1.2Cr",
+    "difficulty": "Hard",
+    "rating": 4.7,
+    "tags": ["AI", "Finance", "Mobile"],
+    "metrics": [8.5, 9.2, 8.8],
+    "timeToMarket": "8 months",
+    "revenue": "High recurring revenue potential",
+    "color": "bg-blue-50 border-blue-200",
+    "detailedDescription": "An intelligent personal finance application that leverages artificial intelligence and machine learning algorithms to provide users with personalized financial insights, automated budgeting, and smart investment recommendations. The app analyzes spending patterns, income trends, and financial goals to offer tailored advice.",
+    "marketAnalysis": {
+      "marketSize": "₹50,000 Cr",
+      "growthRate": "25% annually",
+      "competition": "Moderate",
+      "targetAudience": "Tech-savvy millennials and Gen Z (25-40 years)"
+    },
+    "implementation": {
+      "phase1": "MVP development with basic AI features (3 months)",
+      "phase2": "Advanced ML algorithms and user onboarding (2 months)",
+      "phase3": "Premium features and monetization (3 months)"
+    },
+    "revenueModel": {
+      "freemium": "Basic features free, premium at ₹299/month",
+      "subscription": "₹299-999/month for advanced features",
+      "commission": "1-2% on investment recommendations"
+    },
+    "challenges": [
+      "Regulatory compliance with financial authorities",
+      "Building trust in AI-driven financial advice",
+      "Competition from established players like Zerodha, Paytm Money"
+    ],
+    "successFactors": [
+      "Strong AI/ML team with financial domain expertise",
+      "Partnerships with banks and financial institutions",
+      "Focus on user privacy and data security",
+      "Continuous algorithm improvement based on user feedback"
+    ],
+    "teamRequirements": [
+      "AI/ML Engineers (3-4)",
+      "Mobile App Developers (2-3)",
+      "Financial Advisors (2)",
+      "UI/UX Designers (2)",
+      "Product Manager (1)"
+    ],
+    "funding": {
+      "seed": "₹50L - ₹1Cr",
+      "seriesA": "₹5Cr - ₹10Cr",
+      "useOfFunds": "Technology development (60%), Marketing (25%), Operations (15%)"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Traditional Indian Bakery",
+    "description": "Authentic Indian bakery offering fresh daily breads, traditional sweets, savory snacks, and regional specialties with time-tested recipes.",
+    "icon": "Utensils",
+    "category": "Food & Beverage",
+    "investment": "₹15L",
+    "difficulty": "Medium",
+    "rating": 4.1,
+    "tags": ["Food", "Traditional", "Local"],
+    "metrics": [8.2, 8.5, 8.8],
+    "timeToMarket": "3-6 months",
+    "revenue": "Steady returns with growing demand",
+    "color": "bg-orange-50 border-orange-200",
+    "detailedDescription": "A traditional Indian bakery that specializes in authentic regional recipes passed down through generations. The bakery will offer fresh daily breads, traditional sweets like rasgulla, gulab jamun, and regional specialties from different states of India.",
+    "marketAnalysis": {
+      "marketSize": "₹15,000 Cr",
+      "growthRate": "12% annually",
+      "competition": "High",
+      "targetAudience": "Local community, families, sweet shops, restaurants"
+    },
+    "implementation": {
+      "phase1": "Location setup and equipment installation (2 months)",
+      "phase2": "Recipe testing and staff training (1 month)",
+      "phase3": "Soft launch and marketing (3 months)"
+    },
+    "revenueModel": {
+      "retail": "Direct sales to customers",
+      "wholesale": "Supply to local sweet shops and restaurants",
+      "online": "Home delivery and online orders"
+    },
+    "challenges": [
+      "Maintaining consistent quality and taste",
+      "Managing perishable inventory",
+      "Competition from established local bakeries",
+      "Seasonal demand fluctuations"
+    ],
+    "successFactors": [
+      "Authentic recipes and traditional preparation methods",
+      "Prime location with good foot traffic",
+      "Quality ingredients and hygiene standards",
+      "Strong local community relationships"
+    ],
+    "teamRequirements": [
+      "Master Baker (1)",
+      "Assistant Bakers (2-3)",
+      "Sales Staff (2)",
+      "Delivery Personnel (1-2)"
+    ],
+    "funding": {
+      "self": "₹10L - ₹15L",
+      "loan": "₹5L - ₹10L",
+      "useOfFunds": "Equipment (40%), Renovation (30%), Working Capital (30%)"
+    }
+  },
+  {
+    "id": 3,
+    "title": "Vertical Urban Farming System",
+    "description": "Automated indoor farming solution for growing fresh produce in urban environments using vertical space efficiently and sustainably.",
+    "icon": "Leaf",
+    "category": "Agriculture",
+    "investment": "₹65L",
+    "difficulty": "Medium",
+    "rating": 4.4,
+    "tags": ["Sustainability", "Agriculture", "Urban"],
+    "metrics": [7.8, 8.5, 9.1],
+    "timeToMarket": "6 months",
+    "revenue": "Steady returns with growing demand",
+    "color": "bg-green-50 border-green-200",
+    "detailedDescription": "An innovative vertical farming system that uses hydroponic and aeroponic technologies to grow fresh vegetables and herbs in urban environments. The system maximizes space efficiency and reduces water usage by 90% compared to traditional farming.",
+    "marketAnalysis": {
+      "marketSize": "₹8,000 Cr",
+      "growthRate": "30% annually",
+      "competition": "Low",
+      "targetAudience": "Urban consumers, restaurants, grocery stores, health-conscious individuals"
+    },
+    "implementation": {
+      "phase1": "System design and prototype development (3 months)",
+      "phase2": "Pilot installation and testing (2 months)",
+      "phase3": "Commercial production and marketing (1 month)"
+    },
+    "revenueModel": {
+      "directSales": "Fresh produce to local markets",
+      "subscription": "Weekly/monthly vegetable boxes",
+      "b2b": "Supply to restaurants and grocery chains"
+    },
+    "challenges": [
+      "High initial setup costs",
+      "Energy consumption for LED lighting",
+      "Technical expertise required",
+      "Market education about benefits"
+    ],
+    "successFactors": [
+      "Efficient LED lighting systems",
+      "Automated monitoring and control",
+      "Strategic location near urban centers",
+      "Partnerships with local restaurants"
+    ],
+    "teamRequirements": [
+      "Agricultural Engineer (1)",
+      "System Technicians (2)",
+      "Marketing Specialist (1)",
+      "Operations Manager (1)"
+    ],
+    "funding": {
+      "seed": "₹30L - ₹50L",
+      "seriesA": "₹1Cr - ₹2Cr",
+      "useOfFunds": "Equipment (50%), Technology (30%), Operations (20%)"
+    }
+  },
+  {
+    "id": 4,
+    "title": "Premium Fitness Studio Chain",
+    "description": "Luxury fitness studios offering personalized training, wellness programs, and premium equipment in prime urban locations.",
+    "icon": "Dumbbell",
+    "category": "Health & Wellness",
+    "investment": "₹85L",
+    "difficulty": "Hard",
+    "rating": 4.6,
+    "tags": ["Fitness", "Wellness", "Premium"],
+    "metrics": [8.1, 8.8, 8.9],
+    "timeToMarket": "6-9 months",
+    "revenue": "High recurring revenue potential",
+    "color": "bg-purple-50 border-purple-200",
+    "detailedDescription": "A premium fitness studio chain that offers personalized training, group classes, wellness programs, and state-of-the-art equipment. The studios focus on creating a luxury experience with certified trainers, modern facilities, and comprehensive wellness services.",
+    "marketAnalysis": {
+      "marketSize": "₹25,000 Cr",
+      "growthRate": "18% annually",
+      "competition": "High",
+      "targetAudience": "Affluent urban professionals, health-conscious individuals (25-45 years)"
+    },
+    "implementation": {
+      "phase1": "Location scouting and lease negotiation (2 months)",
+      "phase2": "Interior design and equipment installation (3 months)",
+      "phase3": "Staff hiring and soft launch (4 months)"
+    },
+    "revenueModel": {
+      "membership": "₹5,000-15,000/month",
+      "personalTraining": "₹1,500-3,000/session",
+      "groupClasses": "₹500-1,500/class",
+      "wellnessServices": "Massage, nutrition counseling"
+    },
+    "challenges": [
+      "High real estate costs in prime locations",
+      "Intense competition from established chains",
+      "Seasonal membership fluctuations",
+      "Staff retention and training"
+    ],
+    "successFactors": [
+      "Prime location with high foot traffic",
+      "Experienced and certified trainers",
+      "Modern equipment and facilities",
+      "Strong community building and events"
+    ],
+    "teamRequirements": [
+      "Certified Personal Trainers (4-6)",
+      "Group Class Instructors (3-4)",
+      "Wellness Specialists (2)",
+      "Operations Manager (1)",
+      "Marketing Manager (1)"
+    ],
+    "funding": {
+      "seed": "₹50L - ₹1Cr",
+      "seriesA": "₹2Cr - ₹5Cr",
+      "useOfFunds": "Real Estate (40%), Equipment (30%), Marketing (20%), Operations (10%)"
+    }
+  },
+  {
+    "id": 5,
+    "title": "Eco-Friendly Packaging Solutions",
+    "description": "Sustainable packaging alternatives for businesses looking to reduce their environmental footprint with innovative biodegradable materials.",
+    "icon": "Leaf",
+    "category": "Sustainability",
+    "investment": "₹35L",
+    "difficulty": "Medium",
+    "rating": 4.3,
+    "tags": ["Eco-friendly", "Packaging", "B2B"],
+    "metrics": [7.9, 8.3, 8.7],
+    "timeToMarket": "4-6 months",
+    "revenue": "Growing market demand",
+    "color": "bg-emerald-50 border-emerald-200",
+    "detailedDescription": "A sustainable packaging company that develops and manufactures eco-friendly alternatives to traditional plastic packaging. The company focuses on biodegradable, compostable, and recyclable materials for various industries including food, e-commerce, and retail.",
+    "marketAnalysis": {
+      "marketSize": "₹12,000 Cr",
+      "growthRate": "22% annually",
+      "competition": "Moderate",
+      "targetAudience": "E-commerce companies, food businesses, retail chains, environmentally conscious brands"
+    },
+    "implementation": {
+      "phase1": "Material research and development (2 months)",
+      "phase2": "Manufacturing setup and testing (2 months)",
+      "phase3": "Client acquisition and production (2 months)"
+    },
+    "revenueModel": {
+      "b2bSales": "Bulk packaging solutions",
+      "customDesign": "Branded packaging solutions",
+      "consulting": "Sustainability consulting services"
+    },
+    "challenges": [
+      "Higher costs compared to traditional packaging",
+      "Limited material options for certain applications",
+      "Consumer education about benefits",
+      "Regulatory compliance and certifications"
+    ],
+    "successFactors": [
+      "Innovative material development",
+      "Cost-effective manufacturing processes",
+      "Strong B2B sales team",
+      "Partnerships with sustainability-focused brands"
+    ],
+    "teamRequirements": [
+      "Material Scientists (2)",
+      "Production Engineers (2)",
+      "Sales Team (3-4)",
+      "Quality Control Specialist (1)"
+    ],
+    "funding": {
+      "seed": "₹20L - ₹35L",
+      "seriesA": "₹1Cr - ₹2Cr",
+      "useOfFunds": "R&D (40%), Manufacturing (35%), Sales (25%)"
+    }
+  },
+  {
+    "id": 6,
+    "title": "Digital Marketing Agency",
+    "description": "Full-service digital marketing agency specializing in social media, SEO, content marketing, and growth strategies for small businesses.",
+    "icon": "Laptop",
+    "category": "Marketing",
+    "investment": "₹25L",
+    "difficulty": "Medium",
+    "rating": 4.2,
+    "tags": ["Digital", "Marketing", "Services"],
+    "metrics": [8.0, 8.4, 8.6],
+    "timeToMarket": "2-4 months",
+    "revenue": "Scalable service business",
+    "color": "bg-indigo-50 border-indigo-200",
+    "detailedDescription": "A comprehensive digital marketing agency that provides end-to-end marketing solutions for small and medium businesses. Services include social media management, SEO optimization, content creation, paid advertising, and performance analytics.",
+    "marketAnalysis": {
+      "marketSize": "₹18,000 Cr",
+      "growthRate": "20% annually",
+      "competition": "High",
+      "targetAudience": "Small and medium businesses, startups, e-commerce companies"
+    },
+    "implementation": {
+      "phase1": "Team building and service development (1 month)",
+      "phase2": "Portfolio creation and case studies (1 month)",
+      "phase3": "Client acquisition and service delivery (2 months)"
+    },
+    "revenueModel": {
+      "retainer": "Monthly retainer fees ₹50K-5L",
+      "projectBased": "One-time campaign fees",
+      "performance": "Revenue sharing on results",
+      "consulting": "Strategy consulting services"
+    },
+    "challenges": [
+      "High competition in the market",
+      "Client acquisition and retention",
+      "Keeping up with digital trends",
+      "Proving ROI to clients"
+    ],
+    "successFactors": [
+      "Specialized expertise in specific industries",
+      "Strong portfolio and case studies",
+      "Data-driven approach and analytics",
+      "Excellent client communication and reporting"
+    ],
+    "teamRequirements": [
+      "Digital Marketing Specialists (3-4)",
+      "Content Creators (2-3)",
+      "Graphic Designers (2)",
+      "Account Managers (2)",
+      "Analytics Specialist (1)"
+    ],
+    "funding": {
+      "self": "₹15L - ₹25L",
+      "loan": "₹10L - ₹15L",
+      "useOfFunds": "Team (60%), Tools (20%), Marketing (20%)"
+    }
+  },
+  {
+    "id": 7,
+    "title": "Premium Pet Care Services",
+    "description": "Luxury pet grooming, boarding, and wellness services for pet owners who want the best care for their beloved companions.",
+    "icon": "Heart",
+    "category": "Pet Care",
+    "investment": "₹45L",
+    "difficulty": "Medium",
+    "rating": 4.5,
+    "tags": ["Pet Care", "Luxury", "Services"],
+    "metrics": [8.3, 8.6, 8.9],
+    "timeToMarket": "3-5 months",
+    "revenue": "Steady recurring revenue",
+    "color": "bg-pink-50 border-pink-200",
+    "detailedDescription": "A premium pet care facility offering luxury grooming, boarding, daycare, and wellness services. The facility provides a spa-like experience for pets with certified groomers, veterinary services, and specialized care for different breeds and needs.",
+    "marketAnalysis": {
+      "marketSize": "₹8,500 Cr",
+      "growthRate": "15% annually",
+      "competition": "Moderate",
+      "targetAudience": "Affluent pet owners, busy professionals, pet enthusiasts"
+    },
+    "implementation": {
+      "phase1": "Facility setup and equipment installation (2 months)",
+      "phase2": "Staff hiring and training (1 month)",
+      "phase3": "Service launch and marketing (2 months)"
+    },
+    "revenueModel": {
+      "grooming": "₹1,500-5,000 per session",
+      "boarding": "₹800-2,000 per day",
+      "daycare": "₹500-1,500 per day",
+      "wellness": "Veterinary services and health checkups"
+    },
+    "challenges": [
+      "High operational costs",
+      "Staff training and retention",
+      "Seasonal demand variations",
+      "Regulatory compliance and licensing"
+    ],
+    "successFactors": [
+      "Prime location with good accessibility",
+      "Experienced and certified staff",
+      "Modern equipment and facilities",
+      "Strong customer service and pet care"
+    ],
+    "teamRequirements": [
+      "Certified Pet Groomers (3-4)",
+      "Veterinary Technicians (2)",
+      "Pet Care Specialists (2-3)",
+      "Customer Service Staff (2)"
+    ],
+    "funding": {
+      "seed": "₹25L - ₹45L",
+      "loan": "₹20L - ₹30L",
+      "useOfFunds": "Facility (50%), Equipment (30%), Operations (20%)"
+    }
+  },
+  {
+    "id": 8,
+    "title": "Smart Home Automation",
+    "description": "Custom smart home solutions integrating IoT devices, security systems, and energy management for modern connected homes.",
+    "icon": "Building2",
+    "category": "Technology",
+    "investment": "₹75L",
+    "difficulty": "Hard",
+    "rating": 4.4,
+    "tags": ["IoT", "Smart Home", "Tech"],
+    "metrics": [8.4, 8.7, 9.0],
+    "timeToMarket": "6-8 months",
+    "revenue": "High-value installations",
+    "color": "bg-cyan-50 border-cyan-200",
+    "detailedDescription": "A comprehensive smart home automation company that designs and installs integrated IoT solutions for residential and commercial properties. Services include home security, energy management, lighting control, and entertainment systems.",
+    "marketAnalysis": {
+      "marketSize": "₹15,000 Cr",
+      "growthRate": "28% annually",
+      "competition": "Moderate",
+      "targetAudience": "Affluent homeowners, tech enthusiasts, new home buyers"
+    },
+    "implementation": {
+      "phase1": "Technology partnerships and system design (3 months)",
+      "phase2": "Installation team training and certification (2 months)",
+      "phase3": "Pilot projects and service launch (3 months)"
+    },
+    "revenueModel": {
+      "installation": "₹2L-20L per project",
+      "maintenance": "Annual maintenance contracts",
+      "upgrades": "System upgrades and expansions",
+      "consulting": "Smart home design consulting"
+    },
+    "challenges": [
+      "High initial investment in technology",
+      "Technical complexity and training requirements",
+      "Customer education about benefits",
+      "Integration with existing home systems"
+    ],
+    "successFactors": [
+      "Strong technical expertise and certifications",
+      "Partnerships with leading IoT manufacturers",
+      "Excellent customer service and support",
+      "Focus on user-friendly interfaces"
+    ],
+    "teamRequirements": [
+      "IoT Engineers (2-3)",
+      "Installation Technicians (4-5)",
+      "System Designers (2)",
+      "Customer Support (2)",
+      "Sales Team (2-3)"
+    ],
+    "funding": {
+      "seed": "₹40L - ₹75L",
+      "seriesA": "₹2Cr - ₹5Cr",
+      "useOfFunds": "Technology (40%), Team (35%), Marketing (25%)"
+    }
+  },
+  {
+    "id": 9,
+    "title": "Artisan Coffee Roastery",
+    "description": "Specialty coffee roasting business sourcing premium beans and creating unique blends for cafes and retail customers.",
+    "icon": "Utensils",
+    "category": "Food & Beverage",
+    "investment": "₹40L",
+    "difficulty": "Medium",
+    "rating": 4.3,
+    "tags": ["Coffee", "Artisan", "Premium"],
+    "metrics": [7.7, 8.2, 8.5],
+    "timeToMarket": "4-6 months",
+    "revenue": "Growing specialty market",
+    "color": "bg-amber-50 border-amber-200",
+    "detailedDescription": "A specialty coffee roastery that sources premium coffee beans from around the world and creates unique blends and single-origin roasts. The business serves both B2B clients (cafes, restaurants) and B2C customers through retail and online sales.",
+    "marketAnalysis": {
+      "marketSize": "₹6,000 Cr",
+      "growthRate": "16% annually",
+      "competition": "Moderate",
+      "targetAudience": "Coffee enthusiasts, cafes, restaurants, corporate clients"
+    },
+    "implementation": {
+      "phase1": "Equipment setup and bean sourcing (2 months)",
+      "phase2": "Recipe development and testing (1 month)",
+      "phase3": "Client acquisition and production (3 months)"
+    },
+    "revenueModel": {
+      "b2bSales": "Wholesale to cafes and restaurants",
+      "retail": "Direct sales to consumers",
+      "online": "E-commerce platform sales",
+      "subscription": "Monthly coffee subscription boxes"
+    },
+    "challenges": [
+      "Bean quality and sourcing consistency",
+      "Competition from established roasters",
+      "Seasonal price fluctuations",
+      "Storage and freshness management"
+    ],
+    "successFactors": [
+      "Direct relationships with coffee farmers",
+      "Consistent quality and unique flavor profiles",
+      "Strong brand and marketing",
+      "Excellent customer service and education"
+    ],
+    "teamRequirements": [
+      "Master Roaster (1)",
+      "Quality Control Specialist (1)",
+      "Sales Team (2-3)",
+      "Operations Manager (1)"
+    ],
+    "funding": {
+      "seed": "₹25L - ₹40L",
+      "loan": "₹15L - ₹25L",
+      "useOfFunds": "Equipment (50%), Inventory (30%), Operations (20%)"
+    }
+  },
+  {
+    "id": 10,
+    "title": "Professional Photography Studio",
+    "description": "High-end photography services for weddings, corporate events, and commercial shoots with state-of-the-art equipment and expertise.",
+    "icon": "Camera",
+    "category": "Creative Services",
+    "investment": "₹30L",
+    "difficulty": "Medium",
+    "rating": 4.4,
+    "tags": ["Photography", "Events", "Creative"],
+    "metrics": [8.1, 8.5, 8.8],
+    "timeToMarket": "2-4 months",
+    "revenue": "Premium service pricing",
+    "color": "bg-violet-50 border-violet-200",
+    "detailedDescription": "A professional photography studio specializing in high-end wedding photography, corporate events, and commercial photography. The studio offers premium services with state-of-the-art equipment, experienced photographers, and comprehensive post-production services.",
+    "marketAnalysis": {
+      "marketSize": "₹4,500 Cr",
+      "growthRate": "14% annually",
+      "competition": "High",
+      "targetAudience": "Affluent couples, corporate clients, commercial brands"
+    },
+    "implementation": {
+      "phase1": "Studio setup and equipment purchase (1 month)",
+      "phase2": "Portfolio development and team building (1 month)",
+      "phase3": "Marketing and client acquisition (2 months)"
+    },
+    "revenueModel": {
+      "wedding": "₹1L-5L per wedding",
+      "corporate": "₹25K-1L per event",
+      "commercial": "₹50K-2L per project",
+      "portrait": "₹5K-25K per session"
+    },
+    "challenges": [
+      "High competition in the market",
+      "Seasonal demand variations",
+      "Equipment maintenance and upgrades",
+      "Client acquisition and retention"
+    ],
+    "successFactors": [
+      "Unique artistic style and vision",
+      "High-quality equipment and editing",
+      "Strong portfolio and testimonials",
+      "Excellent customer service and delivery"
+    ],
+    "teamRequirements": [
+      "Lead Photographer (1)",
+      "Assistant Photographers (2-3)",
+      "Photo Editors (2)",
+      "Studio Manager (1)"
+    ],
+    "funding": {
+      "self": "₹20L - ₹30L",
+      "loan": "₹10L - ₹15L",
+      "useOfFunds": "Equipment (60%), Studio (25%), Marketing (15%)"
+    }
+  }
+]

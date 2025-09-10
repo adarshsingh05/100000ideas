@@ -1,0 +1,349 @@
+{
+  "1": {
+    "id": 1,
+    "title": "AI-Powered Personal Finance App",
+    "description": "Smart budgeting app that uses machine learning to provide personalized financial advice and investment recommendations for modern users.",
+    "icon": "Smartphone",
+    "category": "Technology",
+    "investmentAmount": "₹1.2Cr",
+    "difficulty": "Hard",
+    "rating": 4.7,
+    "reviews": 248,
+    "marketGrowth": "15.2% annual CAGR (2025-2033)",
+    "timeToMarket": "6-9 months",
+    "tags": ["AI", "Fintech", "Mobile App"],
+    "image": "/api/placeholder/600/400",
+    "breadcrumbs": [
+      "Home",
+      "Business Ideas",
+      "AI-Powered Personal Finance App"
+    ],
+    "overview": {
+      "problem": "Many people struggle with personal finance management, lack investment knowledge, and need personalized financial guidance to achieve their financial goals.",
+      "solution": "An AI-powered personal finance app that provides intelligent budgeting, automated savings, investment recommendations, and personalized financial coaching.",
+      "market": "₹45.2 billion market growing at 15.2% CAGR with increasing digital adoption and financial awareness among millennials and Gen Z.",
+      "features": [
+        "AI-powered expense categorization and budgeting",
+        "Automated savings and investment recommendations",
+        "Real-time financial health scoring",
+        "Personalized financial coaching and tips",
+        "Integration with banks and investment platforms",
+        "Goal-based financial planning tools"
+      ],
+      "developmentPlan": {
+        "concept": "Developing an AI-driven personal finance platform that democratizes financial advice and makes sophisticated financial planning accessible to everyone.",
+        "differentiation": "Advanced AI algorithms, personalized recommendations, gamified financial education, and seamless bank integrations.",
+        "innovation": "Voice-activated financial queries, predictive spending analysis, and automated tax optimization suggestions.",
+        "timeline": "MVP development in 4 months, beta testing in 2 months, full launch in 6 months, advanced AI features in 9 months."
+      }
+    },
+    "marketAnalysis": {
+      "marketSize": "₹45.2 billion",
+      "growthRate": "15.2% CAGR",
+      "targetAudience": "Millennials and Gen Z (ages 22-40) with disposable income",
+      "marketTrends": [
+        "Increasing digital adoption in financial services",
+        "Growing awareness of financial planning",
+        "Rise of robo-advisors and AI in finance",
+        "Mobile-first financial management preference"
+      ],
+      "competition": {
+        "direct": ["Mint", "YNAB", "Personal Capital"],
+        "indirect": [
+          "Banking apps",
+          "Investment platforms",
+          "Financial advisors"
+        ],
+        "competitiveAdvantage": "AI-powered personalization and comprehensive financial coaching"
+      },
+      "marketOpportunity": "Large underserved market of young professionals seeking accessible financial guidance"
+    },
+    "investment": {
+      "totalInvestment": "₹1.2Cr",
+      "breakdown": {
+        "development": "₹60L (50%)",
+        "marketing": "₹24L (20%)",
+        "operations": "₹18L (15%)",
+        "legal": "₹12L (10%)",
+        "contingency": "₹6L (5%)"
+      },
+      "fundingSources": [
+        "Angel investors (40%)",
+        "Venture capital (35%)",
+        "Government grants (15%)",
+        "Personal investment (10%)"
+      ],
+      "roiProjection": "Break-even in 18 months, 300% ROI in 3 years",
+      "riskFactors": [
+        "Regulatory compliance requirements",
+        "Competition from established players",
+        "User acquisition costs",
+        "Technology development risks"
+      ]
+    },
+    "funding": {
+      "fundingRounds": [
+        {
+          "round": "Seed",
+          "amount": "₹50L",
+          "purpose": "MVP development and initial team",
+          "timeline": "0-6 months"
+        },
+        {
+          "round": "Series A",
+          "amount": "₹2Cr",
+          "purpose": "Market expansion and feature development",
+          "timeline": "6-18 months"
+        }
+      ],
+      "investorTypes": [
+        "Fintech-focused VCs",
+        "Angel investors with finance background",
+        "Strategic investors from banking sector"
+      ],
+      "fundingRequirements": [
+        "Strong technical team",
+        "Regulatory compliance framework",
+        "Partnership with financial institutions",
+        "User acquisition strategy"
+      ]
+    },
+    "businessModel": {
+      "revenueStreams": [
+        {
+          "type": "Freemium Subscription",
+          "description": "Basic features free, premium features ₹299/month",
+          "projectedRevenue": "₹2.4Cr annually"
+        },
+        {
+          "type": "Transaction Fees",
+          "description": "0.5% fee on investment recommendations",
+          "projectedRevenue": "₹1.8Cr annually"
+        },
+        {
+          "type": "Partnership Revenue",
+          "description": "Commission from financial product referrals",
+          "projectedRevenue": "₹1.2Cr annually"
+        }
+      ],
+      "pricingStrategy": "Freemium model with premium tiers",
+      "customerAcquisition": [
+        "Digital marketing and social media",
+        "Partnerships with financial institutions",
+        "Referral programs",
+        "Content marketing and financial education"
+      ],
+      "retentionStrategy": [
+        "Personalized financial insights",
+        "Gamification and achievement systems",
+        "Regular financial health reports",
+        "Community features and peer comparison"
+      ]
+    },
+    "skillsRequired": {
+      "technical": [
+        "Mobile app development (React Native/Flutter)",
+        "AI/ML engineering (Python, TensorFlow)",
+        "Backend development (Node.js, Python)",
+        "Data science and analytics",
+        "Cybersecurity and compliance"
+      ],
+      "business": [
+        "Financial services knowledge",
+        "Product management",
+        "Digital marketing",
+        "Business development",
+        "Regulatory compliance"
+      ],
+      "teamStructure": [
+        "CTO and technical team (4-5 developers)",
+        "Product manager",
+        "Financial advisor/consultant",
+        "Marketing specialist",
+        "Compliance officer"
+      ],
+      "partnerships": [
+        "Banking and financial institutions",
+        "Investment platforms",
+        "Regulatory bodies",
+        "Financial advisors and consultants"
+      ]
+    },
+    "keyMetrics": {
+      "customer": [
+        "Monthly active users and retention rate",
+        "Average session duration and feature usage",
+        "Customer acquisition cost and lifetime value"
+      ],
+      "financial": [
+        "Revenue per user (freemium model)",
+        "Conversion rate from free to premium",
+        "Monthly recurring revenue growth"
+      ]
+    },
+    "technologyStack": "React Native for mobile, Node.js backend, Python for AI/ML, PostgreSQL database, AWS cloud infrastructure, Stripe for payments, Plaid for bank integrations."
+  },
+  "2": {
+    "id": 2,
+    "title": "Traditional Indian Bakery",
+    "description": "A traditional bakery combining authentic recipes with modern retail practices, offering fresh daily products and convenient ordering.",
+    "icon": "Utensils",
+    "category": "Food & Beverage",
+    "investmentAmount": "₹15.0L",
+    "difficulty": "Medium",
+    "rating": 4.2,
+    "reviews": 186,
+    "marketGrowth": "9.12% annual CAGR (2025-2033)",
+    "timeToMarket": "3-6 months",
+    "tags": ["Urban & Semi-Urban", "Medium"],
+    "image": "/api/placeholder/600/400",
+    "breadcrumbs": ["Home", "Business Ideas", "Traditional Indian Bakery"],
+    "overview": {
+      "problem": "Urban communities lack access to fresh, authentic traditional bakery products with consistent quality and modern convenience.",
+      "solution": "A traditional bakery combining authentic recipes with modern retail practices, offering fresh daily products and convenient ordering.",
+      "market": "₹13.8 billion market growing at 9.10% CAGR with strong urban demand and festival seasonality.",
+      "features": [
+        "Fresh daily breads and traditional Indian sweets",
+        "Festival-specific specialty products",
+        "Modern retail setup with attractive displays",
+        "Online ordering and delivery integration",
+        "Custom celebration cake ordering",
+        "Traditional Indian flavor innovations"
+      ],
+      "developmentPlan": {
+        "concept": "Combining traditional Indian baking recipes with modern retail practices to serve growing urban communities.",
+        "differentiation": "Authentic traditional recipes, fresh daily production, competitive pricing, and strong community connections.",
+        "innovation": "Festival-themed product collections and custom celebration cake ordering system with traditional Indian flavors.",
+        "timeline": "Equipment procurement and setup in 2 months, staff training in 3 weeks, trial production in 2 weeks, grand opening in 3 months."
+      }
+    },
+    "marketAnalysis": {
+      "marketSize": "₹13.8 billion",
+      "growthRate": "9.10% CAGR",
+      "targetAudience": "Urban and semi-urban families, working professionals, festival shoppers",
+      "marketTrends": [
+        "Growing preference for authentic traditional foods",
+        "Increased demand for fresh, daily-made products",
+        "Festival and celebration-driven purchasing",
+        "Online ordering and home delivery trends"
+      ],
+      "competition": {
+        "direct": ["Local bakeries", "Sweet shops", "Modern bakery chains"],
+        "indirect": ["Supermarkets", "Online food delivery", "Home bakers"],
+        "competitiveAdvantage": "Authentic recipes, fresh daily production, community connection"
+      },
+      "marketOpportunity": "Underserved market for authentic traditional bakery products with modern convenience"
+    },
+    "investment": {
+      "totalInvestment": "₹15.0L",
+      "breakdown": {
+        "equipment": "₹6L (40%)",
+        "renovation": "₹3L (20%)",
+        "initialInventory": "₹2.25L (15%)",
+        "workingCapital": "₹2.25L (15%)",
+        "marketing": "₹1.5L (10%)"
+      },
+      "fundingSources": [
+        "Personal savings (60%)",
+        "Bank loan (30%)",
+        "Family investment (10%)"
+      ],
+      "roiProjection": "Break-even in 12 months, 200% ROI in 2 years",
+      "riskFactors": [
+        "Seasonal demand fluctuations",
+        "Raw material price volatility",
+        "Competition from established players",
+        "Location and foot traffic dependency"
+      ]
+    },
+    "funding": {
+      "fundingRounds": [
+        {
+          "round": "Initial Investment",
+          "amount": "₹15L",
+          "purpose": "Equipment, setup, and initial operations",
+          "timeline": "0-3 months"
+        }
+      ],
+      "investorTypes": [
+        "Personal savings and family",
+        "Bank loans and credit",
+        "Local business investors"
+      ],
+      "fundingRequirements": [
+        "Good credit history",
+        "Business plan and projections",
+        "Location lease agreement",
+        "Equipment and inventory planning"
+      ]
+    },
+    "businessModel": {
+      "revenueStreams": [
+        {
+          "type": "Retail Sales",
+          "description": "Walk-in customers and daily sales",
+          "projectedRevenue": "₹8L annually"
+        },
+        {
+          "type": "Online Orders",
+          "description": "Home delivery and pickup orders",
+          "projectedRevenue": "₹4L annually"
+        },
+        {
+          "type": "Custom Orders",
+          "description": "Festival and celebration cakes",
+          "projectedRevenue": "₹3L annually"
+        }
+      ],
+      "pricingStrategy": "Competitive pricing with premium for custom orders",
+      "customerAcquisition": [
+        "Local community marketing",
+        "Social media presence",
+        "Word-of-mouth referrals",
+        "Festival and event participation"
+      ],
+      "retentionStrategy": [
+        "Consistent quality and freshness",
+        "Loyalty programs and discounts",
+        "Seasonal and festival specials",
+        "Community engagement and events"
+      ]
+    },
+    "skillsRequired": {
+      "technical": [
+        "Traditional baking techniques",
+        "Recipe development and testing",
+        "Food safety and hygiene",
+        "Basic accounting and inventory management",
+        "Social media marketing"
+      ],
+      "business": [
+        "Retail operations management",
+        "Customer service",
+        "Inventory management",
+        "Financial planning and budgeting",
+        "Local market knowledge"
+      ],
+      "teamStructure": [
+        "Head baker/owner",
+        "Assistant baker",
+        "Sales staff (1-2 people)",
+        "Delivery person (part-time)"
+      ],
+      "partnerships": [
+        "Local suppliers and vendors",
+        "Event planners and caterers",
+        "Local community organizations",
+        "Food delivery platforms"
+      ]
+    },
+    "keyMetrics": {
+      "customer": [
+        "Daily customer count and repeat rate",
+        "Average order value by product category"
+      ],
+      "financial": ["Gross profit margin (20-30%)", "Monthly revenue growth"]
+    },
+    "technologyStack": "POS system, inventory management software, basic e-commerce integration for online orders, social media marketing tools."
+  }
+}

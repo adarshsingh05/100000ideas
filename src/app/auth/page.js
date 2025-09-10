@@ -102,24 +102,24 @@ export default function AuthPage() {
     <div className="min-h-screen bg-[#0A0F1F]">
       <Navbar />
 
-      <div className="flex min-h-[calc(100vh-140px)]">
+      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-140px)]">
         {/* Left Section - Login/Signup Form */}
-        <div className="flex-1 bg-white flex items-center justify-center p-8">
+        <div className="flex-1 bg-white flex items-center justify-center p-4 sm:p-6 lg:p-8">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="w-full max-w-md"
+            className="w-full max-w-md mx-auto"
           >
             {/* Header */}
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-[#10B981] mb-2">
+            <div className="text-center mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#10B981] mb-2">
                 10000Ideas
               </h1>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">
                 {isSignUp ? "Create Your Account" : "Welcome Back"}
               </h2>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 {isSignUp
                   ? "Join thousands of entrepreneurs discovering profitable business opportunities"
                   : "Sign in to access your business ideas and reports"}
@@ -127,10 +127,10 @@ export default function AuthPage() {
             </div>
 
             {/* Auth Tabs */}
-            <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
+            <div className="flex bg-gray-100 rounded-lg p-1 mb-4 sm:mb-6">
               <button
                 onClick={() => setIsSignUp(false)}
-                className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-300 ${
+                className={`flex-1 py-2 px-3 sm:px-4 rounded-md font-medium transition-all duration-300 text-sm sm:text-base ${
                   !isSignUp
                     ? "bg-[#10B981] text-white shadow-sm"
                     : "text-gray-600 hover:text-gray-900"
@@ -140,7 +140,7 @@ export default function AuthPage() {
               </button>
               <button
                 onClick={() => setIsSignUp(true)}
-                className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-300 ${
+                className={`flex-1 py-2 px-3 sm:px-4 rounded-md font-medium transition-all duration-300 text-sm sm:text-base ${
                   isSignUp
                     ? "bg-[#10B981] text-white shadow-sm"
                     : "text-gray-600 hover:text-gray-900"
@@ -166,7 +166,7 @@ export default function AuthPage() {
 
             {/* Form */}
             <Card className="shadow-lg border-0">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {isSignUp && (
                     <div>
@@ -321,7 +321,7 @@ export default function AuthPage() {
         </div>
 
         {/* Right Section - Promotional Content */}
-        <div className="flex-1 bg-gradient-to-br from-[#0A0F1F] to-[#1a1a1a] relative overflow-hidden">
+        <div className="flex-1 bg-gradient-to-br from-[#0A0F1F] to-[#1a1a1a] relative overflow-hidden hidden lg:flex">
           {/* Background Elements */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#10B981]/20 rounded-full -translate-y-48 translate-x-48"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#10B981]/10 rounded-full translate-y-32 -translate-x-32"></div>

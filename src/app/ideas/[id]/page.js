@@ -2,6 +2,7 @@
 
 import { useState, use } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -92,34 +93,39 @@ export default function IdeaDetailPage({ params }) {
     <div className="min-h-screen bg-[#0A0F1F]">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Breadcrumbs */}
-        <div className="flex items-center space-x-2 text-sm text-[#A0AEC0] mb-6">
-          <div className="flex items-center">
-            <Home className="w-4 h-4 mr-1" />
+        <div className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-[#A0AEC0] mb-4 sm:mb-6 overflow-x-auto">
+          <Link
+            href="/"
+            className="flex items-center hover:text-white transition-colors duration-200 whitespace-nowrap"
+          >
+            <Home className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
             <span>Home</span>
-          </div>
-          <ChevronRight className="w-4 h-4 mx-2" />
-          <span>Business Ideas</span>
-          <ChevronRight className="w-4 h-4 mx-2" />
-          <span className="text-white">{idea.title}</span>
+          </Link>
+          <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 mx-1 sm:mx-2 flex-shrink-0" />
+          <span className="whitespace-nowrap">Business Ideas</span>
+          <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 mx-1 sm:mx-2 flex-shrink-0" />
+          <span className="text-white truncate max-w-[150px] sm:max-w-none">
+            {idea.title}
+          </span>
         </div>
 
-        <div className="flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* Main Content */}
           <div className="flex-1 max-w-4xl">
             {/* Header Section */}
-            <div className="mb-8">
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 bg-[#10B981] rounded-2xl flex items-center justify-center shadow-lg">
-                    <IconComponent className="w-8 h-8 text-white" />
+            <div className="mb-6 sm:mb-8">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 sm:mb-6 gap-4">
+                <div className="flex items-center space-x-3 sm:space-x-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#10B981] rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
+                    <IconComponent className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  <div>
-                    <h1 className="text-4xl font-light text-white mb-2 tracking-tight">
+                  <div className="min-w-0 flex-1">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-light text-white mb-2 tracking-tight leading-tight">
                       {idea.title}
                     </h1>
-                    <div className="flex items-center space-x-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                       {idea.tags.map((tag, index) => (
                         <Badge
                           key={index}
@@ -135,47 +141,47 @@ export default function IdeaDetailPage({ params }) {
               </div>
 
               {/* Summary Cards */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <Card className="bg-[#1E40AF]/10 border-[#10B981]/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <DollarSign className="w-6 h-6 text-[#10B981] mx-auto mb-2" />
+                  <CardContent className="p-3 sm:p-4 text-center">
+                    <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-[#10B981] mx-auto mb-2" />
                     <p className="text-xs text-[#A0AEC0] font-light mb-1">
                       Investment Required
                     </p>
-                    <p className="text-lg font-light text-white">
+                    <p className="text-sm sm:text-lg font-light text-white">
                       {idea.investment}
                     </p>
                   </CardContent>
                 </Card>
                 <Card className="bg-[#1E40AF]/10 border-[#10B981]/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <TrendingUp className="w-6 h-6 text-[#10B981] mx-auto mb-2" />
+                  <CardContent className="p-3 sm:p-4 text-center">
+                    <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-[#10B981] mx-auto mb-2" />
                     <p className="text-xs text-[#A0AEC0] font-light mb-1">
                       Market Growth
                     </p>
-                    <p className="text-sm font-light text-white">
+                    <p className="text-xs sm:text-sm font-light text-white">
                       {idea.marketAnalysis?.growthRate || "Growing Market"}
                     </p>
                   </CardContent>
                 </Card>
                 <Card className="bg-[#1E40AF]/10 border-[#10B981]/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <Clock className="w-6 h-6 text-[#10B981] mx-auto mb-2" />
+                  <CardContent className="p-3 sm:p-4 text-center">
+                    <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-[#10B981] mx-auto mb-2" />
                     <p className="text-xs text-[#A0AEC0] font-light mb-1">
                       Time to Market
                     </p>
-                    <p className="text-sm font-light text-white">
+                    <p className="text-xs sm:text-sm font-light text-white">
                       {idea.timeToMarket}
                     </p>
                   </CardContent>
                 </Card>
                 <Card className="bg-[#1E40AF]/10 border-[#10B981]/20 backdrop-blur-sm">
-                  <CardContent className="p-4 text-center">
-                    <Star className="w-6 h-6 text-[#10B981] mx-auto mb-2" />
+                  <CardContent className="p-3 sm:p-4 text-center">
+                    <Star className="w-5 h-5 sm:w-6 sm:h-6 text-[#10B981] mx-auto mb-2" />
                     <p className="text-xs text-[#A0AEC0] font-light mb-1">
                       Rating
                     </p>
-                    <p className="text-sm font-light text-white">
+                    <p className="text-xs sm:text-sm font-light text-white">
                       ⭐{idea.rating}/5
                     </p>
                   </CardContent>
@@ -183,21 +189,24 @@ export default function IdeaDetailPage({ params }) {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap gap-4 mb-8">
-                <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-3 rounded-xl font-light tracking-wide shadow-lg">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-4 sm:px-6 py-3 rounded-xl font-light tracking-wide shadow-lg text-sm sm:text-base">
                   <Download className="w-4 h-4 mr-2" />
-                  Download Detailed Report & Business Plan
+                  <span className="hidden sm:inline">
+                    Download Detailed Report & Business Plan
+                  </span>
+                  <span className="sm:hidden">Download Report</span>
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/20 hover:text-white hover:border-[#10B981] px-6 py-3 rounded-xl font-light tracking-wide transition-all duration-300"
+                  className="border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/20 hover:text-white hover:border-[#10B981] px-4 sm:px-6 py-3 rounded-xl font-light tracking-wide transition-all duration-300 text-sm sm:text-base"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Ask Expert
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/20 hover:text-white hover:border-[#10B981] px-6 py-3 rounded-xl font-light tracking-wide transition-all duration-300"
+                  className="border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/20 hover:text-white hover:border-[#10B981] px-4 sm:px-6 py-3 rounded-xl font-light tracking-wide transition-all duration-300 text-sm sm:text-base"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   Share
@@ -205,13 +214,13 @@ export default function IdeaDetailPage({ params }) {
               </div>
 
               {/* Tab Navigation */}
-              <div className="border-b border-[#10B981]/20 mb-8">
-                <nav className="flex space-x-8">
+              <div className="border-b border-[#10B981]/20 mb-6 sm:mb-8">
+                <nav className="flex space-x-4 sm:space-x-8 overflow-x-auto">
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`py-4 px-1 border-b-2 font-light tracking-wide transition-colors ${
+                      className={`py-3 sm:py-4 px-1 border-b-2 font-light tracking-wide transition-colors whitespace-nowrap text-sm sm:text-base ${
                         activeTab === tab.id
                           ? "border-[#10B981] text-[#10B981]"
                           : "border-transparent text-[#A0AEC0] hover:text-white"

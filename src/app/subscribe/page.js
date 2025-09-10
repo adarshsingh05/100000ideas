@@ -100,55 +100,55 @@ const SubscribePage = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#0A0F1F] via-[#1E1B4B] to-[#0A0F1F]">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         {/* Header Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-8"
+            className="mb-6 sm:mb-8"
           >
-            <div className="flex items-center justify-center mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-3xl flex items-center justify-center shadow-2xl shadow-purple-500/30">
-                <Crown className="w-10 h-10 text-white" />
+            <div className="flex items-center justify-center mb-4 sm:mb-6">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-3xl flex items-center justify-center shadow-2xl shadow-purple-500/30">
+                <Crown className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
               </div>
             </div>
 
-            <h1 className="text-5xl font-light text-white mb-4 leading-tight tracking-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light text-white mb-3 sm:mb-4 leading-tight tracking-tight">
               Unlock Premium Access
             </h1>
 
-            <p className="text-xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto mb-6">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto mb-4 sm:mb-6 px-4 sm:px-0">
               Get unlimited access to our complete library of business ideas,
               premium content, and exclusive resources to accelerate your
               entrepreneurial journey.
             </p>
 
-            <Badge className="bg-gradient-to-r from-purple-500 to-purple-700 text-white px-6 py-3 text-lg font-light tracking-wide shadow-lg">
-              <Sparkles className="w-5 h-5 mr-2" />
+            <Badge className="bg-gradient-to-r from-purple-500 to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg font-light tracking-wide shadow-lg">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Limited Time Offer - 67% OFF
             </Badge>
           </motion.div>
         </div>
 
         {/* Features Grid */}
-        <div className="mb-16">
+        <div className="mb-8 sm:mb-12 lg:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
-            <h2 className="text-3xl font-light text-white mb-4 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-light text-white mb-3 sm:mb-4 tracking-tight">
               What You Get
             </h2>
-            <p className="text-gray-300 font-light text-lg">
+            <p className="text-gray-300 font-light text-base sm:text-lg px-4 sm:px-0">
               Everything you need to start and grow your business
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {features.map((feature, index) => {
               const IconComponent = feature.icon;
               return (
@@ -159,16 +159,16 @@ const SubscribePage = () => {
                   transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
                 >
                   <Card className="bg-white/5 backdrop-blur-sm border border-purple-500/20 hover:border-purple-500/40 transition-all duration-300 h-full">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <IconComponent className="w-6 h-6 text-purple-400" />
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-start space-x-3 sm:space-x-4">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
                         </div>
                         <div>
-                          <h3 className="text-white font-medium text-lg mb-2 tracking-wide">
+                          <h3 className="text-white font-medium text-base sm:text-lg mb-2 tracking-wide">
                             {feature.title}
                           </h3>
-                          <p className="text-gray-400 text-sm font-light leading-relaxed">
+                          <p className="text-gray-400 text-xs sm:text-sm font-light leading-relaxed">
                             {feature.description}
                           </p>
                         </div>
@@ -182,22 +182,22 @@ const SubscribePage = () => {
         </div>
 
         {/* Pricing Section */}
-        <div className="mb-16">
+        <div className="mb-8 sm:mb-12 lg:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
-            <h2 className="text-3xl font-light text-white mb-4 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-light text-white mb-3 sm:mb-4 tracking-tight">
               Choose Your Plan
             </h2>
-            <p className="text-gray-300 font-light text-lg">
+            <p className="text-gray-300 font-light text-base sm:text-lg px-4 sm:px-0">
               Simple, transparent pricing with no hidden fees
             </p>
           </motion.div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center px-4 sm:px-0">
             {plans.map((plan, index) => (
               <motion.div
                 key={plan.id}
@@ -215,22 +215,22 @@ const SubscribePage = () => {
                 )}
 
                 <Card
-                  className={`w-96 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border-2 ${
+                  className={`w-full max-w-sm sm:w-96 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border-2 ${
                     plan.popular
                       ? "border-purple-500/50 shadow-2xl shadow-purple-500/20"
                       : "border-purple-500/20"
                   } transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20`}
                 >
                   <CardHeader className="text-center pb-4">
-                    <CardTitle className="text-2xl font-light text-white mb-2 tracking-wide">
+                    <CardTitle className="text-xl sm:text-2xl font-light text-white mb-2 tracking-wide">
                       {plan.name}
                     </CardTitle>
                     <div className="mb-4">
                       <div className="flex items-center justify-center space-x-2 mb-2">
-                        <span className="text-5xl font-light text-white">
+                        <span className="text-3xl sm:text-5xl font-light text-white">
                           {plan.price}
                         </span>
-                        <span className="text-xl text-gray-400 line-through">
+                        <span className="text-lg sm:text-xl text-gray-400 line-through">
                           {plan.originalPrice}
                         </span>
                       </div>
@@ -261,7 +261,7 @@ const SubscribePage = () => {
                     <Button
                       onClick={handleSubscribe}
                       disabled={isProcessing}
-                      className={`w-full bg-gradient-to-r ${plan.color} hover:opacity-90 text-white font-light tracking-wide py-4 px-8 rounded-xl shadow-lg transition-all duration-300 text-lg`}
+                      className={`w-full bg-gradient-to-r ${plan.color} hover:opacity-90 text-white font-light tracking-wide py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-lg transition-all duration-300 text-sm sm:text-lg`}
                     >
                       {isProcessing ? (
                         <div className="flex items-center space-x-2">
@@ -290,8 +290,8 @@ const SubscribePage = () => {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-center"
         >
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-purple-500/20">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
               <div className="flex items-center justify-center space-x-3">
                 <Shield className="w-8 h-8 text-green-400" />
                 <div className="text-left">
@@ -338,4 +338,3 @@ const SubscribePage = () => {
 };
 
 export default SubscribePage;
-

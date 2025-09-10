@@ -600,8 +600,8 @@ export default function Home() {
     <div className="min-h-screen bg-[#0A0F1F]">
       <Navbar />
 
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex gap-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* Main Content - Pinterest Style Grid */}
           <div className="flex-1 max-w-6xl">
             {/* Header Section with Animated Background */}
@@ -632,11 +632,11 @@ export default function Home() {
               </div>
 
               {/* Header Content */}
-              <div className="relative z-10 text-center py-12 px-8">
-                <h1 className="text-5xl font-light text-white mb-6 leading-tight tracking-tight">
+              <div className="relative z-10 text-center py-8 sm:py-12 px-4 sm:px-8">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light text-white mb-4 sm:mb-6 leading-tight tracking-tight">
                   Discover 10,000+ Business Ideas
                 </h1>
-                <p className="text-xl text-[#A0AEC0] mb-8 leading-relaxed max-w-3xl mx-auto">
+                <p className="text-base sm:text-lg lg:text-xl text-[#A0AEC0] mb-6 sm:mb-8 leading-relaxed max-w-3xl mx-auto px-2">
                   Find the perfect business opportunity that matches your skills
                   and investment capacity
                 </p>
@@ -644,34 +644,36 @@ export default function Home() {
             </div>
 
             {/* Modern Search Bar */}
-            <div className="mb-8 max-w-3xl mx-auto">
+            <div className="mb-6 sm:mb-8 max-w-3xl mx-auto px-4 sm:px-0">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#10B981]/20 to-[#059669]/20 rounded-md blur-sm"></div>
                 <div className="relative bg-[#1E40AF]/20 border border-[#10B981]/30 rounded-md p-1 backdrop-blur-sm">
-                  <div className="flex items-center">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0">
                     <div className="flex-1 relative">
-                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#10B981] w-5 h-5" />
+                      <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-[#10B981] w-4 h-4 sm:w-5 sm:h-5" />
                       <input
                         type="text"
                         placeholder="Search business ideas..."
                         value={searchQuery}
                         onChange={(e) => handleSearch(e.target.value)}
-                        className="w-full pl-12 pr-6 py-4 bg-transparent text-white placeholder-[#A0AEC0] focus:outline-none text-lg font-light tracking-wide"
+                        className="w-full pl-10 sm:pl-12 pr-4 sm:pr-6 py-3 sm:py-4 bg-transparent text-white placeholder-[#A0AEC0] focus:outline-none text-base sm:text-lg font-light tracking-wide"
                       />
                     </div>
-                    <div className="w-px h-8 bg-[#10B981]/30 mx-4"></div>
-                    {searchQuery && (
-                      <Button
-                        onClick={() => handleSearch("")}
-                        variant="outline"
-                        className="mr-2 px-4 py-4 border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/10 rounded-xl font-light tracking-wide transition-all duration-300"
-                      >
-                        Clear
+                    <div className="hidden sm:block w-px h-8 bg-[#10B981]/30 mx-4"></div>
+                    <div className="flex gap-2 sm:gap-0">
+                      {searchQuery && (
+                        <Button
+                          onClick={() => handleSearch("")}
+                          variant="outline"
+                          className="flex-1 sm:flex-none sm:mr-2 px-3 sm:px-4 py-3 sm:py-4 border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/10 rounded-xl font-light tracking-wide transition-all duration-300 text-sm sm:text-base"
+                        >
+                          Clear
+                        </Button>
+                      )}
+                      <Button className="flex-1 sm:flex-none bg-[#10B981] hover:bg-[#059669] text-white px-4 sm:px-8 py-3 sm:py-4 rounded-xl font-light tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-[#10B981]/20 text-sm sm:text-base">
+                        Search
                       </Button>
-                    )}
-                    <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-8 py-4 rounded-xl font-light tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-[#10B981]/20">
-                      Search
-                    </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -679,9 +681,9 @@ export default function Home() {
 
             {/* View Counter */}
             {viewCount > 0 && (
-              <div className="mb-6 flex justify-center">
-                <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-full px-4 py-2 border border-[#10B981]/30">
-                  <p className="text-[#A0AEC0] text-sm font-light tracking-wide">
+              <div className="mb-4 sm:mb-6 flex justify-center px-4 sm:px-0">
+                <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-full px-3 sm:px-4 py-2 border border-[#10B981]/30">
+                  <p className="text-[#A0AEC0] text-xs sm:text-sm font-light tracking-wide text-center">
                     {hasAccess ? (
                       <span>
                         <span className="text-[#10B981] font-medium">
@@ -703,24 +705,24 @@ export default function Home() {
             )}
 
             {/* Featured Ideas Carousel */}
-            <div className="mb-12">
-              <div className="text-center mb-6">
-                <h2 className="text-2xl font-light text-white mb-2 tracking-tight">
+            <div className="mb-8 sm:mb-12">
+              <div className="text-center mb-4 sm:mb-6 px-4 sm:px-0">
+                <h2 className="text-xl sm:text-2xl font-light text-white mb-2 tracking-tight">
                   Featured Ideas
                 </h2>
-                <p className="text-[#A0AEC0] font-light tracking-wide">
+                <p className="text-sm sm:text-base text-[#A0AEC0] font-light tracking-wide">
                   Discover trending business opportunities
                 </p>
               </div>
 
-              <Carousel className="w-full px-4">
-                <CarouselContent className="-ml-1 md:-ml-2">
+              <Carousel className="w-full px-2 sm:px-4">
+                <CarouselContent className="-ml-1 sm:-ml-2">
                   {carouselIdeas.map((idea, index) => {
                     const IconComponent = idea.icon;
                     return (
                       <CarouselItem
                         key={idea.id}
-                        className="pl-1 md:pl-2 basis-1/2 lg:basis-1/4"
+                        className="pl-1 sm:pl-2 basis-1/2 sm:basis-1/3 lg:basis-1/4"
                       >
                         <motion.div
                           initial={{ opacity: 0, y: 20 }}
@@ -728,7 +730,7 @@ export default function Home() {
                           transition={{ delay: index * 0.1 }}
                         >
                           <Card
-                            className={`bg-[#1E40AF]/10 hover:shadow-xl hover:shadow-[#10B981]/20 transition-all duration-300 cursor-pointer group backdrop-blur-sm h-72 flex flex-col overflow-hidden border-2 ${
+                            className={`bg-[#1E40AF]/10 hover:shadow-xl hover:shadow-[#10B981]/20 transition-all duration-300 cursor-pointer group backdrop-blur-sm h-72 sm:h-80 flex flex-col overflow-hidden border-2 ${
                               index % 2 === 0
                                 ? "border-white/30 hover:border-white/50"
                                 : "border-[#10B981]/20 hover:border-[#10B981]/50"
@@ -736,10 +738,10 @@ export default function Home() {
                             onClick={() => handleCardClick(idea.id)}
                           >
                             {/* Header Section */}
-                            <div className="p-4 pb-3">
-                              <div className="flex items-center justify-between mb-3">
-                                <div className="w-8 h-8 bg-[#10B981] rounded-lg flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 border border-[#059669]">
-                                  <IconComponent className="w-4 h-4 text-white" />
+                            <div className="p-3 sm:p-4 pb-2 sm:pb-3">
+                              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#10B981] rounded-lg flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 border border-[#059669]">
+                                  <IconComponent className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                                 </div>
                                 <Badge
                                   variant="secondary"
@@ -756,7 +758,7 @@ export default function Home() {
                               </div>
 
                               {/* Title */}
-                              <CardTitle className="text-base font-light text-white group-hover:text-[#10B981] transition-colors leading-tight tracking-wide text-center mb-2">
+                              <CardTitle className="text-sm sm:text-base font-light text-white group-hover:text-[#10B981] transition-colors leading-tight tracking-wide text-center mb-2">
                                 {idea.title}
                               </CardTitle>
 
@@ -767,7 +769,7 @@ export default function Home() {
                             </div>
 
                             {/* Content Section */}
-                            <div className="flex-1 px-4 pb-4 space-y-3">
+                            <div className="flex-1 px-3 sm:px-4 pb-3 sm:pb-4 space-y-2 sm:space-y-3">
                               {/* Rating & Category */}
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-1">
@@ -785,9 +787,9 @@ export default function Home() {
                               </div>
 
                               {/* Financial Info */}
-                              <div className="bg-[#0A0F1F]/30 rounded-lg p-3 space-y-2">
+                              <div className="bg-[#0A0F1F]/30 rounded-lg p-2 sm:p-3 space-y-2">
                                 <div className="flex items-center justify-between">
-                                  <div className="flex items-center space-x-2">
+                                  <div className="flex items-center space-x-1 sm:space-x-2">
                                     <DollarSign className="w-3 h-3 text-[#A0AEC0]" />
                                     <span className="text-xs text-[#A0AEC0] font-light">
                                       Investment
@@ -798,7 +800,7 @@ export default function Home() {
                                   </span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                  <div className="flex items-center space-x-2">
+                                  <div className="flex items-center space-x-1 sm:space-x-2">
                                     <TrendingUp className="w-3 h-3 text-[#10B981]" />
                                     <span className="text-xs text-[#A0AEC0] font-light">
                                       Revenue
@@ -824,24 +826,24 @@ export default function Home() {
                     );
                   })}
                 </CarouselContent>
-                <CarouselPrevious className="bg-[#10B981] hover:bg-[#059669] text-white border-[#10B981] hover:border-[#059669] w-8 h-8 -left-2" />
-                <CarouselNext className="bg-[#10B981] hover:bg-[#059669] text-white border-[#10B981] hover:border-[#059669] w-8 h-8 -right-2" />
+                <CarouselPrevious className="bg-[#10B981] hover:bg-[#059669] text-white border-[#10B981] hover:border-[#059669] w-6 h-6 sm:w-8 sm:h-8 -left-1 sm:-left-2" />
+                <CarouselNext className="bg-[#10B981] hover:bg-[#059669] text-white border-[#10B981] hover:border-[#059669] w-6 h-6 sm:w-8 sm:h-8 -right-1 sm:-right-2" />
               </Carousel>
             </div>
 
             {/* Separator with Description */}
-            <div className="mb-12">
-              <div className="flex items-center justify-center mb-6">
+            <div className="mb-8 sm:mb-12">
+              <div className="flex items-center justify-center mb-4 sm:mb-6 px-4 sm:px-0">
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#10B981]/30 to-transparent"></div>
-                <div className="mx-6 px-4 py-2 bg-[#1E40AF]/20 border border-[#10B981]/30 rounded-full backdrop-blur-sm">
-                  <span className="text-lg font-light text-[#10B981] tracking-wide">
+                <div className="mx-3 sm:mx-6 px-3 sm:px-4 py-2 bg-[#1E40AF]/20 border border-[#10B981]/30 rounded-full backdrop-blur-sm">
+                  <span className="text-sm sm:text-lg font-light text-[#10B981] tracking-wide">
                     Explore More Ideas
                   </span>
                 </div>
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#10B981]/30 to-transparent"></div>
               </div>
-              <div className="text-center max-w-3xl mx-auto">
-                <p className="text-[#A0AEC0] font-light tracking-wide leading-relaxed">
+              <div className="text-center max-w-3xl mx-auto px-4 sm:px-0">
+                <p className="text-sm sm:text-base text-[#A0AEC0] font-light tracking-wide leading-relaxed">
                   Each business idea card contains detailed information
                   including investment requirements, revenue potential,
                   difficulty level, and estimated timeline to help you make
@@ -853,7 +855,7 @@ export default function Home() {
             </div>
 
             {/* 3-column grid layout */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {currentCards.map((idea, index) => {
                 const IconComponent = idea.icon;
                 return (
@@ -987,19 +989,19 @@ export default function Home() {
 
             {/* No Results Message */}
             {filteredBusinessIdeas.length === 0 && searchQuery && (
-              <div className="text-center py-12">
-                <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-2xl p-8 border border-[#10B981]/30 max-w-md mx-auto">
-                  <Search className="w-16 h-16 text-[#10B981] mx-auto mb-4 opacity-50" />
-                  <h3 className="text-xl font-light text-white mb-2">
+              <div className="text-center py-8 sm:py-12 px-4 sm:px-0">
+                <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-[#10B981]/30 max-w-md mx-auto">
+                  <Search className="w-12 h-12 sm:w-16 sm:h-16 text-[#10B981] mx-auto mb-3 sm:mb-4 opacity-50" />
+                  <h3 className="text-lg sm:text-xl font-light text-white mb-2">
                     No Results Found
                   </h3>
-                  <p className="text-[#A0AEC0] mb-4">
-                    No business ideas match your search for &quot;{searchQuery}
-                    &quot;
+                  <p className="text-sm sm:text-base text-[#A0AEC0] mb-4">
+                    No business ideas match your search for &ldquo;{searchQuery}
+                    &rdquo;
                   </p>
                   <Button
                     onClick={() => handleSearch("")}
-                    className="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-2 rounded-lg font-light tracking-wide"
+                    className="bg-[#10B981] hover:bg-[#059669] text-white px-4 sm:px-6 py-2 rounded-lg font-light tracking-wide text-sm sm:text-base"
                   >
                     Clear Search
                   </Button>
@@ -1220,31 +1222,31 @@ export default function Home() {
       </div>
 
       {/* Newsletter Section */}
-      <div className="bg-gradient-to-br from-[#0A0F1F] via-[#1E40AF]/20 to-[#0A0F1F] py-12 border-t border-[#10B981]/20">
+      <div className="bg-gradient-to-br from-[#0A0F1F] via-[#1E40AF]/20 to-[#0A0F1F] py-8 sm:py-12 border-t border-[#10B981]/20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <div className="w-8 h-8 bg-[#10B981] rounded-lg flex items-center justify-center shadow-md">
-                <Lightbulb className="w-4 h-4 text-white" />
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center justify-center mb-3 sm:mb-4">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#10B981] rounded-lg flex items-center justify-center shadow-md">
+                <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
               </div>
             </div>
-            <h2 className="text-3xl font-light text-white mb-3 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-light text-white mb-2 sm:mb-3 tracking-tight">
               Stay Ahead with Fresh Ideas!
             </h2>
-            <p className="text-lg text-[#A0AEC0] leading-relaxed font-light tracking-wide">
+            <p className="text-base sm:text-lg text-[#A0AEC0] leading-relaxed font-light tracking-wide px-2">
               Get the latest business ideas and startup tips delivered to your
               inbox
             </p>
           </div>
 
           {/* Newsletter Card */}
-          <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-sm p-6 border border-[#10B981]/30 shadow-xl">
-            <div className="mb-4">
-              <h3 className="text-xl font-light text-white mb-1 tracking-wide">
+          <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-sm p-4 sm:p-6 border border-[#10B981]/30 shadow-xl">
+            <div className="mb-3 sm:mb-4">
+              <h3 className="text-lg sm:text-xl font-light text-white mb-1 tracking-wide">
                 Join 10,000+ Entrepreneurs
               </h3>
-              <p className="text-[#A0AEC0] font-light tracking-wide text-sm">
+              <p className="text-[#A0AEC0] font-light tracking-wide text-xs sm:text-sm">
                 Weekly ideas that grow your business
               </p>
             </div>
@@ -1255,10 +1257,10 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder="Enter your email address"
-                  className="w-full px-4 py-3 bg-[#0A0F1F]/50 backdrop-blur-sm border border-[#10B981]/30 rounded-lg text-white placeholder-[#A0AEC0] focus:ring-2 focus:ring-[#10B981] focus:outline-none shadow-md text-sm"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-[#0A0F1F]/50 backdrop-blur-sm border border-[#10B981]/30 rounded-lg text-white placeholder-[#A0AEC0] focus:ring-2 focus:ring-[#10B981] focus:outline-none shadow-md text-sm"
                 />
               </div>
-              <Button className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-light tracking-wide py-2.5  shadow-md hover:shadow-lg transition-all duration-300 text-sm">
+              <Button className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-light tracking-wide py-2 sm:py-2.5 shadow-md hover:shadow-lg transition-all duration-300 text-sm">
                 Subscribe Now
               </Button>
             </div>

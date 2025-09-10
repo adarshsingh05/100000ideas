@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useIdeaAccess } from "@/hooks/useIdeaAccess";
 import PremiumModal from "@/components/PremiumModal";
+import businessIdeasData from "@/data/businessIdeas.json";
 import {
   Card,
   CardContent,
@@ -544,10 +545,28 @@ const sidebarLinks = {
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const cardsPerPage = 9;
 
   const { viewCount, hasAccess, incrementView, remainingViews } =
     useIdeaAccess();
+
+  // Filter business ideas based on search query
+  const filteredBusinessIdeas = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return businessIdeas;
+    }
+
+    return businessIdeas.filter(
+      (idea) =>
+        idea.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        idea.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        idea.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        idea.tags.some((tag) =>
+          tag.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+    );
+  }, [searchQuery]);
 
   const handleCardClick = (id) => {
     if (hasAccess) {
@@ -561,15 +580,20 @@ export default function Home() {
   };
 
   // Calculate pagination
-  const totalPages = Math.ceil(businessIdeas.length / cardsPerPage);
+  const totalPages = Math.ceil(filteredBusinessIdeas.length / cardsPerPage);
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = startIndex + cardsPerPage;
-  const currentCards = businessIdeas.slice(startIndex, endIndex);
+  const currentCards = filteredBusinessIdeas.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     // Scroll to top of the grid
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   return (
@@ -630,10 +654,21 @@ export default function Home() {
                       <input
                         type="text"
                         placeholder="Search business ideas..."
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
                         className="w-full pl-12 pr-6 py-4 bg-transparent text-white placeholder-[#A0AEC0] focus:outline-none text-lg font-light tracking-wide"
                       />
                     </div>
                     <div className="w-px h-8 bg-[#10B981]/30 mx-4"></div>
+                    {searchQuery && (
+                      <Button
+                        onClick={() => handleSearch("")}
+                        variant="outline"
+                        className="mr-2 px-4 py-4 border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/10 rounded-xl font-light tracking-wide transition-all duration-300"
+                      >
+                        Clear
+                      </Button>
+                    )}
                     <Button className="bg-[#10B981] hover:bg-[#059669] text-white px-8 py-4 rounded-xl font-light tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-[#10B981]/20">
                       Search
                     </Button>
@@ -950,6 +985,27 @@ export default function Home() {
               })}
             </div>
 
+            {/* No Results Message */}
+            {filteredBusinessIdeas.length === 0 && searchQuery && (
+              <div className="text-center py-12">
+                <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-2xl p-8 border border-[#10B981]/30 max-w-md mx-auto">
+                  <Search className="w-16 h-16 text-[#10B981] mx-auto mb-4 opacity-50" />
+                  <h3 className="text-xl font-light text-white mb-2">
+                    No Results Found
+                  </h3>
+                  <p className="text-[#A0AEC0] mb-4">
+                    No business ideas match your search for "{searchQuery}"
+                  </p>
+                  <Button
+                    onClick={() => handleSearch("")}
+                    className="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-2 rounded-lg font-light tracking-wide"
+                  >
+                    Clear Search
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {/* Pagination Component */}
             {totalPages > 1 && (
               <div className="mt-12 flex justify-center">
@@ -1061,8 +1117,14 @@ export default function Home() {
               <div className="mt-4 text-center">
                 <p className="text-[#A0AEC0] text-sm font-light tracking-wide">
                   Showing {startIndex + 1}-
-                  {Math.min(endIndex, businessIdeas.length)} of{" "}
-                  {businessIdeas.length} business ideas
+                  {Math.min(endIndex, filteredBusinessIdeas.length)} of{" "}
+                  {filteredBusinessIdeas.length} business ideas
+                  {searchQuery && (
+                    <span className="text-[#10B981]">
+                      {" "}
+                      (filtered from {businessIdeas.length} total)
+                    </span>
+                  )}
                 </p>
               </div>
             )}

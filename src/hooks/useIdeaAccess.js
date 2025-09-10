@@ -38,3 +38,4 @@ export const useIdeaAccess = () => {
     remainingViews: Math.max(0, MAX_FREE_VIEWS - viewCount),
   };
 };
+

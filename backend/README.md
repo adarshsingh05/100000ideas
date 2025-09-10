@@ -65,3 +65,4 @@ npm run dev
 - ✅ Error handling
 - ✅ MongoDB integration
 - ✅ User profile management
+

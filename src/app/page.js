@@ -994,7 +994,8 @@ export default function Home() {
                     No Results Found
                   </h3>
                   <p className="text-[#A0AEC0] mb-4">
-                    No business ideas match your search for "{searchQuery}"
+                    No business ideas match your search for &quot;{searchQuery}
+                    &quot;
                   </p>
                   <Button
                     onClick={() => handleSearch("")}

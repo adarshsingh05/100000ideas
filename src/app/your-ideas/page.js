@@ -570,8 +570,8 @@ export default function YourIdeasPage() {
               Delete Idea
             </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{ideaToDelete?.title}"? This
-              action cannot be undone.
+              Are you sure you want to delete &quot;{ideaToDelete?.title}&quot;?
+              This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
 

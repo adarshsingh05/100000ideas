@@ -56,6 +56,39 @@ const userSchema = new mongoose.Schema(
         maxlength: [200, "Website URL cannot be more than 200 characters"],
       },
     },
+    // Additional registration fields
+    age: {
+      type: Number,
+      min: [13, "Age must be at least 13"],
+      max: [120, "Age cannot be more than 120"],
+    },
+    monthlyIncome: {
+      type: String,
+      enum: [
+        "0-25000",
+        "25000-50000",
+        "50000-100000",
+        "100000-200000",
+        "200000+",
+      ],
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female", "other", "prefer-not-to-say"],
+    },
+    isPhysicallyDisabled: {
+      type: String,
+      enum: ["no", "yes", "prefer-not-to-say"],
+    },
+    maritalStatus: {
+      type: String,
+      enum: ["single", "married", "divorced", "widowed", "prefer-not-to-say"],
+    },
+    area: {
+      type: String,
+      trim: true,
+      maxlength: [100, "Area cannot be more than 100 characters"],
+    },
     preferences: {
       newsletter: {
         type: Boolean,

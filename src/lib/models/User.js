@@ -56,6 +56,66 @@ const userSchema = new mongoose.Schema(
         maxlength: [200, "Website URL cannot be more than 200 characters"],
       },
     },
+    // Additional registration fields
+    phone: {
+      type: String,
+      trim: true,
+      match: [/^\+?[\d\s-()]+$/, "Please enter a valid phone number"],
+    },
+    age: {
+      type: String,
+      trim: true,
+    },
+    annualIncome: {
+      type: String,
+      enum: [
+        "Below 5 Lakhs",
+        "5-10 Lakhs",
+        "10-25 Lakhs",
+        "25-50 Lakhs",
+        "Above 50 Lakhs",
+      ],
+    },
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Other"],
+    },
+    caste: {
+      type: String,
+      enum: ["General", "OBC", "SC", "ST"],
+    },
+    physicallyChallenged: {
+      type: String,
+      enum: ["No", "Yes"],
+      default: "No",
+    },
+    area: {
+      type: String,
+      enum: ["Urban", "Rural", "Semi-Urban"],
+    },
+    profilePicture: {
+      type: String,
+      default: null,
+    },
+    // Profile stats
+    balanceIcoins: {
+      type: Number,
+      default: 0,
+    },
+    savedIdeas: {
+      type: Number,
+      default: 0,
+    },
+    purchased: {
+      type: Number,
+      default: 0,
+    },
+    completionPercentage: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
     preferences: {
       newsletter: {
         type: Boolean,

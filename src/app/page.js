@@ -46,6 +46,10 @@ import {
   DollarSign,
   ArrowRight,
   Search,
+  Target,
+  Shield,
+  MapPin,
+  X,
 } from "lucide-react";
 
 // Dummy data for carousel ideas
@@ -546,27 +550,87 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const cardsPerPage = 9;
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedInvestment, setSelectedInvestment] = useState("");
+  const cardsPerPage = 4;
 
   const { viewCount, hasAccess, incrementView, remainingViews } =
     useIdeaAccess();
 
-  // Filter business ideas based on search query
+  // Filter business ideas based on search query and filters
   const filteredBusinessIdeas = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return businessIdeas;
+    let filtered = businessIdeas;
+
+    // Search query filter
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(
+        (idea) =>
+          idea.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          idea.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          idea.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          idea.tags.some((tag) =>
+            tag.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+      );
     }
 
-    return businessIdeas.filter(
-      (idea) =>
-        idea.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        idea.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        idea.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        idea.tags.some((tag) =>
-          tag.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-    );
-  }, [searchQuery]);
+    // Category filter
+    if (selectedCategory) {
+      filtered = filtered.filter(
+        (idea) => idea.category.toLowerCase() === selectedCategory.toLowerCase()
+      );
+    }
+
+    // Location filter (assuming we add location to business ideas data)
+    if (selectedLocation) {
+      filtered = filtered.filter(
+        (idea) =>
+          idea.location?.toLowerCase() === selectedLocation.toLowerCase()
+      );
+    }
+
+    // Investment filter
+    if (selectedInvestment) {
+      filtered = filtered.filter((idea) => {
+        const investment = idea.investment;
+        switch (selectedInvestment) {
+          case "0-1L":
+            return investment.includes("₹1L") || investment.includes("₹50K");
+          case "1L-5L":
+            return (
+              investment.includes("₹2L") ||
+              investment.includes("₹3L") ||
+              investment.includes("₹5L")
+            );
+          case "5L-10L":
+            return investment.includes("₹8L") || investment.includes("₹10L");
+          case "10L-25L":
+            return (
+              investment.includes("₹15L") ||
+              investment.includes("₹20L") ||
+              investment.includes("₹25L")
+            );
+          case "25L-50L":
+            return (
+              investment.includes("₹30L") ||
+              investment.includes("₹40L") ||
+              investment.includes("₹50L")
+            );
+          case "50L+":
+            return (
+              investment.includes("₹80L") ||
+              investment.includes("₹1Cr") ||
+              investment.includes("₹2Cr")
+            );
+          default:
+            return true;
+        }
+      });
+    }
+
+    return filtered;
+  }, [searchQuery, selectedCategory, selectedLocation, selectedInvestment]);
 
   const handleCardClick = (id) => {
     if (hasAccess) {
@@ -597,83 +661,383 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0F1F]">
+    <div className="min-h-screen bg-[#FCFCFC]">
       <Navbar />
 
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
-        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
-          {/* Main Content - Pinterest Style Grid */}
-          <div className="flex-1 max-w-6xl">
-            {/* Header Section with Animated Background */}
-            <div className="mb-12 relative">
-              {/* Floating Animated Background */}
-              <div className="absolute inset-0 overflow-hidden rounded-3xl">
-                <div className="absolute -top-4 -left-4 w-24 h-24 bg-[#10B981]/20 rounded-full animate-pulse"></div>
+        <div className="w-full">
+          {/* Main Content - Full Width */}
+          <div className="w-full">
+            {/* Enhanced Header Section */}
+            <div className="mb-12">
+              {/* Main Hero Section */}
+              <div className="relative bg-gradient-to-r from-[#FDCC29] to-[#2D3748] rounded-2xl p-8 sm:p-12 shadow-lg overflow-hidden mb-8">
+                {/* Decorative Background Elements */}
+                <div className="absolute top-4 left-4 w-16 h-16 bg-white/10 rounded-full blur-xl animate-pulse"></div>
                 <div
-                  className="absolute top-8 -right-8 w-16 h-16 bg-[#059669]/30 rounded-full animate-bounce"
+                  className="absolute top-8 right-8 w-12 h-12 bg-white/10 rounded-full blur-xl animate-pulse"
                   style={{ animationDelay: "1s" }}
                 ></div>
                 <div
-                  className="absolute -bottom-6 left-1/4 w-20 h-20 bg-[#10B981]/15 rounded-full animate-pulse"
+                  className="absolute bottom-6 left-12 w-20 h-20 bg-white/10 rounded-full blur-xl animate-pulse"
                   style={{ animationDelay: "2s" }}
                 ></div>
                 <div
-                  className="absolute bottom-4 right-1/3 w-12 h-12 bg-[#059669]/25 rounded-full animate-bounce"
+                  className="absolute bottom-4 right-6 w-14 h-14 bg-white/10 rounded-full blur-xl animate-pulse"
                   style={{ animationDelay: "0.5s" }}
                 ></div>
-                <div
-                  className="absolute top-1/2 left-8 w-8 h-8 bg-[#10B981]/20 rounded-full animate-pulse"
-                  style={{ animationDelay: "1.5s" }}
-                ></div>
-                <div
-                  className="absolute top-1/3 right-12 w-14 h-14 bg-[#059669]/20 rounded-full animate-bounce"
-                  style={{ animationDelay: "2.5s" }}
-                ></div>
-              </div>
 
-              {/* Header Content */}
-              <div className="relative z-10 text-center py-8 sm:py-12 px-4 sm:px-8">
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light text-white mb-4 sm:mb-6 leading-tight tracking-tight">
-                  Discover 10,000+ Business Ideas
-                </h1>
-                <p className="text-base sm:text-lg lg:text-xl text-[#A0AEC0] mb-6 sm:mb-8 leading-relaxed max-w-3xl mx-auto px-2">
-                  Find the perfect business opportunity that matches your skills
-                  and investment capacity
-                </p>
+                {/* Floating Icons */}
+                <div className="absolute top-6 left-8 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-bounce">
+                  <Lightbulb className="w-4 h-4 text-white" />
+                </div>
+                <div
+                  className="absolute top-12 right-12 w-6 h-6 bg-white/20 rounded-full flex items-center justify-center animate-bounce"
+                  style={{ animationDelay: "0.5s" }}
+                >
+                  <TrendingUp className="w-3 h-3 text-white" />
+                </div>
+                <div
+                  className="absolute bottom-8 left-16 w-7 h-7 bg-white/20 rounded-full flex items-center justify-center animate-bounce"
+                  style={{ animationDelay: "1s" }}
+                >
+                  <DollarSign className="w-3 h-3 text-white" />
+                </div>
+                <div
+                  className="absolute bottom-6 right-8 w-9 h-9 bg-white/20 rounded-full flex items-center justify-center animate-bounce"
+                  style={{ animationDelay: "1.5s" }}
+                >
+                  <Target className="w-4 h-4 text-white" />
+                </div>
+
+                <div className="relative z-10 text-center">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+                    Discover 10,000+ Business Ideas
+                  </h1>
+
+                  {/* Trust Indicators */}
+                  <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
+                    <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                      <Star className="w-4 h-4 text-[#FDCC29]" />
+                      <span className="text-white text-sm font-medium">
+                        4.9/5 Rating
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                      <Users className="w-4 h-4 text-[#FDCC29]" />
+                      <span className="text-white text-sm font-medium">
+                        50K+ Users
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                      <Award className="w-4 h-4 text-[#FDCC29]" />
+                      <span className="text-white text-sm font-medium">
+                        Success Stories
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-lg sm:text-xl text-white/90 mb-6 sm:mb-8 leading-relaxed max-w-3xl mx-auto">
+                    Find the perfect business opportunity that matches your
+                    skills and investment capacity
+                  </p>
+
+                  {/* Enhanced CTA Section */}
+                  <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-8">
+                    <div className="bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 border border-white/30">
+                      <span className="text-white font-medium text-base">
+                        Start Your Journey Today
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-4 text-white/80">
+                      <div className="flex items-center space-x-1">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-sm">Quick Setup</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Shield className="w-4 h-4" />
+                        <span className="text-sm">Secure Platform</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 max-w-2xl mx-auto mb-8">
+                    <div className="text-center">
+                      <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                        10K+
+                      </div>
+                      <div className="text-sm text-white/80">
+                        Business Ideas
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                        50+
+                      </div>
+                      <div className="text-sm text-white/80">Categories</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                        95%
+                      </div>
+                      <div className="text-sm text-white/80">Success Rate</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                        24/7
+                      </div>
+                      <div className="text-sm text-white/80">Support</div>
+                    </div>
+                  </div>
+
+                  {/* Featured Business Categories - Scattered Around Hero Box */}
+
+                  {/* Top Left Card */}
+                  <div className="absolute top-4 left-4 w-64 bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer group z-20">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-white leading-tight">
+                        High Profit Business Ideas
+                      </h3>
+                      <div className="w-10 h-10 bg-white/30 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform p-1">
+                        <img
+                          src="/amountbag.png"
+                          alt="Money Bag"
+                          className="w-7 h-7"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs text-white/80 mb-2">
+                      Maximum returns with strategic investments
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-white font-medium">
+                        25 Ideas
+                      </span>
+                      <ArrowRight className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Top Right Card */}
+                  <div className="absolute top-4 right-4 w-64 bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer group z-20">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-white leading-tight">
+                        5AM Business Ideas
+                      </h3>
+                      <div className="w-10 h-10 bg-white/30 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform p-1">
+                        <img src="/clock.png" alt="Clock" className="w-7 h-7" />
+                      </div>
+                    </div>
+                    <p className="text-xs text-white/80 mb-2">
+                      Early morning opportunities for early risers
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-white font-medium">
+                        18 Ideas
+                      </span>
+                      <ArrowRight className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Bottom Left Card */}
+                  <div className="absolute bottom-4 left-4 w-64 bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer group z-20">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-white leading-tight">
+                        How Senior Citizens can Get Rich
+                      </h3>
+                      <div className="w-10 h-10 bg-white/30 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform p-1">
+                        <img
+                          src="/Group 482166.png"
+                          alt="Senior"
+                          className="w-7 h-7"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs text-white/80 mb-2">
+                      Age-appropriate business opportunities
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-white font-medium">
+                        15 Ideas
+                      </span>
+                      <ArrowRight className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Bottom Right Card */}
+                  <div className="absolute bottom-4 right-4 w-64 bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer group z-20">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-white leading-tight">
+                        Ideas for Talkative Women
+                      </h3>
+                      <div className="w-10 h-10 bg-white/30 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform p-1">
+                        <img
+                          src="/mic.png"
+                          alt="Microphone"
+                          className="w-7 h-7"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs text-white/80 mb-2">
+                      Perfect business opportunities for outgoing personalities
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-white font-medium">
+                        12 Ideas
+                      </span>
+                      <ArrowRight className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Center Left Card */}
+                  <div className="absolute top-1/2 left-8 transform -translate-y-1/2 w-64 bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer group z-20">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-white leading-tight">
+                        Travel Business Ideas
+                      </h3>
+                      <div className="w-10 h-10 bg-white/30 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform p-1">
+                        <img src="/plane.png" alt="Plane" className="w-7 h-7" />
+                      </div>
+                    </div>
+                    <p className="text-xs text-white/80 mb-2">
+                      Earn while exploring the world
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-white font-medium">
+                        20 Ideas
+                      </span>
+                      <ArrowRight className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+
+                  {/* Center Right Card */}
+                  <div className="absolute top-1/2 right-8 transform -translate-y-1/2 w-64 bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30 hover:bg-white/30 transition-all duration-300 cursor-pointer group z-20">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-white leading-tight">
+                        Tech Startup Ideas
+                      </h3>
+                      <div className="w-10 h-10 bg-white/30 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform p-1">
+                        <img
+                          src="/bulb.png"
+                          alt="Lightbulb"
+                          className="w-7 h-7"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs text-white/80 mb-2">
+                      Innovative technology business opportunities
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-white font-medium">
+                        30 Ideas
+                      </span>
+                      <ArrowRight className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Modern Search Bar */}
-            <div className="mb-6 sm:mb-8 max-w-3xl mx-auto px-4 sm:px-0">
+            {/* Enhanced Search Bar */}
+            <div className="mb-6 sm:mb-8 max-w-6xl mx-auto px-4 sm:px-0">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#10B981]/20 to-[#059669]/20 rounded-md blur-sm"></div>
-                <div className="relative bg-[#1E40AF]/20 border border-[#10B981]/30 rounded-md p-1 backdrop-blur-sm">
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0">
-                    <div className="flex-1 relative">
-                      <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-[#10B981] w-4 h-4 sm:w-5 sm:h-5" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FDCC29]/20 to-[#2D3748]/20 rounded-lg blur-sm"></div>
+                <div className="relative bg-white/90 border border-[#FDCC29]/30 rounded-lg p-2 backdrop-blur-sm shadow-lg">
+                  <div className="flex flex-col lg:flex-row items-stretch lg:items-center space-y-3 lg:space-y-0 lg:space-x-3">
+                    {/* Search Input */}
+                    <div className="flex-1 flex items-center space-x-3 bg-white rounded-lg p-2 border border-gray-200">
+                      <Search className="w-5 h-5 text-[#FDCC29] ml-2" />
                       <input
                         type="text"
-                        placeholder="Search business ideas..."
+                        placeholder="Search for business ideas..."
                         value={searchQuery}
                         onChange={(e) => handleSearch(e.target.value)}
-                        className="w-full pl-10 sm:pl-12 pr-4 sm:pr-6 py-3 sm:py-4 bg-transparent text-white placeholder-[#A0AEC0] focus:outline-none text-base sm:text-lg font-light tracking-wide"
+                        className="flex-1 py-2 px-2 bg-transparent text-[#2D3748] placeholder-gray-500 focus:outline-none text-sm sm:text-base"
                       />
-                    </div>
-                    <div className="hidden sm:block w-px h-8 bg-[#10B981]/30 mx-4"></div>
-                    <div className="flex gap-2 sm:gap-0">
                       {searchQuery && (
-                        <Button
+                        <button
                           onClick={() => handleSearch("")}
-                          variant="outline"
-                          className="flex-1 sm:flex-none sm:mr-2 px-3 sm:px-4 py-3 sm:py-4 border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/10 rounded-xl font-light tracking-wide transition-all duration-300 text-sm sm:text-base"
+                          className="p-1 text-gray-400 hover:text-[#2D3748] rounded"
                         >
-                          Clear
-                        </Button>
+                          <X className="w-4 h-4" />
+                        </button>
                       )}
-                      <Button className="flex-1 sm:flex-none bg-[#10B981] hover:bg-[#059669] text-white px-4 sm:px-8 py-3 sm:py-4 rounded-xl font-light tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-[#10B981]/20 text-sm sm:text-base">
-                        Search
-                      </Button>
                     </div>
+
+                    {/* Category Filter */}
+                    <div className="flex items-center space-x-2 bg-white rounded-lg p-2 border border-gray-200 min-w-[180px]">
+                      <Building2 className="w-4 h-4 text-[#FDCC29]" />
+                      <select
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="flex-1 py-2 px-2 bg-transparent text-[#2D3748] focus:outline-none text-sm border-none"
+                      >
+                        <option value="">All Categories</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Food & Beverage">Food & Beverage</option>
+                        <option value="Health & Fitness">
+                          Health & Fitness
+                        </option>
+                        <option value="E-commerce">E-commerce</option>
+                        <option value="Education">Education</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Automotive">Automotive</option>
+                        <option value="Beauty & Fashion">
+                          Beauty & Fashion
+                        </option>
+                      </select>
+                    </div>
+
+                    {/* Location Filter */}
+                    <div className="flex items-center space-x-2 bg-white rounded-lg p-2 border border-gray-200 min-w-[160px]">
+                      <MapPin className="w-4 h-4 text-[#FDCC29]" />
+                      <select
+                        value={selectedLocation}
+                        onChange={(e) => setSelectedLocation(e.target.value)}
+                        className="flex-1 py-2 px-2 bg-transparent text-[#2D3748] focus:outline-none text-sm border-none"
+                      >
+                        <option value="">All Locations</option>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Online">Online</option>
+                        <option value="Remote">Remote</option>
+                      </select>
+                    </div>
+
+                    {/* Investment Range Filter */}
+                    <div className="flex items-center space-x-2 bg-white rounded-lg p-2 border border-gray-200 min-w-[140px]">
+                      <DollarSign className="w-4 h-4 text-[#FDCC29]" />
+                      <select
+                        value={selectedInvestment}
+                        onChange={(e) => setSelectedInvestment(e.target.value)}
+                        className="flex-1 py-2 px-2 bg-transparent text-[#2D3748] focus:outline-none text-sm border-none"
+                      >
+                        <option value="">Any Investment</option>
+                        <option value="0-1L">Under ₹1L</option>
+                        <option value="1L-5L">₹1L - ₹5L</option>
+                        <option value="5L-10L">₹5L - ₹10L</option>
+                        <option value="10L-25L">₹10L - ₹25L</option>
+                        <option value="25L-50L">₹25L - ₹50L</option>
+                        <option value="50L+">₹50L+</option>
+                      </select>
+                    </div>
+
+                    {/* Search Button */}
+                    <button
+                      onClick={() => {}} // We'll handle this with the search input
+                      className="bg-[#FDCC29] text-[#2D3748] px-6 py-3 rounded-lg font-medium text-sm hover:bg-[#2D3748] hover:text-white transition-all duration-300 flex items-center justify-center space-x-2"
+                    >
+                      <Search className="w-4 h-4" />
+                      <span>Search</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -682,19 +1046,19 @@ export default function Home() {
             {/* View Counter */}
             {viewCount > 0 && (
               <div className="mb-4 sm:mb-6 flex justify-center px-4 sm:px-0">
-                <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-full px-3 sm:px-4 py-2 border border-[#10B981]/30">
-                  <p className="text-[#A0AEC0] text-xs sm:text-sm font-light tracking-wide text-center">
+                <div className="bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-2 border border-[#FDCC29]/30 shadow-lg">
+                  <p className="text-gray-600 text-xs sm:text-sm font-light tracking-wide text-center">
                     {hasAccess ? (
                       <span>
-                        <span className="text-[#10B981] font-medium">
+                        <span className="text-[#FDCC29] font-medium">
                           {remainingViews}
                         </span>{" "}
                         free views remaining
                       </span>
                     ) : (
-                      <span className="text-red-400">
+                      <span className="text-red-500">
                         Free limit reached -{" "}
-                        <span className="text-purple-400">
+                        <span className="text-[#2D3748]">
                           Upgrade to Premium
                         </span>
                       </span>
@@ -705,24 +1069,24 @@ export default function Home() {
             )}
 
             {/* Featured Ideas Carousel */}
-            <div className="mb-8 sm:mb-12">
+            <div className="mb-8 sm:mb-12 ">
               <div className="text-center mb-4 sm:mb-6 px-4 sm:px-0">
-                <h2 className="text-xl sm:text-2xl font-light text-white mb-2 tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#2D3748] mb-3 tracking-tight">
                   Featured Ideas
                 </h2>
-                <p className="text-sm sm:text-base text-[#A0AEC0] font-light tracking-wide">
+                <p className="text-base sm:text-lg text-[#2D3748] ftracking-wide">
                   Discover trending business opportunities
                 </p>
               </div>
 
-              <Carousel className="w-full px-2 sm:px-4">
-                <CarouselContent className="-ml-1 sm:-ml-2">
+              <Carousel className="w-full px-4 sm:px-6 ">
+                <CarouselContent className="-ml-2 sm:-ml-3">
                   {carouselIdeas.map((idea, index) => {
                     const IconComponent = idea.icon;
                     return (
                       <CarouselItem
                         key={idea.id}
-                        className="pl-1 sm:pl-2 basis-1/2 sm:basis-1/3 lg:basis-1/4"
+                        className="pl-2 sm:pl-3 basis-1/2 sm:basis-1/3 lg:basis-1/4"
                       >
                         <motion.div
                           initial={{ opacity: 0, y: 20 }}
@@ -730,94 +1094,84 @@ export default function Home() {
                           transition={{ delay: index * 0.1 }}
                         >
                           <Card
-                            className={`bg-[#1E40AF]/10 hover:shadow-xl hover:shadow-[#10B981]/20 transition-all duration-300 cursor-pointer group backdrop-blur-sm h-72 sm:h-80 flex flex-col overflow-hidden border-2 ${
-                              index % 2 === 0
-                                ? "border-white/30 hover:border-white/50"
-                                : "border-[#10B981]/20 hover:border-[#10B981]/50"
-                            }`}
+                            className="bg-white shadow-sm cursor-pointer border border-gray-200 rounded-lg overflow-hidden"
                             onClick={() => handleCardClick(idea.id)}
                           >
-                            {/* Header Section */}
-                            <div className="p-3 sm:p-4 pb-2 sm:pb-3">
-                              <div className="flex items-center justify-between mb-2 sm:mb-3">
-                                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-[#10B981] rounded-lg flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 border border-[#059669]">
-                                  <IconComponent className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                            {/* Image Placeholder */}
+                            <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-200">
+                              <div className="absolute inset-0 bg-gradient-to-br from-[#FDCC29]/20 to-[#2D3748]/20"></div>
+                              <div className="absolute top-3 left-3">
+                                <div className="bg-[#FDCC29] text-[#2D3748] px-2 py-1 rounded text-xs font-medium">
+                                  {idea.investment}
                                 </div>
-                                <Badge
-                                  variant="secondary"
-                                  className={`text-xs font-medium tracking-wide px-2 py-1 ${
-                                    idea.difficulty === "Easy"
-                                      ? "bg-green-500 text-white"
-                                      : idea.difficulty === "Medium"
-                                      ? "bg-yellow-500 text-white"
-                                      : "bg-red-500 text-white"
-                                  }`}
-                                >
+                              </div>
+                              <div className="absolute top-3 right-3">
+                                <div className="bg-white/90 text-[#2D3748] px-2 py-1 rounded text-xs font-medium">
                                   {idea.difficulty}
-                                </Badge>
+                                </div>
+                              </div>
+                              <div className="absolute bottom-3 right-3">
+                                <div className="w-6 h-6 bg-white/90 rounded-full flex items-center justify-center">
+                                  <IconComponent className="w-3 h-3 text-[#2D3748]" />
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Content Section */}
+                            <div className="p-4">
+                              {/* Category and Rating */}
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs text-gray-500 uppercase tracking-wide">
+                                  {idea.category}
+                                </span>
+                                <div className="flex items-center space-x-1">
+                                  <Star className="w-3 h-3 text-[#FDCC29] fill-current" />
+                                  <span className="text-xs text-[#2D3748] font-medium">
+                                    {idea.rating}
+                                  </span>
+                                </div>
                               </div>
 
                               {/* Title */}
-                              <CardTitle className="text-sm sm:text-base font-light text-white group-hover:text-[#10B981] transition-colors leading-tight tracking-wide text-center mb-2">
+                              <CardTitle className="text-sm font-semibold text-[#2D3748] leading-tight mb-2">
                                 {idea.title}
                               </CardTitle>
 
                               {/* Description */}
-                              <CardDescription className="text-[#8A9BAE] text-xs leading-relaxed font-light tracking-wide text-center line-clamp-2">
+                              <CardDescription className="text-xs text-gray-600 leading-relaxed mb-3 line-clamp-2">
                                 {idea.description}
                               </CardDescription>
-                            </div>
 
-                            {/* Content Section */}
-                            <div className="flex-1 px-3 sm:px-4 pb-3 sm:pb-4 space-y-2 sm:space-y-3">
-                              {/* Rating & Category */}
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-1">
-                                  <Star className="w-3 h-3 text-[#10B981] fill-current" />
-                                  <span className="text-xs font-light text-white tracking-wide">
-                                    {idea.rating}
+                              {/* Tags */}
+                              <div className="flex flex-wrap gap-1 mb-3">
+                                {idea.tags.slice(0, 2).map((tag, tagIndex) => (
+                                  <span
+                                    key={tagIndex}
+                                    className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
+                                  >
+                                    {tag}
                                   </span>
-                                </div>
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-[#10B981]/20 text-[#10B981] border-[#10B981]/30 font-light tracking-wide px-2 py-1"
-                                >
-                                  {idea.category}
-                                </Badge>
+                                ))}
                               </div>
 
-                              {/* Financial Info */}
-                              <div className="bg-[#0A0F1F]/30 rounded-lg p-2 sm:p-3 space-y-2">
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center space-x-1 sm:space-x-2">
-                                    <DollarSign className="w-3 h-3 text-[#A0AEC0]" />
-                                    <span className="text-xs text-[#A0AEC0] font-light">
-                                      Investment
-                                    </span>
-                                  </div>
-                                  <span className="text-xs font-medium text-white tracking-wide">
-                                    {idea.investment}
+                              {/* Metrics */}
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between text-xs">
+                                  <span className="text-gray-500">
+                                    Revenue Potential
                                   </span>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center space-x-1 sm:space-x-2">
-                                    <TrendingUp className="w-3 h-3 text-[#10B981]" />
-                                    <span className="text-xs text-[#A0AEC0] font-light">
-                                      Revenue
-                                    </span>
-                                  </div>
-                                  <span className="text-xs font-medium text-[#10B981] tracking-wide">
+                                  <span className="text-[#2D3748] font-medium">
                                     {idea.revenue}
                                   </span>
                                 </div>
-                              </div>
-
-                              {/* Timeline */}
-                              <div className="flex items-center justify-center space-x-2 bg-[#10B981]/10 rounded-lg py-2">
-                                <Clock className="w-3 h-3 text-[#10B981]" />
-                                <span className="text-xs text-[#10B981] font-light tracking-wide">
-                                  {idea.timeToStart} to start
-                                </span>
+                                <div className="flex items-center justify-between text-xs">
+                                  <span className="text-gray-500">
+                                    Time to Market
+                                  </span>
+                                  <span className="text-[#2D3748] font-medium">
+                                    {idea.timeToStart}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </Card>
@@ -826,24 +1180,24 @@ export default function Home() {
                     );
                   })}
                 </CarouselContent>
-                <CarouselPrevious className="bg-[#10B981] hover:bg-[#059669] text-white border-[#10B981] hover:border-[#059669] w-6 h-6 sm:w-8 sm:h-8 -left-1 sm:-left-2" />
-                <CarouselNext className="bg-[#10B981] hover:bg-[#059669] text-white border-[#10B981] hover:border-[#059669] w-6 h-6 sm:w-8 sm:h-8 -right-1 sm:-right-2" />
+                <CarouselPrevious className="bg-[#FDCC29] text-[#2D3748] border-[#FDCC29] w-8 h-8 sm:w-10 sm:h-10 -left-2 sm:-left-3" />
+                <CarouselNext className="bg-[#FDCC29] text-[#2D3748] border-[#FDCC29] w-8 h-8 sm:w-10 sm:h-10 -right-2 sm:-right-3" />
               </Carousel>
             </div>
 
             {/* Separator with Description */}
             <div className="mb-8 sm:mb-12">
-              <div className="flex items-center justify-center mb-4 sm:mb-6 px-4 sm:px-0">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#10B981]/30 to-transparent"></div>
-                <div className="mx-3 sm:mx-6 px-3 sm:px-4 py-2 bg-[#1E40AF]/20 border border-[#10B981]/30 rounded-full backdrop-blur-sm">
-                  <span className="text-sm sm:text-lg font-light text-[#10B981] tracking-wide">
+              <div className="flex items-center justify-center mb-6 px-4 sm:px-0">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#FDCC29]/20 to-transparent"></div>
+                <div className="mx-4 px-4 py-2 bg-[#FDCC29] rounded-lg shadow-sm">
+                  <span className="text-sm font-medium text-[#2D3748] tracking-wide">
                     Explore More Ideas
                   </span>
                 </div>
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#10B981]/30 to-transparent"></div>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#FDCC29]/20 to-transparent"></div>
               </div>
-              <div className="text-center max-w-3xl mx-auto px-4 sm:px-0">
-                <p className="text-sm sm:text-base text-[#A0AEC0] font-light tracking-wide leading-relaxed">
+              <div className="text-center max-w-2xl mx-auto px-4 sm:px-0">
+                <p className="text-sm text-[#2D3748] font-medium leading-relaxed">
                   Each business idea card contains detailed information
                   including investment requirements, revenue potential,
                   difficulty level, and estimated timeline to help you make
@@ -854,8 +1208,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 3-column grid layout */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            {/* 4-column grid layout for full width */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {currentCards.map((idea, index) => {
                 const IconComponent = idea.icon;
                 return (
@@ -874,112 +1228,95 @@ export default function Home() {
                       whileTap={{ scale: 0.98 }}
                     >
                       <Card
-                        className="bg-[#1E40AF]/10 border-[#10B981]/20 hover:shadow-2xl hover:shadow-[#10B981]/30 transition-all duration-300 cursor-pointer group border-2 hover:border-[#10B981]/50 backdrop-blur-sm min-h-[320px]"
+                        className="bg-white border border-gray-200 shadow-sm cursor-pointer rounded-lg overflow-hidden"
                         onClick={() => handleCardClick(idea.id)}
                       >
-                        <CardHeader className="pb-6 px-6 pt-6">
-                          {/* Header with icon and category */}
-                          <div className="flex items-start justify-between mb-3">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-8 h-8 bg-[#10B981] rounded-lg flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 border border-[#059669]">
-                                <IconComponent className="w-4 h-4 text-white" />
-                              </div>
-                              <div className="flex-1">
-                                <Badge
-                                  variant="secondary"
-                                  className="mb-1 bg-[#10B981]/20 text-[#10B981] border-[#10B981]/30 text-xs font-light tracking-wide"
-                                >
-                                  {idea.category}
-                                </Badge>
-                                <div className="flex items-center space-x-2">
-                                  <div className="flex items-center space-x-1">
-                                    <Star className="w-3 h-3 text-[#10B981] fill-current" />
-                                    <span className="text-xs font-light text-white tracking-wide">
-                                      {idea.rating}
-                                    </span>
-                                  </div>
-                                  <Badge
-                                    variant="outline"
-                                    className="text-xs px-1 py-0 border-[#A0AEC0]/30 text-[#A0AEC0] font-light tracking-wide"
-                                  >
-                                    {idea.difficulty}
-                                  </Badge>
-                                </div>
-                              </div>
+                        {/* Image Placeholder */}
+                        <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-200">
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#FDCC29]/20 to-[#2D3748]/20"></div>
+                          <div className="absolute top-4 left-4">
+                            <div className="bg-[#FDCC29] text-[#2D3748] px-3 py-1 rounded text-sm font-medium">
+                              {idea.investment}
                             </div>
-                            <div className="text-right">
-                              <div
-                                className={`text-sm text-white px-2 py-1 rounded-md font-light tracking-wide ${
-                                  idea.difficulty === "Easy"
-                                    ? "bg-green-500"
-                                    : idea.difficulty === "Medium"
-                                    ? "bg-yellow-500"
-                                    : "bg-red-500"
-                                }`}
-                              >
-                                {idea.investment}
-                              </div>
+                          </div>
+                          <div className="absolute top-4 right-4">
+                            <div className="bg-white/90 text-[#2D3748] px-3 py-1 rounded text-sm font-medium">
+                              {idea.difficulty}
+                            </div>
+                          </div>
+                          <div className="absolute bottom-4 right-4">
+                            <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center">
+                              <IconComponent className="w-4 h-4 text-[#2D3748]" />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Content Section */}
+                        <div className="p-5">
+                          {/* Category and Rating */}
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                              {idea.category}
+                            </span>
+                            <div className="flex items-center space-x-1">
+                              <Star className="w-4 h-4 text-[#FDCC29] fill-current" />
+                              <span className="text-sm text-[#2D3748] font-medium">
+                                {idea.rating}
+                              </span>
                             </div>
                           </div>
 
-                          <CardTitle className="text-xl font-light text-white mb-3 group-hover:text-[#10B981] transition-colors leading-tight tracking-wide">
+                          {/* Title */}
+                          <CardTitle className="text-lg font-semibold text-[#2D3748] leading-tight mb-3">
                             {idea.title}
                           </CardTitle>
-                          <CardDescription className="text-[#8A9BAE] text-sm leading-relaxed line-clamp-2 font-light tracking-wide">
+
+                          {/* Description */}
+                          <CardDescription className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-2">
                             {idea.description}
                           </CardDescription>
-                        </CardHeader>
 
-                        <CardContent className="pt-0 px-6 pb-6">
                           {/* Tags */}
-                          <div className="flex flex-wrap gap-1 mb-4">
+                          <div className="flex flex-wrap gap-2 mb-4">
                             {idea.tags.slice(0, 3).map((tag, tagIndex) => (
-                              <Badge
+                              <span
                                 key={tagIndex}
-                                variant="outline"
-                                className="text-xs bg-[#1E40AF]/20 text-[#A0AEC0] border-[#10B981]/30 hover:bg-[#10B981]/20 px-2 py-0 font-light tracking-wide"
+                                className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
                               >
                                 {tag}
-                              </Badge>
+                              </span>
                             ))}
                           </div>
 
-                          <Separator className="my-3 bg-[#10B981]/20" />
-
-                          {/* Metrics and Info */}
-                          <div className="space-y-3">
-                            {/* Revenue Potential */}
-                            <div className="flex items-center space-x-2">
-                              <TrendingUp className="w-3 h-3 text-[#10B981]" />
-                              <span className="text-xs text-white font-light tracking-wide">
+                          {/* Metrics */}
+                          <div className="space-y-3 mb-4">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-gray-500">
+                                Revenue Potential
+                              </span>
+                              <span className="text-sm text-[#2D3748] font-medium">
                                 {idea.revenue}
                               </span>
                             </div>
-
-                            {/* Time to Market */}
-                            <div className="flex items-center space-x-2">
-                              <Clock className="w-3 h-3 text-[#A0AEC0]" />
-                              <span className="text-xs text-[#A0AEC0] font-light tracking-wide">
-                                Time:{" "}
-                                <span className="font-light text-white tracking-wide">
-                                  {idea.timeToMarket}
-                                </span>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-gray-500">
+                                Time to Market
+                              </span>
+                              <span className="text-sm text-[#2D3748] font-medium">
+                                {idea.timeToMarket}
                               </span>
                             </div>
                           </div>
 
                           {/* Action Button */}
-                          <div className="mt-4 pt-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-full group-hover:bg-[#10B981]/20 group-hover:border-[#10B981] group-hover:text-[#10B981] transition-all text-sm border-[#10B981]/50 text-[#10B981] font-light tracking-wide bg-[#10B981]/10"
-                            >
-                              View Details
-                              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
-                            </Button>
-                          </div>
-                        </CardContent>
+                          <Button
+                            variant="outline"
+                            className="w-full text-sm font-medium border border-[#2D3748] text-[#2D3748] py-2"
+                          >
+                            View Details
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </div>
                       </Card>
                     </motion.div>
                   </motion.div>
@@ -990,18 +1327,18 @@ export default function Home() {
             {/* No Results Message */}
             {filteredBusinessIdeas.length === 0 && searchQuery && (
               <div className="text-center py-8 sm:py-12 px-4 sm:px-0">
-                <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-[#10B981]/30 max-w-md mx-auto">
-                  <Search className="w-12 h-12 sm:w-16 sm:h-16 text-[#10B981] mx-auto mb-3 sm:mb-4 opacity-50" />
-                  <h3 className="text-lg sm:text-xl font-light text-white mb-2">
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-[#FDCC29]/30 max-w-md mx-auto">
+                  <Search className="w-12 h-12 sm:w-16 sm:h-16 text-[#FDCC29] mx-auto mb-3 sm:mb-4 opacity-50" />
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#2D3748] mb-3">
                     No Results Found
                   </h3>
-                  <p className="text-sm sm:text-base text-[#A0AEC0] mb-4">
+                  <p className="text-base sm:text-lg text-[#2D3748] font-bold mb-4">
                     No business ideas match your search for &ldquo;{searchQuery}
                     &rdquo;
                   </p>
                   <Button
                     onClick={() => handleSearch("")}
-                    className="bg-[#10B981] hover:bg-[#059669] text-white px-4 sm:px-6 py-2 rounded-lg font-light tracking-wide text-sm sm:text-base"
+                    className="bg-[#FDCC29] text-[#2D3748] px-4 sm:px-6 py-2 rounded-lg font-bold text-base"
                   >
                     Clear Search
                   </Button>
@@ -1012,14 +1349,14 @@ export default function Home() {
             {/* Pagination Component */}
             {totalPages > 1 && (
               <div className="mt-12 flex justify-center">
-                <div className="flex items-center space-x-1 sm:space-x-2 bg-[#1E40AF]/20 backdrop-blur-sm rounded-2xl p-1 sm:p-2 border border-[#10B981]/30 shadow-lg max-w-full overflow-x-auto">
+                <div className="flex items-center space-x-1 sm:space-x-2 bg-white rounded-lg p-2 border border-gray-200 shadow-md max-w-full overflow-x-auto">
                   {/* Previous Button */}
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="bg-transparent border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/20 hover:border-[#10B981] disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
+                    className="bg-transparent border-[#2D3748]/30 text-[#2D3748] disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-medium text-xs sm:text-sm"
                   >
                     <span className="hidden sm:inline">Previous</span>
                     <span className="sm:hidden">Prev</span>
@@ -1034,12 +1371,12 @@ export default function Home() {
                           variant="outline"
                           size="sm"
                           onClick={() => handlePageChange(1)}
-                          className="bg-transparent border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/20 hover:border-[#10B981] px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
+                          className="bg-transparent border-[#2D3748]/30 text-[#2D3748] px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
                         >
                           1
                         </Button>
                         {currentPage > 4 && (
-                          <span className="text-[#A0AEC0] px-2 font-light">
+                          <span className="text-gray-600 px-2 font-light">
                             ...
                           </span>
                         )}
@@ -1071,8 +1408,8 @@ export default function Home() {
                           onClick={() => handlePageChange(pageNum)}
                           className={
                             pageNum === currentPage
-                              ? "bg-[#10B981] hover:bg-[#059669] text-white border-[#10B981] px-2 sm:px-3 py-2 font-light tracking-wide shadow-md text-xs sm:text-sm"
-                              : "bg-transparent border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/20 hover:border-[#10B981] px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
+                              ? "bg-[#FDCC29] hover:bg-[#2D3748] text-[#2D3748] border-[#FDCC29] px-2 sm:px-3 py-2 font-light tracking-wide shadow-md text-xs sm:text-sm"
+                              : "bg-transparent border-[#2D3748]/30 text-[#2D3748] px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
                           }
                         >
                           {pageNum}
@@ -1084,7 +1421,7 @@ export default function Home() {
                     {currentPage < totalPages - 2 && (
                       <>
                         {currentPage < totalPages - 3 && (
-                          <span className="text-[#A0AEC0] px-2 font-light">
+                          <span className="text-gray-600 px-2 font-light">
                             ...
                           </span>
                         )}
@@ -1092,7 +1429,7 @@ export default function Home() {
                           variant="outline"
                           size="sm"
                           onClick={() => handlePageChange(totalPages)}
-                          className="bg-transparent border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/20 hover:border-[#10B981] px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
+                          className="bg-transparent border-[#2D3748]/30 text-[#2D3748] px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
                         >
                           {totalPages}
                         </Button>
@@ -1106,7 +1443,7 @@ export default function Home() {
                     size="sm"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="bg-transparent border-[#10B981]/30 text-[#10B981] hover:bg-[#10B981]/20 hover:border-[#10B981] disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
+                    className="bg-transparent border-[#2D3748]/30 text-[#2D3748] disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
                   >
                     <span className="hidden sm:inline">Next</span>
                     <span className="sm:hidden">Next</span>
@@ -1118,12 +1455,12 @@ export default function Home() {
             {/* Page Info */}
             {totalPages > 1 && (
               <div className="mt-4 text-center">
-                <p className="text-[#A0AEC0] text-sm font-light tracking-wide">
+                <p className="text-[#2D3748] text-base font-bold tracking-wide">
                   Showing {startIndex + 1}-
                   {Math.min(endIndex, filteredBusinessIdeas.length)} of{" "}
                   {filteredBusinessIdeas.length} business ideas
                   {searchQuery && (
-                    <span className="text-[#10B981]">
+                    <span className="text-[#FDCC29]">
                       {" "}
                       (filtered from {businessIdeas.length} total)
                     </span>
@@ -1132,121 +1469,123 @@ export default function Home() {
               </div>
             )}
           </div>
+        </div>
+      </div>
 
-          {/* Right Sidebar */}
-          <div className="w-64 hidden lg:block flex-shrink-0 ml-auto">
-            <div className="sticky top-32 space-y-4">
-              {/* Classifieds Section */}
-              <Card className="bg-[#1E40AF]/10 border-[#10B981]/20 shadow-lg rounded-2xl overflow-hidden backdrop-blur-sm">
-                <CardHeader className="py-3 bg-gradient-to-r from-[#10B981] to-[#059669] text-white">
-                  <div className="flex items-center justify-center space-x-2">
-                    <div className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center">
-                      <FileText className="w-3 h-3 text-white" />
-                    </div>
-                    <CardTitle className="text-sm font-light text-white tracking-wide">
-                      Classifieds
-                    </CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-3 space-y-2">
-                  {sidebarLinks.classifieds.map((item, index) => {
-                    const IconComponent = item.icon;
-                    return (
-                      <motion.div
-                        key={index}
-                        whileHover={{ x: 4, scale: 1.02 }}
-                        className="flex items-start space-x-2 p-2 rounded-lg hover:bg-[#10B981]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#10B981]/30 hover:shadow-md hover:shadow-[#10B981]/10"
-                      >
-                        <div className="w-6 h-6 bg-[#10B981]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#10B981]/30 transition-colors">
-                          <IconComponent className="w-3 h-3 text-[#10B981]" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-xs font-light text-white group-hover:text-[#10B981] transition-colors tracking-wide">
-                            {item.title}
-                          </h4>
-                          <p className="text-xs text-[#A0AEC0] mt-0.5 leading-relaxed font-light tracking-wide">
-                            {item.description}
-                          </p>
-                          <p className="text-xs text-[#10B981] mt-0.5 font-light tracking-wide">
-                            {item.time}
-                          </p>
-                        </div>
-                        <ArrowRight className="w-3 h-3 text-[#A0AEC0] group-hover:text-[#10B981] transition-colors mt-0.5" />
-                      </motion.div>
-                    );
-                  })}
-                </CardContent>
-              </Card>
+      {/* Compact Sidebar Content - Horizontal Layout */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Classifieds Section */}
+          <Card className="bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden">
+            <CardHeader className="py-4 bg-gradient-to-r from-[#FDCC29] to-[#2D3748] text-white">
+              <div className="flex items-center space-x-2">
+                <div className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center">
+                  <FileText className="w-3 h-3 text-white" />
+                </div>
+                <CardTitle className="text-lg font-bold text-white">
+                  Classifieds
+                </CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {sidebarLinks.classifieds.slice(0, 4).map((item, index) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: 1.02 }}
+                      className="flex items-start space-x-3 p-3 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#FDCC29]/30"
+                    >
+                      <div className="w-8 h-8 bg-[#FDCC29]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#FDCC29]/30 transition-colors">
+                        <IconComponent className="w-4 h-4 text-[#FDCC29]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
+                          {item.title}
+                        </h4>
+                        <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                          {item.description}
+                        </p>
+                        <p className="text-xs text-[#FDCC29] mt-1 font-medium">
+                          {item.time}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
 
-              {/* Resources Section */}
-              <Card className="bg-[#1E40AF]/10 border-[#10B981]/20 shadow-lg rounded-2xl overflow-hidden backdrop-blur-sm">
-                <CardHeader className="py-3 bg-gradient-to-r from-[#10B981] to-[#059669] text-white">
-                  <div className="flex items-center justify-center space-x-2">
-                    <div className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center">
-                      <Award className="w-3 h-3 text-white" />
-                    </div>
-                    <CardTitle className="text-sm font-light text-white tracking-wide">
-                      Resources
-                    </CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-3 space-y-2">
-                  {sidebarLinks.resources.map((item, index) => {
-                    const IconComponent = item.icon;
-                    return (
-                      <motion.div
-                        key={index}
-                        whileHover={{ x: 4, scale: 1.02 }}
-                        className="flex items-start space-x-2 p-2 rounded-lg hover:bg-[#10B981]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#10B981]/30 hover:shadow-md hover:shadow-[#10B981]/10"
-                      >
-                        <div className="w-6 h-6 bg-[#10B981]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#10B981]/30 transition-colors">
-                          <IconComponent className="w-3 h-3 text-[#10B981]" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-xs font-light text-white group-hover:text-[#10B981] transition-colors tracking-wide">
-                            {item.title}
-                          </h4>
-                          <p className="text-xs text-[#A0AEC0] mt-0.5 leading-relaxed font-light tracking-wide">
-                            {item.description}
-                          </p>
-                        </div>
-                        <ArrowRight className="w-3 h-3 text-[#A0AEC0] group-hover:text-[#10B981] transition-colors mt-0.5" />
-                      </motion.div>
-                    );
-                  })}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+          {/* Resources Section */}
+          <Card className="bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden">
+            <CardHeader className="py-4 bg-gradient-to-r from-[#FDCC29] to-[#2D3748] text-white">
+              <div className="flex items-center space-x-2">
+                <div className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center">
+                  <Award className="w-3 h-3 text-white" />
+                </div>
+                <CardTitle className="text-lg font-bold text-white">
+                  Resources
+                </CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {sidebarLinks.resources.slice(0, 4).map((item, index) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: 1.02 }}
+                      className="flex items-start space-x-3 p-3 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#FDCC29]/30"
+                    >
+                      <div className="w-8 h-8 bg-[#FDCC29]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#FDCC29]/30 transition-colors">
+                        <IconComponent className="w-4 h-4 text-[#FDCC29]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
+                          {item.title}
+                        </h4>
+                        <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
       {/* Newsletter Section */}
-      <div className="bg-gradient-to-br from-[#0A0F1F] via-[#1E40AF]/20 to-[#0A0F1F] py-8 sm:py-12 border-t border-[#10B981]/20">
+      <div className="bg-gradient-to-r from-[#FDCC29] to-[#2D3748] py-12 sm:py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center justify-center mb-3 sm:mb-4">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#10B981] rounded-lg flex items-center justify-center shadow-md">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white/20 rounded-lg flex items-center justify-center shadow-md">
                 <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
               </div>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-light text-white mb-2 sm:mb-3 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">
               Stay Ahead with Fresh Ideas!
             </h2>
-            <p className="text-base sm:text-lg text-[#A0AEC0] leading-relaxed font-light tracking-wide px-2">
+            <p className="text-base sm:text-lg text-white/90 leading-relaxed px-2">
               Get the latest business ideas and startup tips delivered to your
               inbox
             </p>
           </div>
 
           {/* Newsletter Card */}
-          <div className="bg-[#1E40AF]/20 backdrop-blur-sm rounded-sm p-4 sm:p-6 border border-[#10B981]/30 shadow-xl">
+          <div className="bg-white rounded-lg p-6 sm:p-8 shadow-xl">
             <div className="mb-3 sm:mb-4">
-              <h3 className="text-lg sm:text-xl font-light text-white mb-1 tracking-wide">
+              <h3 className="text-lg sm:text-xl font-light text-[#2D3748] mb-1 tracking-wide">
                 Join 10,000+ Entrepreneurs
               </h3>
-              <p className="text-[#A0AEC0] font-light tracking-wide text-xs sm:text-sm">
+              <p className="text-gray-600 font-light tracking-wide text-xs sm:text-sm">
                 Weekly ideas that grow your business
               </p>
             </div>
@@ -1257,17 +1596,17 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder="Enter your email address"
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-[#0A0F1F]/50 backdrop-blur-sm border border-[#10B981]/30 rounded-lg text-white placeholder-[#A0AEC0] focus:ring-2 focus:ring-[#10B981] focus:outline-none shadow-md text-sm"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-50/50 backdrop-blur-sm border border-[#FDCC29]/30 rounded-lg text-[#2D3748] placeholder-[#A0AEC0] focus:ring-2 focus:ring-[#10B981] focus:outline-none shadow-md text-sm"
                 />
               </div>
-              <Button className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-light tracking-wide py-2 sm:py-2.5 shadow-md hover:shadow-lg transition-all duration-300 text-sm">
+              <Button className="w-full bg-[#FDCC29] hover:bg-[#2D3748] text-[#2D3748] font-light tracking-wide py-2 sm:py-2.5 shadow-md hover:shadow-lg transition-all duration-300 text-sm">
                 Subscribe Now
               </Button>
             </div>
 
             {/* Disclaimer */}
-            <div className="mt-4 flex items-center justify-center space-x-2 text-[#A0AEC0]">
-              <Star className="w-3 h-3 text-[#10B981] fill-current" />
+            <div className="mt-4 flex items-center justify-center space-x-2 text-gray-600">
+              <Star className="w-3 h-3 text-[#FDCC29] fill-current" />
               <span className="text-xs font-light tracking-wide">
                 No spam, unsubscribe anytime
               </span>

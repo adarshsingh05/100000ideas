@@ -31,6 +31,37 @@ const signupValidation = [
   body("password")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long"),
+  body("age")
+    .optional()
+    .isInt({ min: 13, max: 120 })
+    .withMessage("Age must be between 13 and 120"),
+  body("monthlyIncome")
+    .optional()
+    .isIn([
+      "0-25000",
+      "25000-50000",
+      "50000-100000",
+      "100000-200000",
+      "200000+",
+    ])
+    .withMessage("Invalid monthly income range"),
+  body("gender")
+    .optional()
+    .isIn(["male", "female", "other", "prefer-not-to-say"])
+    .withMessage("Invalid gender selection"),
+  body("isPhysicallyDisabled")
+    .optional()
+    .isIn(["no", "yes", "prefer-not-to-say"])
+    .withMessage("Invalid disability status selection"),
+  body("maritalStatus")
+    .optional()
+    .isIn(["single", "married", "divorced", "widowed", "prefer-not-to-say"])
+    .withMessage("Invalid marital status selection"),
+  body("area")
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage("Area cannot be more than 100 characters"),
 ];
 
 const loginValidation = [
@@ -57,7 +88,17 @@ router.post("/signup", signupValidation, async (req, res) => {
       });
     }
 
-    const { name, email, password } = req.body;
+    const {
+      name,
+      email,
+      password,
+      age,
+      monthlyIncome,
+      gender,
+      isPhysicallyDisabled,
+      maritalStatus,
+      area,
+    } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -73,6 +114,12 @@ router.post("/signup", signupValidation, async (req, res) => {
       name,
       email,
       password,
+      age,
+      monthlyIncome,
+      gender,
+      isPhysicallyDisabled,
+      maritalStatus,
+      area,
     });
 
     await user.save();
@@ -93,6 +140,12 @@ router.post("/signup", signupValidation, async (req, res) => {
           email: user.email,
           role: user.role,
           isEmailVerified: user.isEmailVerified,
+          age: user.age,
+          monthlyIncome: user.monthlyIncome,
+          gender: user.gender,
+          isPhysicallyDisabled: user.isPhysicallyDisabled,
+          maritalStatus: user.maritalStatus,
+          area: user.area,
           createdAt: user.createdAt,
         },
         token,
@@ -158,6 +211,12 @@ router.post("/login", authLimiter, loginValidation, async (req, res) => {
           email: user.email,
           role: user.role,
           isEmailVerified: user.isEmailVerified,
+          age: user.age,
+          monthlyIncome: user.monthlyIncome,
+          gender: user.gender,
+          isPhysicallyDisabled: user.isPhysicallyDisabled,
+          maritalStatus: user.maritalStatus,
+          area: user.area,
           lastLogin: user.lastLogin,
         },
         token,

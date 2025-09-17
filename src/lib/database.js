@@ -6,10 +6,13 @@ const connectDB = async () => {
       return;
     }
 
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const conn = await mongoose.connect(
+      "mongodb+srv://project_1:project_1@cluster0.pwx2r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
@@ -19,3 +22,4 @@ const connectDB = async () => {
 };
 
 export default connectDB;
+export { connectDB };

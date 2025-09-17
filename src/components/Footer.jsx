@@ -11,73 +11,80 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0A0F1F] border-t border-[#10B981]/20">
+    <footer className="bg-[#2D3748] border-t border-[#FDCC29]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#10B981] to-[#059669] rounded-xl flex items-center justify-center shadow-lg">
-                <Lightbulb className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-2xl font-light text-white tracking-wide">
-                10000IDEAS
-              </span>
+              <img
+                src="/logos.png"
+                alt="10000Ideas Logo"
+                className="w-8 h-8 sm:w-[200px] sm:h-[40px] object-contain"
+              />
             </div>
-            <p className="text-[#A0AEC0] font-light tracking-wide mb-6 leading-relaxed">
+            <p className="text-[#FCFCFC] font-light tracking-wide mb-6 leading-relaxed">
               Follow us on social media
             </p>
             <div className="flex space-x-4">
               <a
                 href="#"
-                className="w-10 h-10 bg-[#10B981]/20 hover:bg-[#10B981]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Facebook className="w-5 h-5 text-[#10B981] group-hover:text-white transition-colors" />
+                <Facebook className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#10B981]/20 hover:bg-[#10B981]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Twitter className="w-5 h-5 text-[#10B981] group-hover:text-white transition-colors" />
+                <Twitter className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#10B981]/20 hover:bg-[#10B981]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Youtube className="w-5 h-5 text-[#10B981] group-hover:text-white transition-colors" />
+                <Youtube className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#10B981]/20 hover:bg-[#10B981]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Instagram className="w-5 h-5 text-[#10B981] group-hover:text-white transition-colors" />
+                <Instagram className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#10B981]/20 hover:bg-[#10B981]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Linkedin className="w-5 h-5 text-[#10B981] group-hover:text-white transition-colors" />
+                <Linkedin className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
               </a>
             </div>
           </div>
 
           {/* Categories */}
           <div>
-            <h3 className="text-white font-light tracking-wide mb-4">
+            <h3 className="text-[#FCFCFC] font-light tracking-wide mb-4">
               CATEGORIES
             </h3>
             <ul className="space-y-2">
+              <li>
+                <a
+                  href="/categories"
+                  className="text-[#FCFCFC]/70 hover:text-[#FDCC29] transition-colors font-light tracking-wide text-sm"
+                >
+                  All Categories
+                </a>
+              </li>
               {[
                 "Technology",
-                "Manufacturing",
-                "For Women",
-                "Fashion",
-                "E-commerce",
+                "Healthcare",
+                "Sustainability",
+                "Food & Beverage",
+                "Education",
               ].map((category) => (
                 <li key={category}>
                   <a
-                    href="#"
-                    className="text-[#A0AEC0] hover:text-[#10B981] transition-colors font-light tracking-wide text-sm"
+                    href="/categories"
+                    className="text-[#FCFCFC]/70 hover:text-[#FDCC29] transition-colors font-light tracking-wide text-sm"
                   >
                     {category}
                   </a>
@@ -88,7 +95,9 @@ export default function Footer() {
 
           {/* About */}
           <div>
-            <h3 className="text-white font-light tracking-wide mb-4">ABOUT</h3>
+            <h3 className="text-[#FCFCFC] font-light tracking-wide mb-4">
+              ABOUT
+            </h3>
             <ul className="space-y-2">
               {[
                 "Our Company",
@@ -101,7 +110,7 @@ export default function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="text-[#A0AEC0] hover:text-[#10B981] transition-colors font-light tracking-wide text-sm"
+                    className="text-[#FCFCFC]/70 hover:text-[#FDCC29] transition-colors font-light tracking-wide text-sm"
                   >
                     {item}
                   </a>
@@ -112,7 +121,9 @@ export default function Footer() {
 
           {/* More */}
           <div>
-            <h3 className="text-white font-light tracking-wide mb-4">MORE</h3>
+            <h3 className="text-[#FCFCFC] font-light tracking-wide mb-4">
+              MORE
+            </h3>
             <ul className="space-y-2">
               {[
                 "Terms of Service",
@@ -124,7 +135,7 @@ export default function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="text-[#A0AEC0] hover:text-[#10B981] transition-colors font-light tracking-wide text-sm"
+                    className="text-[#FCFCFC]/70 hover:text-[#FDCC29] transition-colors font-light tracking-wide text-sm"
                   >
                     {item}
                   </a>
@@ -135,12 +146,12 @@ export default function Footer() {
         </div>
 
         {/* Disclaimer */}
-        <div className="mt-12 pt-8 border-t border-[#10B981]/20">
-          <div className="bg-[#1E40AF]/10 border border-[#10B981]/20 rounded-lg p-6 backdrop-blur-sm">
-            <h4 className="text-white font-light tracking-wide mb-3">
+        <div className="mt-12 pt-8 border-t border-[#FDCC29]/20">
+          <div className="bg-[#FDCC29]/10 border border-[#FDCC29]/20 rounded-lg p-6 backdrop-blur-sm">
+            <h4 className="text-[#FCFCFC] font-light tracking-wide mb-3">
               DISCLAIMER:
             </h4>
-            <p className="text-[#A0AEC0] font-light tracking-wide leading-relaxed text-sm">
+            <p className="text-[#FCFCFC]/70 font-light tracking-wide leading-relaxed text-sm">
               10000Ideas is only an intermediary offering its exchange of
               ideas...offers a platform to advertise products of seller for a
               subscriber (please seeked User concerning on its website and is
@@ -163,8 +174,8 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-6 border-t border-[#10B981]/20 text-center">
-          <p className="text-[#A0AEC0] font-light tracking-wide text-sm">
+        <div className="mt-8 pt-6 border-t border-[#FDCC29]/20 text-center">
+          <p className="text-[#FCFCFC]/70 font-light tracking-wide text-sm">
             © 2025 All rights reserved
           </p>
         </div>
@@ -172,4 +183,3 @@ export default function Footer() {
     </footer>
   );
 }
-

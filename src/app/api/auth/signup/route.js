@@ -13,7 +13,17 @@ export async function POST(request) {
     await connectDB();
 
     const body = await request.json();
-    const { name, email, password } = body;
+    const {
+      name,
+      email,
+      password,
+      age,
+      monthlyIncome,
+      gender,
+      isPhysicallyDisabled,
+      maritalStatus,
+      area,
+    } = body;
 
     // Validation
     if (!validateName(name)) {
@@ -54,6 +64,12 @@ export async function POST(request) {
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password,
+      age,
+      monthlyIncome,
+      gender,
+      isPhysicallyDisabled,
+      maritalStatus,
+      area,
     });
 
     await user.save();
@@ -75,6 +91,12 @@ export async function POST(request) {
             email: user.email,
             role: user.role,
             isEmailVerified: user.isEmailVerified,
+            age: user.age,
+            monthlyIncome: user.monthlyIncome,
+            gender: user.gender,
+            isPhysicallyDisabled: user.isPhysicallyDisabled,
+            maritalStatus: user.maritalStatus,
+            area: user.area,
             createdAt: user.createdAt,
           },
           token,

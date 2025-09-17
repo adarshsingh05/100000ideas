@@ -84,6 +84,69 @@ export const ideasService = {
       throw error;
     }
   },
+
+  // Get static ideas (migrated from JSON)
+  async getStaticIdeas(page = 1, limit = 10, category = null, search = null) {
+    try {
+      let url = `/ideas/static?page=${page}&limit=${limit}`;
+      if (category) {
+        url += `&category=${category}`;
+      }
+      if (search) {
+        url += `&search=${search}`;
+      }
+      const response = await apiClient.get(url);
+      return response;
+    } catch (error) {
+      console.error("Error fetching static ideas:", error);
+      throw error;
+    }
+  },
+
+  // Get featured ideas for carousel (random mix of static and community ideas)
+  async getFeaturedIdeas(limit = 8) {
+    try {
+      const response = await apiClient.get(`/ideas/featured?limit=${limit}`);
+      return response;
+    } catch (error) {
+      console.error("Error fetching featured ideas:", error);
+      throw error;
+    }
+  },
+
+  // Get featured static ideas for carousel (legacy method)
+  async getFeaturedStaticIdeas(limit = 8) {
+    try {
+      const response = await apiClient.post("/ideas/static", { limit });
+      return response;
+    } catch (error) {
+      console.error("Error fetching featured static ideas:", error);
+      throw error;
+    }
+  },
+
+  // Get community ideas only (excludes admin/migrated ideas)
+  async getCommunityIdeas(
+    page = 1,
+    limit = 10,
+    category = null,
+    search = null
+  ) {
+    try {
+      let url = `/community-ideas?page=${page}&limit=${limit}`;
+      if (category) {
+        url += `&category=${category}`;
+      }
+      if (search) {
+        url += `&search=${search}`;
+      }
+      const response = await apiClient.get(url);
+      return response;
+    } catch (error) {
+      console.error("Error fetching community ideas:", error);
+      throw error;
+    }
+  },
 };
 
 export default ideasService;

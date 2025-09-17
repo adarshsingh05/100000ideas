@@ -191,6 +191,19 @@ const ideaSchema = new mongoose.Schema(
       },
     ],
     tags: [String],
+    // Fields for static ideas migrated from JSON
+    isStaticIdea: {
+      type: Boolean,
+      default: false,
+    },
+    originalId: {
+      type: Number,
+      sparse: true, // Allow null values but ensure uniqueness when present
+    },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

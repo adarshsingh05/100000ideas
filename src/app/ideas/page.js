@@ -84,6 +84,7 @@ export default function IdeasPage() {
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalIdeas, setTotalIdeas] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
@@ -91,7 +92,7 @@ export default function IdeasPage() {
   const [sortBy, setSortBy] = useState("newest");
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState("card"); // "card" or "list"
-  const ideasPerPage = viewMode === "card" ? 8 : 6; // 4x2 grid for cards, 6 for list
+  const ideasPerPage = viewMode === "card" ? 12 : 10; // Show more ideas per page
 
   const { viewCount, hasAccess, incrementView } = useIdeaAccess();
 
@@ -134,6 +135,7 @@ export default function IdeasPage() {
       );
       if (response.success) {
         setIdeas(response.ideas);
+        setTotalIdeas(response.pagination?.totalIdeas || 0);
       }
     } catch (error) {
       console.error("Error fetching ideas:", error);
@@ -1063,10 +1065,7 @@ export default function IdeasPage() {
               <div className="flex items-center space-x-1">
                 {Array.from(
                   {
-                    length: Math.min(
-                      5,
-                      Math.ceil(filteredAndSortedIdeas.length / ideasPerPage)
-                    ),
+                    length: Math.min(5, Math.ceil(totalIdeas / ideasPerPage)),
                   },
                   (_, i) => {
                     const pageNum = i + 1;
@@ -1096,7 +1095,7 @@ export default function IdeasPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => handlePageChange(currentPage + 1)}
-                disabled={filteredAndSortedIdeas.length < ideasPerPage}
+                disabled={currentPage >= Math.ceil(totalIdeas / ideasPerPage)}
                 className="bg-transparent border-[#2D3748]/30 text-[#2D3748] disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
               >
                 <span className="hidden sm:inline">Next</span>
@@ -1116,11 +1115,8 @@ export default function IdeasPage() {
           >
             <p className="text-[#2D3748] text-base font-bold tracking-wide">
               Showing {(currentPage - 1) * ideasPerPage + 1}-
-              {Math.min(
-                currentPage * ideasPerPage,
-                filteredAndSortedIdeas.length
-              )}{" "}
-              of {filteredAndSortedIdeas.length} ideas
+              {Math.min(currentPage * ideasPerPage, totalIdeas)} of {totalIdeas}{" "}
+              ideas
             </p>
           </motion.div>
         )}

@@ -58,13 +58,13 @@ import {
   Send,
 } from "lucide-react";
 
-import detailedBusinessIdeas from "@/data/detailedBusinessIdeas.json";
 import apiClient from "@/lib/api";
 
 export default function IdeaDetailPage({ params }) {
+  const [idea, setIdea] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [newReview, setNewReview] = useState({ comment: "" });
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -74,6 +74,29 @@ export default function IdeaDetailPage({ params }) {
   const clearMessage = () => {
     setMessage({ type: "", text: "" });
   };
+
+  // Fetch idea from API
+  useEffect(() => {
+    const fetchIdea = async () => {
+      try {
+        setLoading(true);
+        const response = await apiClient.get(`/ideas/${params.id}`);
+        if (response.success) {
+          setIdea(response.data.idea);
+        } else {
+          console.error("Failed to fetch idea:", response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching idea:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (params.id) {
+      fetchIdea();
+    }
+  }, [params.id]);
 
   const { isAuthenticated } = useAuth();
   const resolvedParams = use(params);
@@ -87,12 +110,6 @@ export default function IdeaDetailPage({ params }) {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
-  // Find the idea by ID from the detailed JSON data
-  const idea =
-    detailedBusinessIdeas.find(
-      (item) => item.id === parseInt(resolvedParams.id)
-    ) || detailedBusinessIdeas[0];
 
   // Map icon names to actual components
   const iconMap = {
@@ -108,13 +125,15 @@ export default function IdeaDetailPage({ params }) {
     Dumbbell,
   };
 
-  const IconComponent = iconMap[idea.icon] || Smartphone;
+  const IconComponent = idea ? iconMap[idea.icon] || Smartphone : Smartphone;
 
   // Fetch reviews
   const fetchReviews = async () => {
+    if (!idea) return;
+
     setLoading(true);
     try {
-      const data = await apiClient.get(`/reviews?ideaId=${idea.id}`);
+      const data = await apiClient.get(`/reviews?ideaId=${idea._id}`);
       if (data.success) {
         setReviews(data.data);
       }
@@ -149,7 +168,7 @@ export default function IdeaDetailPage({ params }) {
     setSubmitting(true);
     try {
       const data = await apiClient.post("/reviews", {
-        ideaId: idea.id,
+        ideaId: idea._id,
         comment: newReview.comment,
       });
 
@@ -167,10 +186,10 @@ export default function IdeaDetailPage({ params }) {
           text: "You need to be logged in to add a review. Please sign in first.",
         });
       } else {
-        setMessage({
-          type: "error",
-          text: error.message || "Failed to submit review",
-        });
+      setMessage({
+        type: "error",
+        text: error.message || "Failed to submit review",
+      });
       }
     } finally {
       setSubmitting(false);
@@ -191,10 +210,10 @@ export default function IdeaDetailPage({ params }) {
 
   // Load reviews when reviews tab is active
   React.useEffect(() => {
-    if (activeTab === "reviews") {
+    if (activeTab === "reviews" && idea) {
       fetchReviews();
     }
-  }, [activeTab, idea.id]);
+  }, [activeTab, idea]);
 
   const tabs = [
     { id: "overview", label: "Overview" },
@@ -205,6 +224,31 @@ export default function IdeaDetailPage({ params }) {
     { id: "skills", label: "Skills Required" },
     { id: "reviews", label: "Reviews" },
   ];
+
+  // Show loading state
+  if (loading && !idea) {
+    return (
+      <div className="min-h-screen bg-[#FCFCFC] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FDCC29]"></div>
+      </div>
+    );
+  }
+
+  // Show error state if idea not found
+  if (!loading && !idea) {
+    return (
+      <div className="min-h-screen bg-[#FCFCFC] flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Idea Not Found
+          </h1>
+          <p className="text-gray-600">
+            The idea you&apos;re looking for doesn&apos;t exist.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FCFCFC]">
@@ -267,7 +311,7 @@ export default function IdeaDetailPage({ params }) {
                       Investment Required
                     </p>
                     <p className="text-base sm:text-lg font-semibold text-[#2D3748]">
-                      {idea.investment}
+                      {idea.investmentRange}
                     </p>
                   </CardContent>
                 </Card>
@@ -289,7 +333,7 @@ export default function IdeaDetailPage({ params }) {
                       Time to Market
                     </p>
                     <p className="text-sm sm:text-base font-semibold text-[#2D3748]">
-                      {idea.timeToMarket}
+                      {idea.timeToStart}
                     </p>
                   </CardContent>
                 </Card>
@@ -363,7 +407,7 @@ export default function IdeaDetailPage({ params }) {
                       </CardHeader>
                       <CardContent>
                         <p className="text-[#2D3748] font-medium tracking-wide leading-relaxed text-lg">
-                          {idea.detailedDescription}
+                          {idea.description}
                         </p>
                       </CardContent>
                     </Card>
@@ -376,17 +420,17 @@ export default function IdeaDetailPage({ params }) {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
-                        {Object.entries(idea.implementation || {}).map(
-                          ([phase, description], index) => (
+                        {(idea.keyFeatures || []).map(
+                          (feature, index) => (
                             <div
                               key={index}
                               className="p-4 bg-[#B8860B]/10 rounded-lg"
                             >
-                              <h4 className="text-[#2D3748] font-medium tracking-wide mb-2 capitalize">
-                                {phase.replace(/([A-Z])/g, " $1").trim()}
+                              <h4 className="text-[#2D3748] font-medium tracking-wide mb-2">
+                                {feature}
                               </h4>
                               <p className="text-[#2D3748] font-medium tracking-wide leading-relaxed">
-                                {description}
+                                Key feature of the business
                               </p>
                             </div>
                           )
@@ -403,7 +447,7 @@ export default function IdeaDetailPage({ params }) {
                       </CardHeader>
                       <CardContent>
                         <div className="grid md:grid-cols-2 gap-4">
-                          {(idea.successFactors || []).map((factor, index) => (
+                          {(idea.keyFeatures || []).map((factor, index) => (
                             <div
                               key={index}
                               className="flex items-start space-x-3"
@@ -428,7 +472,7 @@ export default function IdeaDetailPage({ params }) {
                       </CardHeader>
                       <CardContent>
                         <div className="grid md:grid-cols-2 gap-4">
-                          {(idea.challenges || []).map((challenge, index) => (
+                          {idea.challenges ? idea.challenges.split(', ').map((challenge, index) => (
                             <div
                               key={index}
                               className="flex items-start space-x-3"
@@ -438,7 +482,7 @@ export default function IdeaDetailPage({ params }) {
                                 {challenge}
                               </p>
                             </div>
-                          ))}
+                          )) : []}
                         </div>
                       </CardContent>
                     </Card>
@@ -458,12 +502,10 @@ export default function IdeaDetailPage({ params }) {
                         </CardHeader>
                         <CardContent>
                           <p className="text-2xl font-medium text-[#B8860B] mb-2">
-                            {idea.marketAnalysis?.marketSize ||
-                              "Market Data Available"}
+                            {idea.marketSize || "Market Data Available"}
                           </p>
                           <p className="text-[#2D3748] font-medium tracking-wide">
-                            {idea.marketAnalysis?.growthRate ||
-                              "Growing Market"}
+                            Growing Market
                           </p>
                         </CardContent>
                       </Card>
@@ -476,8 +518,7 @@ export default function IdeaDetailPage({ params }) {
                         </CardHeader>
                         <CardContent>
                           <p className="text-[#2D3748] font-medium tracking-wide leading-relaxed">
-                            {idea.marketAnalysis?.targetAudience ||
-                              "General market"}
+                            {idea.targetAudience || "General market"}
                           </p>
                         </CardContent>
                       </Card>
@@ -497,8 +538,7 @@ export default function IdeaDetailPage({ params }) {
                             Competition Level
                           </h4>
                           <p className="text-[#2D3748] font-medium tracking-wide leading-relaxed">
-                            {idea.marketAnalysis?.competition ||
-                              "Moderate competition"}
+                            {idea.competitiveAdvantage || "Moderate competition"}
                           </p>
                         </div>
                       </CardContent>
@@ -518,10 +558,10 @@ export default function IdeaDetailPage({ params }) {
                       </CardHeader>
                       <CardContent>
                         <p className="text-3xl font-medium text-[#B8860B] mb-4">
-                          {idea.investment}
+                          {idea.investmentRange}
                         </p>
                         <p className="text-[#2D3748] font-medium tracking-wide">
-                          {idea.revenue}
+                          High Revenue Potential
                         </p>
                       </CardContent>
                     </Card>
@@ -536,17 +576,17 @@ export default function IdeaDetailPage({ params }) {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-3">
-                          {Object.entries(idea.revenueModel || {}).map(
-                            ([type, description], index) => (
+                          {(idea.revenueStreams || []).map(
+                            (stream, index) => (
                               <div
                                 key={index}
                                 className="p-3 bg-[#B8860B]/10 rounded-lg"
                               >
-                                <h4 className="text-[#2D3748] font-medium tracking-wide mb-1 capitalize">
-                                  {type.replace(/([A-Z])/g, " $1").trim()}
+                                <h4 className="text-[#2D3748] font-medium tracking-wide mb-1">
+                                  {stream}
                                 </h4>
                                 <p className="text-[#2D3748] font-medium tracking-wide">
-                                  {description}
+                                  Revenue stream for the business
                                 </p>
                               </div>
                             )
@@ -568,18 +608,18 @@ export default function IdeaDetailPage({ params }) {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
-                        {Object.entries(idea.funding || {}).map(
-                          ([type, amount], index) => (
+                        {(idea.revenueStreams || []).map(
+                          (stream, index) => (
                             <div
                               key={index}
                               className="p-4 bg-[#B8860B]/10 rounded-lg"
                             >
                               <div className="flex justify-between items-start mb-2">
-                                <h4 className="text-[#2D3748] font-medium tracking-wide capitalize">
-                                  {type.replace(/([A-Z])/g, " $1").trim()}
+                                <h4 className="text-[#2D3748] font-medium tracking-wide">
+                                  {stream}
                                 </h4>
                                 <span className="text-[#B8860B] font-medium">
-                                  {amount}
+                                  Revenue Stream
                                 </span>
                               </div>
                             </div>
@@ -602,17 +642,17 @@ export default function IdeaDetailPage({ params }) {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-3">
-                          {Object.entries(idea.revenueModel || {}).map(
-                            ([type, description], index) => (
+                          {(idea.revenueStreams || []).map(
+                            (stream, index) => (
                               <div
                                 key={index}
                                 className="p-3 bg-[#B8860B]/10 rounded-lg"
                               >
-                                <h4 className="text-[#2D3748] font-medium tracking-wide mb-1 capitalize">
-                                  {type.replace(/([A-Z])/g, " $1").trim()}
+                                <h4 className="text-[#2D3748] font-medium tracking-wide mb-1">
+                                  {stream}
                                 </h4>
                                 <p className="text-[#2D3748] font-medium tracking-wide">
-                                  {description}
+                                  Revenue stream for the business
                                 </p>
                               </div>
                             )
@@ -635,14 +675,14 @@ export default function IdeaDetailPage({ params }) {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-3">
-                          {(idea.teamRequirements || []).map((role, index) => (
+                          {(idea.requiredSkills || []).map((skill, index) => (
                             <div
                               key={index}
                               className="flex items-center space-x-3 p-3 bg-[#B8860B]/10 rounded-lg"
                             >
                               <User className="w-4 h-4 text-[#B8860B] flex-shrink-0" />
                               <p className="text-[#2D3748] font-medium tracking-wide">
-                                {role}
+                                {skill}
                               </p>
                             </div>
                           ))}
@@ -753,8 +793,8 @@ export default function IdeaDetailPage({ params }) {
                                       <p className="font-semibold text-[#2D3748] text-sm">
                                         {review.userName}
                                       </p>
+                                      </div>
                                     </div>
-                                  </div>
                                   <div className="text-xs text-gray-500">
                                     {new Date(
                                       review.createdAt
@@ -880,7 +920,7 @@ export default function IdeaDetailPage({ params }) {
                       Difficulty Level
                     </h4>
                     <p className="text-[#2D3748] font-medium tracking-wide">
-                      {idea.difficulty}
+                      Medium
                     </p>
                   </div>
                   <Separator className="bg-[#B8860B]/30" />
@@ -889,7 +929,7 @@ export default function IdeaDetailPage({ params }) {
                       Time to Market
                     </h4>
                     <p className="text-[#2D3748] font-medium tracking-wide">
-                      {idea.timeToMarket}
+                      {idea.timeToStart}
                     </p>
                   </div>
                 </CardContent>

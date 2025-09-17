@@ -327,7 +327,7 @@ export default function YourIdeasPage() {
               <p className="text-gray-500 mb-4 text-sm">
                 {searchTerm
                   ? "No ideas match your search criteria."
-                  : `You haven't uploaded any ${filterStatus} ideas yet.`}
+                  : `You haven&apos;t uploaded any ${filterStatus} ideas yet.`}
               </p>
               <Button
                 onClick={() => setIsUploadModalOpen(true)}

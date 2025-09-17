@@ -519,7 +519,7 @@ export default function IdeasPage() {
             <p className="text-[#2D3748] font-medium">
               {filteredAndSortedIdeas.length} ideas found
               {searchQuery && (
-                <span className="text-gray-500 ml-2">for "{searchQuery}"</span>
+                <span className="text-gray-500 ml-2">for &quot;{searchQuery}&quot;</span>
               )}
             </p>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -571,9 +571,9 @@ export default function IdeasPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className={
-              viewMode === "card"
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-                : "space-y-4"
+              viewMode === &quot;card&quot;
+                ? &quot;grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6&quot;
+                : &quot;space-y-4&quot;
             }
           >
             {filteredAndSortedIdeas.map((idea, index) => {

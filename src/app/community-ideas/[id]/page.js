@@ -201,7 +201,7 @@ export default function CommunityIdeaDetailPage({ params }) {
             Idea Not Found
           </h2>
           <p className="text-gray-600 mb-4">
-            The idea you're looking for doesn't exist.
+            The idea you&apos;re looking for doesn&apos;t exist.
           </p>
           <Link href="/your-ideas">
             <Button className="bg-[#B8860B] hover:bg-[#2D3748] text-white">

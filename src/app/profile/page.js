@@ -566,28 +566,28 @@ export default function ProfilePage() {
                   <div className="text-center flex-1">
                     <div className="flex items-center justify-center gap-2">
                       <p className="text-gray-700 font-medium text-sm">
-                  Purchased
-                </p>
+                        Purchased
+                      </p>
                       <h3 className="text-xl font-bold text-[#2D3748]">
                         {profileStats.purchased.toString().padStart(2, "0")}
                       </h3>
-          </div>
-                      </div>
+                    </div>
+                  </div>
                   <div className="text-right">
                     <div className="flex items-center text-yellow-600 text-xs font-semibold">
                       <Crown className="w-3 h-3 mr-1" />
                       Premium
-                      </div>
-                    <span className="text-yellow-600 text-xs">Buyer</span>
                     </div>
-                      </div>
+                    <span className="text-yellow-600 text-xs">Buyer</span>
+                  </div>
+                </div>
                 <p className="text-gray-500 text-xs mb-2">Total orders</p>
                 <div className="flex items-center text-gray-600">
                   <Award className="w-3 h-3 mr-1" />
                   <span className="text-xs font-medium">Premium member</span>
-                      </div>
-                </CardContent>
-              </Card>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </motion.div>
 
@@ -607,9 +607,9 @@ export default function ProfilePage() {
                   <CardTitle className="text-base font-medium flex items-center">
                     <div className="w-6 h-6 bg-[#B8860B]/10 rounded-lg flex items-center justify-center mr-2">
                       <User className="w-4 h-4 text-[#B8860B]" />
-                      </div>
-                      Personal Information
-                    </CardTitle>
+                    </div>
+                    Personal Information
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -619,14 +619,14 @@ export default function ProfilePage() {
                         Full Name *
                       </Label>
                       {isEditing ? (
-                          <Input
-                            value={profileData.name}
-                            onChange={(e) =>
-                              handleInputChange("name", e.target.value)
-                            }
+                        <Input
+                          value={profileData.name}
+                          onChange={(e) =>
+                            handleInputChange("name", e.target.value)
+                          }
                           className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
-                            placeholder="Enter your full name"
-                          />
+                          placeholder="Enter your full name"
+                        />
                       ) : (
                         <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
@@ -649,15 +649,15 @@ export default function ProfilePage() {
                         Email Address
                       </Label>
                       {isEditing ? (
-                          <Input
-                            type="email"
-                            value={profileData.email}
-                            onChange={(e) =>
-                              handleInputChange("email", e.target.value)
-                            }
+                        <Input
+                          type="email"
+                          value={profileData.email}
+                          onChange={(e) =>
+                            handleInputChange("email", e.target.value)
+                          }
                           className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
-                            placeholder="Enter your email"
-                          />
+                          placeholder="Enter your email"
+                        />
                       ) : (
                         <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
@@ -680,14 +680,14 @@ export default function ProfilePage() {
                         Phone Number
                       </Label>
                       {isEditing ? (
-                          <Input
-                            value={profileData.phone}
-                            onChange={(e) =>
-                              handleInputChange("phone", e.target.value)
-                            }
+                        <Input
+                          value={profileData.phone}
+                          onChange={(e) =>
+                            handleInputChange("phone", e.target.value)
+                          }
                           className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
-                            placeholder="Enter your phone number"
-                          />
+                          placeholder="Enter your phone number"
+                        />
                       ) : (
                         <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
@@ -710,17 +710,17 @@ export default function ProfilePage() {
                         Gender
                       </Label>
                       {isEditing ? (
-                          <select
-                            value={profileData.gender}
-                            onChange={(e) =>
-                              handleInputChange("gender", e.target.value)
-                            }
+                        <select
+                          value={profileData.gender}
+                          onChange={(e) =>
+                            handleInputChange("gender", e.target.value)
+                          }
                           className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
-                          >
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                          </select>
+                        >
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Other">Other</option>
+                        </select>
                       ) : (
                         <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
@@ -743,15 +743,15 @@ export default function ProfilePage() {
                         Age
                       </Label>
                       {isEditing ? (
-                          <Input
-                            type="number"
-                            value={profileData.age}
-                            onChange={(e) =>
-                              handleInputChange("age", e.target.value)
-                            }
+                        <Input
+                          type="number"
+                          value={profileData.age}
+                          onChange={(e) =>
+                            handleInputChange("age", e.target.value)
+                          }
                           className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
-                            placeholder="Enter your age"
-                          />
+                          placeholder="Enter your age"
+                        />
                       ) : (
                         <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
@@ -774,19 +774,19 @@ export default function ProfilePage() {
                         Annual Income
                       </Label>
                       {isEditing ? (
-                          <select
-                            value={profileData.annualIncome}
-                            onChange={(e) =>
-                              handleInputChange("annualIncome", e.target.value)
-                            }
+                        <select
+                          value={profileData.annualIncome}
+                          onChange={(e) =>
+                            handleInputChange("annualIncome", e.target.value)
+                          }
                           className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
-                          >
-                            <option value="Below 5 Lakhs">Below 5 Lakhs</option>
-                            <option value="5-10 Lakhs">5-10 Lakhs</option>
-                            <option value="10-25 Lakhs">10-25 Lakhs</option>
-                            <option value="25-50 Lakhs">25-50 Lakhs</option>
+                        >
+                          <option value="Below 5 Lakhs">Below 5 Lakhs</option>
+                          <option value="5-10 Lakhs">5-10 Lakhs</option>
+                          <option value="10-25 Lakhs">10-25 Lakhs</option>
+                          <option value="25-50 Lakhs">25-50 Lakhs</option>
                           <option value="Above 50 Lakhs">Above 50 Lakhs</option>
-                          </select>
+                        </select>
                       ) : (
                         <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
@@ -932,15 +932,15 @@ export default function ProfilePage() {
                 <CardContent className="space-y-2">
                   <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-100 hover:border-gray-200">
                     <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
+                      <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
                         <UserCircle className="w-4 h-4 text-[#B8860B]" />
-                          </div>
+                      </div>
                       <div className="text-left">
                         <span className="text-[#2D3748] font-medium text-sm">
                           View Activity
                         </span>
                         <p className="text-gray-500 text-xs">Recent actions</p>
-                        </div>
+                      </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
                   </button>
@@ -949,7 +949,7 @@ export default function ProfilePage() {
                     <div className="flex items-center space-x-3">
                       <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
                         <BarChart3 className="w-4 h-4 text-[#B8860B]" />
-                  </div>
+                      </div>
                       <div className="text-left">
                         <span className="text-[#2D3748] font-medium text-sm">
                           Analytics

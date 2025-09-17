@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useIdeaAccess } from "@/hooks/useIdeaAccess";
 import PremiumModal from "@/components/PremiumModal";
 import businessIdeasData from "@/data/businessIdeas.json";
+import { ideasService } from "@/lib/ideasService";
 import {
   Card,
   CardContent,
@@ -30,7 +31,6 @@ import {
   Leaf,
   Utensils,
   Car,
-  Heart,
   Laptop,
   ShoppingBag,
   Camera,
@@ -50,6 +50,9 @@ import {
   Shield,
   MapPin,
   X,
+  User,
+  Eye,
+  Heart,
 } from "lucide-react";
 
 // Dummy data for carousel ideas
@@ -545,6 +548,266 @@ const sidebarLinks = {
     },
   ],
 };
+
+// User Uploaded Ideas Component
+function UserUploadedIdeas() {
+  const [ideas, setIdeas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ideasPerPage = 8; // 4x2 grid
+
+  useEffect(() => {
+    const fetchIdeas = async () => {
+      try {
+        setLoading(true);
+        const response = await ideasService.getAllIdeas(
+          currentPage,
+          ideasPerPage
+        );
+        if (response.success) {
+          setIdeas(response.ideas);
+        }
+      } catch (error) {
+        console.error("Error fetching user ideas:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIdeas();
+  }, [currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // Scroll to top of the community section
+    const element = document.getElementById("community-ideas");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FDCC29]"></div>
+      </div>
+    );
+  }
+
+  if (ideas.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Lightbulb className="w-8 h-8 text-gray-400" />
+        </div>
+        <h3 className="text-lg font-medium text-[#2D3748] mb-2">
+          No community ideas yet
+        </h3>
+        <p className="text-gray-500">
+          Be the first to share your innovative business idea!
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {/* 4x2 Grid Layout */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        {ideas.map((idea, index) => (
+          <motion.div
+            key={idea._id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="break-inside-avoid mb-8"
+          >
+            <Card className="bg-white border border-gray-200 shadow-sm cursor-pointer rounded-lg overflow-hidden">
+              {/* Image Placeholder */}
+              <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-200">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#FDCC29]/20 to-[#2D3748]/20"></div>
+                <div className="absolute top-4 left-4">
+                  <div className="bg-[#FDCC29] text-[#2D3748] px-3 py-1 rounded text-sm font-medium">
+                    {idea.investmentRange || "₹25L"}
+                  </div>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <div className="bg-white/90 text-[#2D3748] px-3 py-1 rounded text-sm font-medium">
+                    {idea.difficulty || "Medium"}
+                  </div>
+                </div>
+                <div className="absolute bottom-4 right-4">
+                  <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center">
+                    <Lightbulb className="w-4 h-4 text-[#2D3748]" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Content Section */}
+              <div className="p-5">
+                {/* Category and Rating */}
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                    {idea.category}
+                  </span>
+                  <div className="flex items-center space-x-1">
+                    <Star className="w-4 h-4 text-[#FDCC29] fill-current" />
+                    <span className="text-sm text-[#2D3748] font-medium">
+                      {idea.rating || 4.5}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Title */}
+                <CardTitle className="text-lg font-semibold text-[#2D3748] leading-tight mb-3">
+                  {idea.title}
+                </CardTitle>
+
+                {/* Description */}
+                <CardDescription className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-2">
+                  {idea.description}
+                </CardDescription>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {idea.tags?.slice(0, 3).map((tag, tagIndex) => (
+                    <span
+                      key={tagIndex}
+                      className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  )) || [
+                    <span
+                      key="0"
+                      className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
+                    >
+                      Community
+                    </span>,
+                    <span
+                      key="1"
+                      className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
+                    >
+                      Innovation
+                    </span>,
+                  ]}
+                </div>
+
+                {/* Metrics */}
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">
+                      Revenue Potential
+                    </span>
+                    <span className="text-sm text-[#2D3748] font-medium">
+                      {idea.revenue || "High potential"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">
+                      Time to Market
+                    </span>
+                    <span className="text-sm text-[#2D3748] font-medium">
+                      {idea.timeToStart || "2-3 months"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* User Info - Compact */}
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100 mb-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 bg-[#FDCC29] rounded-full flex items-center justify-center">
+                      <User className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-xs text-gray-500">
+                      {idea.uploadedByName?.split(" ")[0] || "Anonymous"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <div className="flex items-center">
+                      <Eye className="w-3 h-3 mr-1" />
+                      <span>{idea.views || 0}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Heart className="w-3 h-3 mr-1" />
+                      <span>{idea.likes || 0}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Button */}
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    console.log(
+                      "Homepage View Details clicked! Opening:",
+                      `/community-ideas/${idea._id}`
+                    );
+                    window.location.href = `/community-ideas/${idea._id}`;
+                  }}
+                  className="w-full text-sm font-medium border border-[#2D3748] text-[#2D3748] py-2"
+                >
+                  View Details
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Pagination for Community Ideas */}
+      {ideas.length > 0 && (
+        <div className="mt-8 flex justify-center">
+          <div className="flex items-center space-x-1 sm:space-x-2 bg-white rounded-lg p-2 border border-gray-200 shadow-md max-w-full overflow-x-auto">
+            {/* Previous Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="bg-transparent border-[#2D3748]/30 text-[#2D3748] disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-medium text-xs sm:text-sm"
+            >
+              <span className="hidden sm:inline">Previous</span>
+              <span className="sm:hidden">Prev</span>
+            </Button>
+
+            {/* Page Numbers */}
+            <div className="flex items-center space-x-1">
+              {Array.from({ length: 5 }, (_, i) => i + 1).map((pageNum) => (
+                <Button
+                  key={pageNum}
+                  variant={currentPage === pageNum ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handlePageChange(pageNum)}
+                  className={
+                    currentPage === pageNum
+                      ? "bg-[#FDCC29] hover:bg-[#2D3748] text-[#2D3748] border-[#FDCC29] px-2 sm:px-3 py-2 font-light tracking-wide shadow-md text-xs sm:text-sm"
+                      : "bg-transparent border-[#2D3748]/30 text-[#2D3748] px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
+                  }
+                >
+                  {pageNum}
+                </Button>
+              ))}
+            </div>
+
+            {/* Next Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={ideas.length < ideasPerPage}
+              className="bg-transparent border-[#2D3748]/30 text-[#2D3748] disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
+            >
+              <span className="hidden sm:inline">Next</span>
+              <span className="sm:hidden">Next</span>
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -1220,105 +1483,97 @@ export default function Home() {
                     transition={{ delay: index * 0.1 }}
                     className="break-inside-avoid mb-8"
                   >
-                    <motion.div
-                      whileHover={{
-                        scale: 1.05,
-                        transition: { duration: 0.3 },
-                      }}
-                      whileTap={{ scale: 0.98 }}
+                    <Card
+                      className="bg-white border border-gray-200 shadow-sm cursor-pointer rounded-lg overflow-hidden"
+                      onClick={() => handleCardClick(idea.id)}
                     >
-                      <Card
-                        className="bg-white border border-gray-200 shadow-sm cursor-pointer rounded-lg overflow-hidden"
-                        onClick={() => handleCardClick(idea.id)}
-                      >
-                        {/* Image Placeholder */}
-                        <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-200">
-                          <div className="absolute inset-0 bg-gradient-to-br from-[#FDCC29]/20 to-[#2D3748]/20"></div>
-                          <div className="absolute top-4 left-4">
-                            <div className="bg-[#FDCC29] text-[#2D3748] px-3 py-1 rounded text-sm font-medium">
-                              {idea.investment}
-                            </div>
-                          </div>
-                          <div className="absolute top-4 right-4">
-                            <div className="bg-white/90 text-[#2D3748] px-3 py-1 rounded text-sm font-medium">
-                              {idea.difficulty}
-                            </div>
-                          </div>
-                          <div className="absolute bottom-4 right-4">
-                            <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center">
-                              <IconComponent className="w-4 h-4 text-[#2D3748]" />
-                            </div>
+                      {/* Image Placeholder */}
+                      <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-200">
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#FDCC29]/20 to-[#2D3748]/20"></div>
+                        <div className="absolute top-4 left-4">
+                          <div className="bg-[#FDCC29] text-[#2D3748] px-3 py-1 rounded text-sm font-medium">
+                            {idea.investment}
                           </div>
                         </div>
+                        <div className="absolute top-4 right-4">
+                          <div className="bg-white/90 text-[#2D3748] px-3 py-1 rounded text-sm font-medium">
+                            {idea.difficulty}
+                          </div>
+                        </div>
+                        <div className="absolute bottom-4 right-4">
+                          <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center">
+                            <IconComponent className="w-4 h-4 text-[#2D3748]" />
+                          </div>
+                        </div>
+                      </div>
 
-                        {/* Content Section */}
-                        <div className="p-5">
-                          {/* Category and Rating */}
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs text-gray-500 uppercase tracking-wide font-medium">
-                              {idea.category}
+                      {/* Content Section */}
+                      <div className="p-5">
+                        {/* Category and Rating */}
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                            {idea.category}
+                          </span>
+                          <div className="flex items-center space-x-1">
+                            <Star className="w-4 h-4 text-[#FDCC29] fill-current" />
+                            <span className="text-sm text-[#2D3748] font-medium">
+                              {idea.rating}
                             </span>
-                            <div className="flex items-center space-x-1">
-                              <Star className="w-4 h-4 text-[#FDCC29] fill-current" />
-                              <span className="text-sm text-[#2D3748] font-medium">
-                                {idea.rating}
-                              </span>
-                            </div>
                           </div>
-
-                          {/* Title */}
-                          <CardTitle className="text-lg font-semibold text-[#2D3748] leading-tight mb-3">
-                            {idea.title}
-                          </CardTitle>
-
-                          {/* Description */}
-                          <CardDescription className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-2">
-                            {idea.description}
-                          </CardDescription>
-
-                          {/* Tags */}
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {idea.tags.slice(0, 3).map((tag, tagIndex) => (
-                              <span
-                                key={tagIndex}
-                                className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-
-                          {/* Metrics */}
-                          <div className="space-y-3 mb-4">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-gray-500">
-                                Revenue Potential
-                              </span>
-                              <span className="text-sm text-[#2D3748] font-medium">
-                                {idea.revenue}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-gray-500">
-                                Time to Market
-                              </span>
-                              <span className="text-sm text-[#2D3748] font-medium">
-                                {idea.timeToMarket}
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Action Button */}
-                          <Button
-                            variant="outline"
-                            className="w-full text-sm font-medium border border-[#2D3748] text-[#2D3748] py-2"
-                          >
-                            View Details
-                            <ArrowRight className="w-4 h-4 ml-2" />
-                          </Button>
                         </div>
-                      </Card>
-                    </motion.div>
+
+                        {/* Title */}
+                        <CardTitle className="text-lg font-semibold text-[#2D3748] leading-tight mb-3">
+                          {idea.title}
+                        </CardTitle>
+
+                        {/* Description */}
+                        <CardDescription className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-2">
+                          {idea.description}
+                        </CardDescription>
+
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {idea.tags.slice(0, 3).map((tag, tagIndex) => (
+                            <span
+                              key={tagIndex}
+                              className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Metrics */}
+                        <div className="space-y-3 mb-4">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-500">
+                              Revenue Potential
+                            </span>
+                            <span className="text-sm text-[#2D3748] font-medium">
+                              {idea.revenue}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-500">
+                              Time to Market
+                            </span>
+                            <span className="text-sm text-[#2D3748] font-medium">
+                              {idea.timeToMarket}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Action Button */}
+                        <Button
+                          variant="outline"
+                          className="w-full text-sm font-medium border border-[#2D3748] text-[#2D3748] py-2"
+                        >
+                          View Details
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
+                    </Card>
                   </motion.div>
                 );
               })}
@@ -1470,6 +1725,23 @@ export default function Home() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* User Uploaded Ideas Section */}
+      <div
+        id="community-ideas"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+      >
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-[#2D3748] mb-4">
+            Community Ideas
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Discover innovative business ideas shared by our community members
+          </p>
+        </div>
+
+        <UserUploadedIdeas />
       </div>
 
       {/* Compact Sidebar Content - Horizontal Layout */}

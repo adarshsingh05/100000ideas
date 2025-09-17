@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navbar() {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, loading } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
@@ -60,7 +60,7 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <a
-              href="#"
+              href="/ideas"
               className="text-white hover:text-[#B8860B] transition-colors font-semibold tracking-wide text-base"
             >
               Ideas
@@ -78,7 +78,17 @@ export default function Navbar() {
               About
             </a>
 
-            {isAuthenticated ? (
+            {loading ? (
+              // Skeleton Loading for Desktop
+              <div className="flex items-center space-x-3 p-2">
+                <div className="w-9 h-9 bg-white/20 rounded-full animate-pulse"></div>
+                <div className="hidden lg:block space-y-1">
+                  <div className="w-20 h-3 bg-white/20 rounded animate-pulse"></div>
+                  <div className="w-16 h-2 bg-white/20 rounded animate-pulse"></div>
+                </div>
+                <div className="w-4 h-4 bg-white/20 rounded animate-pulse"></div>
+              </div>
+            ) : isAuthenticated ? (
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={toggleUserMenu}
@@ -123,6 +133,14 @@ export default function Navbar() {
                       >
                         <UserCircle className="w-5 h-5 text-[#B8860B]" />
                         <span className="font-medium">My Profile</span>
+                      </a>
+
+                      <a
+                        href="/your-ideas"
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-[#2D3748] hover:bg-[#B8860B]/10 transition-colors duration-200"
+                      >
+                        <Lightbulb className="w-5 h-5 text-[#B8860B]" />
+                        <span className="font-medium">Your Ideas</span>
                       </a>
 
                       <button className="w-full flex items-center space-x-3 px-4 py-3 text-[#2D3748] hover:bg-[#B8860B]/10 transition-colors duration-200">
@@ -181,7 +199,7 @@ export default function Navbar() {
           <div className="md:hidden border-t border-[#B8860B]/30 bg-gradient-to-r from-[#B8860B] to-[#2D3748] backdrop-blur-sm">
             <div className="px-2 pt-2 pb-3 space-y-1">
               <a
-                href="#"
+                href="/ideas"
                 className="block px-3 py-3 text-white hover:text-[#B8860B] hover:bg-[#B8860B]/10 transition-colors font-semibold tracking-wide rounded-lg"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -202,7 +220,23 @@ export default function Navbar() {
                 About
               </a>
 
-              {isAuthenticated ? (
+              {loading ? (
+                // Skeleton Loading for Mobile
+                <div className="px-3 py-2 border-t border-[#B8860B]/20 mt-2">
+                  <div className="flex items-center space-x-3 mb-4 p-3 bg-[#B8860B]/10 rounded-lg">
+                    <div className="w-10 h-10 bg-white/20 rounded-full animate-pulse"></div>
+                    <div className="space-y-2">
+                      <div className="w-24 h-3 bg-white/20 rounded animate-pulse"></div>
+                      <div className="w-32 h-2 bg-white/20 rounded animate-pulse"></div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="w-full h-12 bg-white/10 rounded-lg animate-pulse"></div>
+                    <div className="w-full h-12 bg-white/10 rounded-lg animate-pulse"></div>
+                    <div className="w-full h-12 bg-white/10 rounded-lg animate-pulse"></div>
+                  </div>
+                </div>
+              ) : isAuthenticated ? (
                 <div className="px-3 py-2 border-t border-[#B8860B]/20 mt-2">
                   <div className="flex items-center space-x-3 mb-4 p-3 bg-[#B8860B]/10 rounded-lg">
                     <div className="w-10 h-10 bg-[#B8860B] rounded-full flex items-center justify-center shadow-lg overflow-hidden">
@@ -229,6 +263,14 @@ export default function Navbar() {
                     >
                       <UserCircle className="w-5 h-5 text-[#B8860B]" />
                       <span className="font-medium">My Profile</span>
+                    </a>
+
+                    <a
+                      href="/your-ideas"
+                      className="w-full flex items-center space-x-3 px-3 py-3 text-white hover:bg-[#B8860B]/10 rounded-lg transition-colors duration-200"
+                    >
+                      <Lightbulb className="w-5 h-5 text-[#B8860B]" />
+                      <span className="font-medium">Your Ideas</span>
                     </a>
 
                     <button className="w-full flex items-center space-x-3 px-3 py-3 text-white hover:bg-[#B8860B]/10 rounded-lg transition-colors duration-200">

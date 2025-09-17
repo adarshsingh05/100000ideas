@@ -84,11 +84,11 @@ export default function Navbar() {
                   onClick={toggleUserMenu}
                   className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#B8860B]/10 transition-all duration-300 group"
                 >
-                  <div className="w-10 h-10 bg-[#B8860B] rounded-full flex items-center justify-center shadow-lg border-2 border-white overflow-hidden">
+                  <div className="w-9 h-9 bg-[#B8860B] rounded-full flex items-center justify-center shadow-lg border-2 border-white overflow-hidden">
                     <img
                       src="/profileicon.png"
                       alt="Profile"
-                      className="w-8 h-8 object-cover rounded-full"
+                      className="w-5 h-5 object-cover rounded-full"
                     />
                   </div>
                   <div className="hidden lg:block text-left">

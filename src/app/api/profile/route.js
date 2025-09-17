@@ -90,24 +90,47 @@ export async function PUT(request) {
       );
     }
 
+    // Prepare update data, only include fields that have values
+    const updateData = {
+      name: profileData.name,
+      email: profileData.email,
+      updatedAt: new Date(),
+    };
+
+    // Only add optional fields if they have values
+    if (profileData.phone && profileData.phone.trim() !== "") {
+      updateData.phone = profileData.phone;
+    }
+    if (profileData.age && profileData.age.trim() !== "") {
+      updateData.age = profileData.age;
+    }
+    if (profileData.gender && profileData.gender.trim() !== "") {
+      updateData.gender = profileData.gender;
+    }
+    if (profileData.annualIncome && profileData.annualIncome.trim() !== "") {
+      updateData.annualIncome = profileData.annualIncome;
+    }
+    if (profileData.caste && profileData.caste.trim() !== "") {
+      updateData.caste = profileData.caste;
+    }
+    if (profileData.area && profileData.area.trim() !== "") {
+      updateData.area = profileData.area;
+    }
+    if (
+      profileData.physicallyChallenged &&
+      profileData.physicallyChallenged.trim() !== ""
+    ) {
+      updateData.physicallyChallenged = profileData.physicallyChallenged;
+    }
+    if (profileData.profilePicture) {
+      updateData.profilePicture = profileData.profilePicture;
+    }
+
     // Update user profile
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        name: profileData.name,
-        email: profileData.email,
-        phone: profileData.phone || "",
-        gender: profileData.gender || "",
-        age: profileData.age || "",
-        annualIncome: profileData.annualIncome || "",
-        caste: profileData.caste || "",
-        area: profileData.area || "",
-        physicallyChallenged: profileData.physicallyChallenged || "No",
-        profilePicture: profileData.profilePicture || null,
-        updatedAt: new Date(),
-      },
-      { new: true, runValidators: true }
-    ).select("-password");
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
 
     if (!updatedUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -120,13 +143,13 @@ export async function PUT(request) {
         id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
-        phone: updatedUser.phone,
-        gender: updatedUser.gender,
-        age: updatedUser.age,
-        annualIncome: updatedUser.annualIncome,
-        caste: updatedUser.caste,
-        area: updatedUser.area,
-        physicallyChallenged: updatedUser.physicallyChallenged,
+        phone: updatedUser.phone || "",
+        gender: updatedUser.gender || "",
+        age: updatedUser.age || "",
+        annualIncome: updatedUser.annualIncome || "",
+        caste: updatedUser.caste || "",
+        area: updatedUser.area || "",
+        physicallyChallenged: updatedUser.physicallyChallenged || "No",
         profilePicture: updatedUser.profilePicture,
         balanceIcoins: updatedUser.balanceIcoins,
         savedIdeas: updatedUser.savedIdeas,

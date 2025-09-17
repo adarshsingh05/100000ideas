@@ -68,6 +68,34 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [message, setMessage] = useState({ type: "", text: "" });
+  const [toastProgress, setToastProgress] = useState(100);
+
+  // Auto-dismiss toast notifications with progress bar
+  useEffect(() => {
+    if (message.text) {
+      setToastProgress(100);
+
+      const progressInterval = setInterval(() => {
+        setToastProgress((prev) => {
+          if (prev <= 0) {
+            setMessage({ type: "", text: "" });
+            return 100;
+          }
+          return prev - 2; // Decrease by 2% every 100ms (5 seconds total)
+        });
+      }, 100);
+
+      const timer = setTimeout(() => {
+        setMessage({ type: "", text: "" });
+        setToastProgress(100);
+      }, 5000);
+
+      return () => {
+        clearTimeout(timer);
+        clearInterval(progressInterval);
+      };
+    }
+  }, [message.text]);
   const [profileData, setProfileData] = useState({
     name: "",
     email: "",
@@ -207,6 +235,18 @@ export default function ProfilePage() {
           ...prev,
           ...response.profile,
         }));
+
+        // Refresh profile data from server
+        setTimeout(async () => {
+          try {
+            const refreshedProfile = await profileService.getProfile(userId);
+            if (refreshedProfile.success) {
+              setProfileData(refreshedProfile.profile);
+            }
+          } catch (error) {
+            console.error("Error refreshing profile:", error);
+          }
+        }, 500);
       } else {
         throw new Error(response.message || "Failed to update profile");
       }
@@ -285,6 +325,55 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
       <Navbar />
 
+      {/* Toast Notification - Fixed Overlay */}
+      {message.text && (
+        <div
+          className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 max-w-md w-full mx-4 ${
+            message.type === "success"
+              ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/25"
+              : "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/25"
+          } rounded-xl border border-white/20 backdrop-blur-sm animate-in slide-in-from-top-2 duration-300`}
+        >
+          <div className="p-4 flex items-center space-x-3">
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                message.type === "success" ? "bg-white/20" : "bg-white/20"
+              }`}
+            >
+              {message.type === "success" ? (
+                <CheckCircle className="w-5 h-5 text-white" />
+              ) : (
+                <AlertCircle className="w-5 h-5 text-white" />
+              )}
+            </div>
+            <div className="flex-1">
+              <p className="font-semibold text-sm">
+                {message.type === "success" ? "Success!" : "Error!"}
+              </p>
+              <p className="text-white/90 text-sm">{message.text}</p>
+            </div>
+            <button
+              onClick={() => {
+                setMessage({ type: "", text: "" });
+                setToastProgress(100);
+              }}
+              className="w-6 h-6 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors duration-200"
+            >
+              <X className="w-4 h-4 text-white" />
+            </button>
+          </div>
+          {/* Progress Bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 rounded-b-xl overflow-hidden">
+            <div
+              className={`h-full transition-all duration-100 ease-linear ${
+                message.type === "success" ? "bg-white/60" : "bg-white/60"
+              }`}
+              style={{ width: `${toastProgress}%` }}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Professional Header Section */}
       <div className="relative overflow-hidden">
         {/* Background Pattern */}
@@ -295,106 +384,81 @@ export default function ProfilePage() {
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-32 -translate-x-32"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.5 }}
             className="flex flex-col lg:flex-row items-start lg:items-center justify-between"
           >
             {/* User Info Section */}
-            <div className="flex items-start space-x-6 mb-8 lg:mb-0">
+            <div className="flex items-center space-x-3 mb-3 lg:mb-0">
               {/* Profile Avatar */}
               <div className="relative group">
-                <div className="w-24 h-24 bg-gradient-to-br from-[#B8860B] to-[#D4AF37] rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white/30 group-hover:scale-105 transition-transform duration-300">
-                  <User className="w-12 h-12 text-white" />
+                <div className="w-12 h-12 bg-gradient-to-br from-[#B8860B] to-[#D4AF37] rounded-lg flex items-center justify-center shadow-md border border-white/20">
+                  <User className="w-6 h-6 text-white" />
                 </div>
                 {/* Completion Badge */}
-                <div className="absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-xl border-2 border-white">
-                  <span className="text-white text-sm font-bold">
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center border border-white">
+                  <span className="text-white text-xs font-medium">
                     {profileStats.completionPercentage}%
                   </span>
                 </div>
-                {/* Online Status */}
-                <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white shadow-lg"></div>
               </div>
 
               {/* User Details */}
-              <div className="flex-1">
-                <div className="flex items-center space-x-3 mb-2">
-                  <h1 className="text-4xl font-bold text-white">
+              <div>
+                <div className="mb-1">
+                  <h1 className="text-lg font-semibold text-white">
                     {profileData.name || user?.name || "User"}
                   </h1>
-                  <div className="w-8 h-8 bg-[#B8860B]/20 rounded-full flex items-center justify-center">
-                    <ShieldCheck className="w-5 h-5 text-[#B8860B]" />
-                  </div>
                 </div>
-                <p className="text-white/80 text-xl mb-3">
+                <p className="text-white/70 text-xs mb-1">
                   {profileData.email || user?.email || "user@example.com"}
                 </p>
 
                 {/* Status Badges */}
-                <div className="flex flex-wrap items-center gap-3 mb-4">
-                  <Badge className="bg-[#B8860B]/20 text-[#B8860B] border-[#B8860B]/30 font-semibold px-4 py-2 text-sm">
-                    <Crown className="w-4 h-4 mr-2" />
-                    Premium Member
+                <div className="flex items-center gap-1">
+                  <Badge className="bg-[#B8860B]/20 text-[#B8860B] border-[#B8860B]/30 text-xs px-1.5 py-0.5">
+                    Premium
                   </Badge>
-                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30 font-semibold px-4 py-2 text-sm">
-                    <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs px-1.5 py-0.5">
                     Active
                   </Badge>
-                  <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 font-semibold px-4 py-2 text-sm">
-                    <Star className="w-4 h-4 mr-2" />
-                    Verified
-                  </Badge>
-                </div>
-
-                {/* Quick Stats */}
-                <div className="flex items-center space-x-6 text-white/70">
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-4 h-4" />
-                    <span className="text-sm">
-                      Joined {new Date().getFullYear()}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Activity className="w-4 h-4" />
-                    <span className="text-sm">Last active now</span>
-                  </div>
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <div className="flex items-center space-x-2">
               {!isEditing ? (
                 <Button
                   onClick={() => setIsEditing(true)}
-                  className="bg-[#B8860B] hover:bg-[#2D3748] text-white hover:text-white px-8 py-4 rounded-2xl font-semibold shadow-xl transition-all duration-300 flex items-center justify-center space-x-3 min-w-[160px]"
+                  className="bg-[#B8860B] hover:bg-[#B8860B]/90 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors duration-200"
                 >
-                  <Edit3 className="w-5 h-5" />
-                  <span>Edit Profile</span>
+                  <Edit3 className="w-3 h-3 mr-1" />
+                  Edit Profile
                 </Button>
               ) : (
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                <div className="flex space-x-1">
                   <Button
                     onClick={handleSave}
                     disabled={isLoading}
-                    className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-xl transition-all duration-300 flex items-center justify-center space-x-3 disabled:opacity-50 min-w-[160px]"
+                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors duration-200 disabled:opacity-50"
                   >
                     {isLoading ? (
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
                     ) : (
-                      <Save className="w-5 h-5" />
+                      <Save className="w-3 h-3 mr-1" />
                     )}
-                    <span>{isLoading ? "Saving..." : "Save Changes"}</span>
+                    {isLoading ? "Saving..." : "Save"}
                   </Button>
                   <Button
                     onClick={handleCancel}
-                    className="bg-gray-600 hover:bg-gray-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-xl transition-all duration-300 flex items-center justify-center space-x-3 min-w-[160px]"
+                    className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors duration-200"
                   >
-                    <X className="w-5 h-5" />
-                    <span>Cancel</span>
+                    <X className="w-3 h-3 mr-1" />
+                    Cancel
                   </Button>
                 </div>
               )}
@@ -404,500 +468,344 @@ export default function ProfilePage() {
       </div>
 
       {/* Main Content Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Stats Overview Section */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        {/* Compact Stats Overview Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-12"
+          className="mb-6"
         >
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-[#2D3748] mb-2">
-              Your Dashboard
+          <div className="text-center mb-4">
+            <h2 className="text-xl font-medium text-[#2D3748] mb-1">
+              Welcome to the Dashboard
             </h2>
-            <p className="text-[#2D3748]/70 text-lg">
-              Track your progress and achievements
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* Balance Icoins Card */}
-            <Card className="bg-gradient-to-br from-amber-50 via-amber-100 to-yellow-100 border-amber-200/50 hover:shadow-2xl transition-all duration-500 group overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-200/20 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
-              <CardContent className="p-8 relative">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
-                    <Target className="w-8 h-8 text-white" />
+            <Card className="bg-gradient-to-br from-amber-50 to-orange-100 border border-amber-200 hover:shadow-md transition-all duration-300 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-amber-200/30 to-transparent rounded-full -translate-y-6 translate-x-6"></div>
+              <CardContent className="p-4 relative">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center shadow-md">
+                    <DollarSign className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="text-center flex-1">
+                    <div className="flex items-center justify-center gap-2">
+                      <p className="text-gray-700 font-medium text-sm">
+                        Balance Icoins
+                      </p>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        {profileStats.balanceIcoins.toLocaleString()}
+                      </h3>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <div className="flex items-center text-green-600 text-sm font-semibold mb-1">
-                      <TrendingUp className="w-4 h-4 mr-1" />
+                    <div className="flex items-center text-green-600 text-xs font-semibold">
+                      <TrendingUp className="w-3 h-3 mr-1" />
                       +12.5%
                     </div>
                     <span className="text-green-600 text-xs">This month</span>
                   </div>
                 </div>
-                <h3 className="text-4xl font-bold text-gray-800 mb-2">
-                  {profileStats.balanceIcoins.toLocaleString()}
-                </h3>
-                <p className="text-gray-600 font-semibold text-lg mb-1">
-                  Balance Icoins
+                <p className="text-gray-500 text-xs mb-2">
+                  Available for purchases
                 </p>
-                <p className="text-gray-500 text-sm">Available for purchases</p>
+                <div className="flex items-center text-amber-600">
+                  <Activity className="w-3 h-3 mr-1" />
+                  <span className="text-xs font-medium">Active balance</span>
+                </div>
               </CardContent>
             </Card>
 
             {/* Saved Ideas Card */}
-            <Card className="bg-gradient-to-br from-[#B8860B]/5 via-[#B8860B]/10 to-[#B8860B]/15 border-[#B8860B]/20 hover:shadow-2xl transition-all duration-500 group overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#B8860B]/20 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
-              <CardContent className="p-8 relative">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#B8860B] to-[#D4AF37] rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
-                    <Heart className="w-8 h-8 text-white" />
+            <Card className="bg-gradient-to-br from-[#B8860B]/10 to-[#D4AF37]/20 border border-[#B8860B]/30 hover:shadow-md transition-all duration-300 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-14 h-14 bg-gradient-to-br from-[#B8860B]/20 to-transparent rounded-full -translate-y-7 translate-x-7"></div>
+              <CardContent className="p-4 relative">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#B8860B] to-[#D4AF37] rounded-lg flex items-center justify-center shadow-md">
+                    <Heart className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="text-center flex-1">
+                    <div className="flex items-center justify-center gap-2">
+                      <p className="text-gray-700 font-medium text-sm">
+                        Saved Ideas
+                      </p>
+                      <h3 className="text-xl font-bold text-[#2D3748]">
+                        {profileStats.savedIdeas}
+                      </h3>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <div className="flex items-center text-[#B8860B] text-sm font-semibold mb-1">
-                      <Star className="w-4 h-4 mr-1" />
+                    <div className="flex items-center text-[#B8860B] text-xs font-semibold">
+                      <Star className="w-3 h-3 mr-1" />
                       +3
                     </div>
                     <span className="text-[#B8860B] text-xs">This week</span>
                   </div>
                 </div>
-                <h3 className="text-4xl font-bold text-[#2D3748] mb-2">
-                  {profileStats.savedIdeas}
-                </h3>
-                <p className="text-[#2D3748]/70 font-semibold text-lg mb-1">
-                  Saved Ideas
-                </p>
-                <p className="text-[#2D3748]/50 text-sm">Your collection</p>
+                <p className="text-gray-500 text-xs mb-2">Your collection</p>
+                <div className="flex items-center text-[#B8860B]">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  <span className="text-xs font-medium">
+                    Growing collection
+                  </span>
+                </div>
               </CardContent>
             </Card>
 
             {/* Purchased Card */}
-            <Card className="bg-gradient-to-br from-[#2D3748] via-gray-700 to-[#1a202c] border-[#2D3748]/50 hover:shadow-2xl transition-all duration-500 group overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/10 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
-              <CardContent className="p-8 relative">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-white/20 to-white/10 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
-                    <ShoppingBag className="w-8 h-8 text-white" />
+            <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-300 hover:shadow-md transition-all duration-300 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-gray-200/40 to-transparent rounded-full -translate-y-6 translate-x-6"></div>
+              <CardContent className="p-4 relative">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center shadow-md">
+                    <ShoppingBag className="w-5 h-5 text-white" />
                   </div>
-                  <div className="text-right">
-                    <div className="flex items-center text-yellow-400 text-sm font-semibold mb-1">
-                      <Crown className="w-4 h-4 mr-1" />
-                      Premium
-                    </div>
-                    <span className="text-yellow-400 text-xs">Buyer</span>
-                  </div>
-                </div>
-                <h3 className="text-4xl font-bold text-white mb-2">
-                  {profileStats.purchased.toString().padStart(2, "0")}
-                </h3>
-                <p className="text-white/80 font-semibold text-lg mb-1">
+                  <div className="text-center flex-1">
+                    <div className="flex items-center justify-center gap-2">
+                      <p className="text-gray-700 font-medium text-sm">
                   Purchased
                 </p>
-                <p className="text-white/60 text-sm">Total orders</p>
-              </CardContent>
-            </Card>
+                      <h3 className="text-xl font-bold text-[#2D3748]">
+                        {profileStats.purchased.toString().padStart(2, "0")}
+                      </h3>
+          </div>
+                      </div>
+                  <div className="text-right">
+                    <div className="flex items-center text-yellow-600 text-xs font-semibold">
+                      <Crown className="w-3 h-3 mr-1" />
+                      Premium
+                      </div>
+                    <span className="text-yellow-600 text-xs">Buyer</span>
+                    </div>
+                      </div>
+                <p className="text-gray-500 text-xs mb-2">Total orders</p>
+                <div className="flex items-center text-gray-600">
+                  <Award className="w-3 h-3 mr-1" />
+                  <span className="text-xs font-medium">Premium member</span>
+                      </div>
+                </CardContent>
+              </Card>
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-          {/* Left Sidebar - Quick Actions */}
-          <div className="xl:col-span-1">
-            {/* Quick Actions */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <Card className="bg-white/90 backdrop-blur-sm border-gray-200/50 shadow-xl sticky top-8">
-                <CardHeader className="pb-6">
-                  <CardTitle className="text-xl font-bold text-[#2D3748] flex items-center">
-                    <Zap className="w-6 h-6 mr-3 text-[#B8860B]" />
-                    Quick Actions
-                  </CardTitle>
-                  <CardDescription className="text-[#2D3748]/70">
-                    Access your most used features
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <button className="w-full flex items-center justify-between p-4 hover:bg-[#B8860B]/5 rounded-xl transition-all duration-300 group border border-gray-200 hover:border-[#B8860B]/30 hover:shadow-md">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#B8860B]/10 to-[#B8860B]/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <UserCircle className="w-6 h-6 text-[#B8860B]" />
-                      </div>
-                      <div className="text-left">
-                        <span className="text-[#2D3748] font-semibold text-base">
-                          View Activity
-                        </span>
-                        <p className="text-[#2D3748]/60 text-sm">
-                          Recent actions
-                        </p>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-[#2D3748]/50 group-hover:text-[#B8860B] transition-colors" />
-                  </button>
-
-                  <button className="w-full flex items-center justify-between p-4 hover:bg-[#B8860B]/5 rounded-xl transition-all duration-300 group border border-gray-200 hover:border-[#B8860B]/30 hover:shadow-md">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#B8860B]/10 to-[#B8860B]/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <BarChart3 className="w-6 h-6 text-[#B8860B]" />
-                      </div>
-                      <div className="text-left">
-                        <span className="text-[#2D3748] font-semibold text-base">
-                          Analytics
-                        </span>
-                        <p className="text-[#2D3748]/60 text-sm">
-                          Performance data
-                        </p>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-[#2D3748]/50 group-hover:text-[#B8860B] transition-colors" />
-                  </button>
-
-                  <button className="w-full flex items-center justify-between p-4 hover:bg-[#B8860B]/5 rounded-xl transition-all duration-300 group border border-gray-200 hover:border-[#B8860B]/30 hover:shadow-md">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#B8860B]/10 to-[#B8860B]/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <Settings className="w-6 h-6 text-[#B8860B]" />
-                      </div>
-                      <div className="text-left">
-                        <span className="text-[#2D3748] font-semibold text-base">
-                          Preferences
-                        </span>
-                        <p className="text-[#2D3748]/60 text-sm">
-                          Account settings
-                        </p>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-[#2D3748]/50 group-hover:text-[#B8860B] transition-colors" />
-                  </button>
-
-                  <button className="w-full flex items-center justify-between p-4 hover:bg-[#B8860B]/5 rounded-xl transition-all duration-300 group border border-gray-200 hover:border-[#B8860B]/30 hover:shadow-md">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#B8860B]/10 to-[#B8860B]/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <HelpCircle className="w-6 h-6 text-[#B8860B]" />
-                      </div>
-                      <div className="text-left">
-                        <span className="text-[#2D3748] font-semibold text-base">
-                          Help Center
-                        </span>
-                        <p className="text-[#2D3748]/60 text-sm">Get support</p>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-[#2D3748]/50 group-hover:text-[#B8860B] transition-colors" />
-                  </button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-
-          {/* Main Content Area */}
-          <div className="xl:col-span-3 space-y-8">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+          {/* Left Section - Profile Edit Form */}
+          <div className="xl:col-span-3 space-y-4">
             {/* Professional Profile Form */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="space-y-8"
+              className="space-y-4"
             >
-              {/* Message Display */}
-              {message.text && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`p-4 rounded-xl flex items-center space-x-3 shadow-lg ${
-                    message.type === "success"
-                      ? "bg-gradient-to-r from-green-50 to-green-100 text-green-800 border border-green-200"
-                      : "bg-gradient-to-r from-red-50 to-red-100 text-red-800 border border-red-200"
-                  }`}
-                >
-                  {message.type === "success" ? (
-                    <CheckCircle className="w-6 h-6 text-green-600" />
-                  ) : (
-                    <AlertCircle className="w-6 h-6 text-red-600" />
-                  )}
-                  <span className="font-semibold text-lg">{message.text}</span>
-                </motion.div>
-              )}
-
               {/* Personal Information Section */}
-              <Card className="bg-white/95 backdrop-blur-sm border-gray-200/50 shadow-2xl overflow-hidden">
-                <CardHeader className="bg-gradient-to-r from-[#2D3748] via-[#1a202c] to-[#2D3748] text-white relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-20">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
-                  </div>
-                  <div className="relative">
-                    <CardTitle className="text-2xl font-bold flex items-center mb-2">
-                      <div className="w-10 h-10 bg-[#B8860B]/20 rounded-xl flex items-center justify-center mr-4">
-                        <User className="w-6 h-6 text-[#B8860B]" />
+              <Card className="bg-white border border-gray-200 shadow-sm">
+                <CardHeader className="bg-gray-50 border-b border-gray-200">
+                  <CardTitle className="text-base font-medium flex items-center">
+                    <div className="w-6 h-6 bg-[#B8860B]/10 rounded-lg flex items-center justify-center mr-2">
+                      <User className="w-4 h-4 text-[#B8860B]" />
                       </div>
                       Personal Information
                     </CardTitle>
-                    <CardDescription className="text-white/80 text-lg">
-                      Manage your personal details and contact information
-                    </CardDescription>
-                  </div>
                 </CardHeader>
-                <CardContent className="p-10">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <CardContent className="p-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {/* Name */}
-                    <div className="space-y-4">
-                      <Label className="text-[#2D3748] font-bold text-base flex items-center">
-                        <div className="w-6 h-6 bg-[#B8860B]/10 rounded-lg flex items-center justify-center mr-3">
-                          <User className="w-4 h-4 text-[#B8860B]" />
-                        </div>
+                    <div className="space-y-1">
+                      <Label className="text-gray-700 font-medium text-xs">
                         Full Name *
                       </Label>
                       {isEditing ? (
-                        <div className="relative">
                           <Input
                             value={profileData.name}
                             onChange={(e) =>
                               handleInputChange("name", e.target.value)
                             }
-                            className="h-14 border-2 border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded-2xl text-lg font-medium pl-6 pr-6 shadow-sm hover:shadow-md transition-all duration-300"
+                          className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
                             placeholder="Enter your full name"
                           />
-                          <div className="absolute inset-y-0 right-0 flex items-center pr-6">
-                            <Edit3 className="w-5 h-5 text-gray-400" />
-                          </div>
-                        </div>
                       ) : (
-                        <div className="flex items-center justify-between p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 hover:border-[#B8860B]/30 transition-all duration-300 group">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
-                            className={`text-lg font-semibold ${
+                            className={`text-xs font-medium ${
                               profileData.name
-                                ? "text-[#2D3748]"
+                                ? "text-gray-900"
                                 : "text-gray-400 italic"
                             }`}
                           >
                             {profileData.name || "Not provided"}
                           </span>
-                          <div className="w-10 h-10 bg-[#B8860B]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <User className="w-5 h-5 text-[#B8860B]" />
-                          </div>
+                          <User className="w-3 h-3 text-gray-400" />
                         </div>
                       )}
                     </div>
 
                     {/* Email */}
-                    <div className="space-y-4">
-                      <Label className="text-[#2D3748] font-bold text-base flex items-center">
-                        <div className="w-6 h-6 bg-[#B8860B]/10 rounded-lg flex items-center justify-center mr-3">
-                          <Mail className="w-4 h-4 text-[#B8860B]" />
-                        </div>
+                    <div className="space-y-1">
+                      <Label className="text-gray-700 font-medium text-xs">
                         Email Address
                       </Label>
                       {isEditing ? (
-                        <div className="relative">
                           <Input
                             type="email"
                             value={profileData.email}
                             onChange={(e) =>
                               handleInputChange("email", e.target.value)
                             }
-                            className="h-14 border-2 border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded-2xl text-lg font-medium pl-6 pr-6 shadow-sm hover:shadow-md transition-all duration-300"
+                          className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
                             placeholder="Enter your email"
                           />
-                          <div className="absolute inset-y-0 right-0 flex items-center pr-6">
-                            <Mail className="w-5 h-5 text-gray-400" />
-                          </div>
-                        </div>
                       ) : (
-                        <div className="flex items-center justify-between p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 hover:border-[#B8860B]/30 transition-all duration-300 group">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
-                            className={`text-lg font-semibold ${
+                            className={`text-xs font-medium ${
                               profileData.email
-                                ? "text-[#2D3748]"
+                                ? "text-gray-900"
                                 : "text-gray-400 italic"
                             }`}
                           >
                             {profileData.email || "Not provided"}
                           </span>
-                          <div className="w-10 h-10 bg-[#B8860B]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <Mail className="w-5 h-5 text-[#B8860B]" />
-                          </div>
+                          <Mail className="w-3 h-3 text-gray-400" />
                         </div>
                       )}
                     </div>
 
                     {/* Phone Number */}
-                    <div className="space-y-4">
-                      <Label className="text-[#2D3748] font-bold text-base flex items-center">
-                        <div className="w-6 h-6 bg-[#B8860B]/10 rounded-lg flex items-center justify-center mr-3">
-                          <Phone className="w-4 h-4 text-[#B8860B]" />
-                        </div>
+                    <div className="space-y-1">
+                      <Label className="text-gray-700 font-medium text-xs">
                         Phone Number
                       </Label>
                       {isEditing ? (
-                        <div className="relative">
                           <Input
                             value={profileData.phone}
                             onChange={(e) =>
                               handleInputChange("phone", e.target.value)
                             }
-                            className="h-14 border-2 border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded-2xl text-lg font-medium pl-6 pr-6 shadow-sm hover:shadow-md transition-all duration-300"
+                          className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
                             placeholder="Enter your phone number"
                           />
-                          <div className="absolute inset-y-0 right-0 flex items-center pr-6">
-                            <Phone className="w-5 h-5 text-gray-400" />
-                          </div>
-                        </div>
                       ) : (
-                        <div className="flex items-center justify-between p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 hover:border-[#B8860B]/30 transition-all duration-300 group">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
-                            className={`text-lg font-semibold ${
+                            className={`text-xs font-medium ${
                               profileData.phone
-                                ? "text-[#2D3748]"
+                                ? "text-gray-900"
                                 : "text-gray-400 italic"
                             }`}
                           >
                             {profileData.phone || "Not provided"}
                           </span>
-                          <div className="w-10 h-10 bg-[#B8860B]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <Phone className="w-5 h-5 text-[#B8860B]" />
-                          </div>
+                          <Phone className="w-3 h-3 text-gray-400" />
                         </div>
                       )}
                     </div>
 
                     {/* Gender */}
-                    <div className="space-y-4">
-                      <Label className="text-[#2D3748] font-bold text-base flex items-center">
-                        <div className="w-6 h-6 bg-[#B8860B]/10 rounded-lg flex items-center justify-center mr-3">
-                          <Users className="w-4 h-4 text-[#B8860B]" />
-                        </div>
+                    <div className="space-y-1">
+                      <Label className="text-gray-700 font-medium text-xs">
                         Gender
                       </Label>
                       {isEditing ? (
-                        <div className="relative">
                           <select
                             value={profileData.gender}
                             onChange={(e) =>
                               handleInputChange("gender", e.target.value)
                             }
-                            className="h-14 w-full border-2 border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded-2xl text-lg font-medium bg-white pl-6 pr-12 shadow-sm hover:shadow-md transition-all duration-300 appearance-none"
+                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                           >
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             <option value="Other">Other</option>
                           </select>
-                          <div className="absolute inset-y-0 right-0 flex items-center pr-6 pointer-events-none">
-                            <Users className="w-5 h-5 text-gray-400" />
-                          </div>
-                        </div>
                       ) : (
-                        <div className="flex items-center justify-between p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 group">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
-                            className={`text-lg font-semibold ${
+                            className={`text-xs font-medium ${
                               profileData.gender
-                                ? "text-[#2D3748]"
+                                ? "text-gray-900"
                                 : "text-gray-400 italic"
                             }`}
                           >
                             {profileData.gender || "Not provided"}
                           </span>
-                          <div className="w-10 h-10 bg-[#B8860B]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <Users className="w-5 h-5 text-[#B8860B]" />
-                          </div>
+                          <Users className="w-3 h-3 text-gray-400" />
                         </div>
                       )}
                     </div>
 
                     {/* Age */}
-                    <div className="space-y-4">
-                      <Label className="text-[#2D3748] font-bold text-base flex items-center">
-                        <div className="w-6 h-6 bg-[#B8860B]/10 rounded-lg flex items-center justify-center mr-3">
-                          <Calendar className="w-4 h-4 text-[#B8860B]" />
-                        </div>
+                    <div className="space-y-1">
+                      <Label className="text-gray-700 font-medium text-xs">
                         Age
                       </Label>
                       {isEditing ? (
-                        <div className="relative">
                           <Input
                             type="number"
                             value={profileData.age}
                             onChange={(e) =>
                               handleInputChange("age", e.target.value)
                             }
-                            className="h-14 border-2 border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded-2xl text-lg font-medium pl-6 pr-6 shadow-sm hover:shadow-md transition-all duration-300"
+                          className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
                             placeholder="Enter your age"
                           />
-                          <div className="absolute inset-y-0 right-0 flex items-center pr-6">
-                            <Calendar className="w-5 h-5 text-gray-400" />
-                          </div>
-                        </div>
                       ) : (
-                        <div className="flex items-center justify-between p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 hover:border-[#B8860B]/30 transition-all duration-300 group">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
-                            className={`text-lg font-semibold ${
+                            className={`text-xs font-medium ${
                               profileData.age
-                                ? "text-[#2D3748]"
+                                ? "text-gray-900"
                                 : "text-gray-400 italic"
                             }`}
                           >
                             {profileData.age || "Not provided"}
                           </span>
-                          <div className="w-10 h-10 bg-[#B8860B]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <Calendar className="w-5 h-5 text-[#B8860B]" />
-                          </div>
+                          <Calendar className="w-3 h-3 text-gray-400" />
                         </div>
                       )}
                     </div>
 
                     {/* Annual Income */}
-                    <div className="space-y-4">
-                      <Label className="text-[#2D3748] font-bold text-base flex items-center">
-                        <div className="w-6 h-6 bg-[#B8860B]/10 rounded-lg flex items-center justify-center mr-3">
-                          <DollarSign className="w-4 h-4 text-[#B8860B]" />
-                        </div>
+                    <div className="space-y-1">
+                      <Label className="text-gray-700 font-medium text-xs">
                         Annual Income
                       </Label>
                       {isEditing ? (
-                        <div className="relative">
                           <select
                             value={profileData.annualIncome}
                             onChange={(e) =>
                               handleInputChange("annualIncome", e.target.value)
                             }
-                            className="h-14 w-full border-2 border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded-2xl text-lg font-medium bg-white pl-6 pr-12 shadow-sm hover:shadow-md transition-all duration-300 appearance-none"
+                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                           >
                             <option value="Below 5 Lakhs">Below 5 Lakhs</option>
                             <option value="5-10 Lakhs">5-10 Lakhs</option>
                             <option value="10-25 Lakhs">10-25 Lakhs</option>
                             <option value="25-50 Lakhs">25-50 Lakhs</option>
-                            <option value="Above 50 Lakhs">
-                              Above 50 Lakhs
-                            </option>
+                          <option value="Above 50 Lakhs">Above 50 Lakhs</option>
                           </select>
-                          <div className="absolute inset-y-0 right-0 flex items-center pr-6 pointer-events-none">
-                            <DollarSign className="w-5 h-5 text-gray-400" />
-                          </div>
-                        </div>
                       ) : (
-                        <div className="flex items-center justify-between p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border-2 border-gray-200 hover:border-[#B8860B]/30 transition-all duration-300 group">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
-                            className={`text-lg font-semibold ${
+                            className={`text-xs font-medium ${
                               profileData.annualIncome
-                                ? "text-[#2D3748]"
+                                ? "text-gray-900"
                                 : "text-gray-400 italic"
                             }`}
                           >
                             {profileData.annualIncome || "Not provided"}
                           </span>
-                          <div className="w-10 h-10 bg-[#B8860B]/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <DollarSign className="w-5 h-5 text-[#B8860B]" />
-                          </div>
+                          <DollarSign className="w-3 h-3 text-gray-400" />
                         </div>
                       )}
                     </div>
 
                     {/* Caste */}
-                    <div className="space-y-3">
-                      <Label className="text-[#2D3748] font-bold text-sm flex items-center">
-                        <Shield className="w-4 h-4 mr-2 text-[#B8860B]" />
+                    <div className="space-y-1">
+                      <Label className="text-gray-700 font-medium text-xs">
                         Caste
                       </Label>
                       {isEditing ? (
@@ -906,7 +814,7 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("caste", e.target.value)
                           }
-                          className="h-12 w-full border-2 border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded-xl text-lg font-medium bg-white"
+                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                         >
                           <option value="General">General</option>
                           <option value="OBC">OBC</option>
@@ -914,31 +822,28 @@ export default function ProfilePage() {
                           <option value="ST">ST</option>
                         </select>
                       ) : (
-                        <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
-                            className={`text-lg font-semibold ${
+                            className={`text-xs font-medium ${
                               profileData.caste
-                                ? "text-[#2D3748]"
+                                ? "text-gray-900"
                                 : "text-gray-400 italic"
                             }`}
                           >
                             {profileData.caste || "Not provided"}
                           </span>
-                          <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                            <Shield className="w-4 h-4 text-[#B8860B]" />
-                          </div>
+                          <Shield className="w-3 h-3 text-gray-400" />
                         </div>
                       )}
-                      <p className="text-red-500 text-sm font-medium flex items-center">
-                        <AlertCircle className="w-4 h-4 mr-1" />
+                      <p className="text-red-500 text-xs flex items-center">
+                        <AlertCircle className="w-3 h-3 mr-1" />
                         This cannot be edited later
                       </p>
                     </div>
 
                     {/* Area */}
-                    <div className="space-y-3">
-                      <Label className="text-[#2D3748] font-bold text-sm flex items-center">
-                        <MapPin className="w-4 h-4 mr-2 text-[#B8860B]" />
+                    <div className="space-y-1">
+                      <Label className="text-gray-700 font-medium text-xs">
                         Area
                       </Label>
                       {isEditing ? (
@@ -947,34 +852,31 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("area", e.target.value)
                           }
-                          className="h-12 w-full border-2 border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded-xl text-lg font-medium bg-white"
+                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                         >
                           <option value="Urban">Urban</option>
                           <option value="Rural">Rural</option>
                           <option value="Semi-Urban">Semi-Urban</option>
                         </select>
                       ) : (
-                        <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200 hover:border-[#B8860B]/30 transition-colors">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
-                            className={`text-lg font-semibold ${
+                            className={`text-xs font-medium ${
                               profileData.area
-                                ? "text-[#2D3748]"
+                                ? "text-gray-900"
                                 : "text-gray-400 italic"
                             }`}
                           >
                             {profileData.area || "Not provided"}
                           </span>
-                          <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                            <MapPin className="w-4 h-4 text-[#B8860B]" />
-                          </div>
+                          <MapPin className="w-3 h-3 text-gray-400" />
                         </div>
                       )}
                     </div>
 
                     {/* Physically Challenged */}
-                    <div className="space-y-3">
-                      <Label className="text-[#2D3748] font-bold text-sm flex items-center">
-                        <ShieldCheck className="w-4 h-4 mr-2 text-[#B8860B]" />
+                    <div className="space-y-1">
+                      <Label className="text-gray-700 font-medium text-xs">
                         Physically Challenged
                       </Label>
                       {isEditing ? (
@@ -986,133 +888,218 @@ export default function ProfilePage() {
                               e.target.value
                             )
                           }
-                          className="h-12 w-full border-2 border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded-xl text-lg font-medium bg-white"
+                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                         >
                           <option value="No">No</option>
                           <option value="Yes">Yes</option>
                         </select>
                       ) : (
-                        <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200">
+                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 hover:border-gray-300 transition-colors duration-200">
                           <span
-                            className={`text-lg font-semibold ${
+                            className={`text-xs font-medium ${
                               profileData.physicallyChallenged
-                                ? "text-[#2D3748]"
+                                ? "text-gray-900"
                                 : "text-gray-400 italic"
                             }`}
                           >
                             {profileData.physicallyChallenged || "Not provided"}
                           </span>
-                          <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                            <ShieldCheck className="w-4 h-4 text-[#B8860B]" />
-                          </div>
+                          <ShieldCheck className="w-3 h-3 text-gray-400" />
                         </div>
                       )}
                     </div>
                   </div>
                 </CardContent>
               </Card>
+            </motion.div>
+          </div>
 
-              {/* Account Settings Section */}
-              <Card className="bg-white/90 backdrop-blur-sm border-gray-200/50 shadow-xl">
-                <CardHeader className="bg-gradient-to-r from-[#B8860B] to-[#D4AF37] text-white rounded-t-xl">
-                  <CardTitle className="text-xl font-bold flex items-center">
-                    <Settings className="w-6 h-6 mr-3 text-white" />
+          {/* Right Sidebar - Quick Actions & Account Settings */}
+          <div className="xl:col-span-1 space-y-4">
+            {/* Quick Actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <Card className="bg-white border border-gray-200 shadow-sm">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium text-[#2D3748] flex items-center">
+                    <Zap className="w-4 h-4 mr-2 text-[#B8860B]" />
+                    Quick Actions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-100 hover:border-gray-200">
+                    <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
+                        <UserCircle className="w-4 h-4 text-[#B8860B]" />
+                          </div>
+                      <div className="text-left">
+                        <span className="text-[#2D3748] font-medium text-sm">
+                          View Activity
+                        </span>
+                        <p className="text-gray-500 text-xs">Recent actions</p>
+                        </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                  </button>
+
+                  <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-100 hover:border-gray-200">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
+                        <BarChart3 className="w-4 h-4 text-[#B8860B]" />
+                  </div>
+                      <div className="text-left">
+                        <span className="text-[#2D3748] font-medium text-sm">
+                          Analytics
+                        </span>
+                        <p className="text-gray-500 text-xs">
+                          Performance data
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                  </button>
+
+                  <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-100 hover:border-gray-200">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
+                        <Settings className="w-4 h-4 text-[#B8860B]" />
+                      </div>
+                      <div className="text-left">
+                        <span className="text-[#2D3748] font-medium text-sm">
+                          Preferences
+                        </span>
+                        <p className="text-gray-500 text-xs">
+                          Account settings
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                  </button>
+
+                  <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-100 hover:border-gray-200">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
+                        <HelpCircle className="w-4 h-4 text-[#B8860B]" />
+                      </div>
+                      <div className="text-left">
+                        <span className="text-[#2D3748] font-medium text-sm">
+                          Help Center
+                        </span>
+                        <p className="text-gray-500 text-xs">Get support</p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                  </button>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Account Settings */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <Card className="bg-white border border-gray-200 shadow-sm">
+                <CardHeader className="bg-gray-50 border-b border-gray-200">
+                  <CardTitle className="text-base font-medium flex items-center">
+                    <Settings className="w-4 h-4 mr-2 text-[#B8860B]" />
                     Account Settings
                   </CardTitle>
-                  <CardDescription className="text-white/90">
-                    Manage your account preferences and security settings
-                  </CardDescription>
                 </CardHeader>
-                <CardContent className="p-8">
-                  <div className="space-y-6">
-                    <button className="w-full flex items-center justify-between p-6 hover:bg-[#B8860B]/5 rounded-xl transition-colors group border-2 border-gray-200 hover:border-[#B8860B]/30">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-[#B8860B]/10 rounded-xl flex items-center justify-center">
-                          <UserCircle className="w-6 h-6 text-[#B8860B]" />
+                <CardContent className="p-4">
+                  <div className="space-y-2">
+                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group border border-gray-100 hover:border-gray-200">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
+                          <UserCircle className="w-4 h-4 text-[#B8860B]" />
                         </div>
                         <div className="text-left">
-                          <h3 className="text-lg font-bold text-[#2D3748]">
+                          <h3 className="text-sm font-medium text-gray-900">
                             Proposed Ideas
                           </h3>
-                          <p className="text-[#2D3748]/70 text-sm">
+                          <p className="text-gray-500 text-xs">
                             View and manage your submitted business ideas
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-6 h-6 text-[#2D3748]/50 group-hover:text-[#B8860B] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
                     </button>
 
-                    <button className="w-full flex items-center justify-between p-6 hover:bg-[#B8860B]/5 rounded-xl transition-colors group border-2 border-gray-200 hover:border-[#B8860B]/30">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-[#B8860B]/10 rounded-xl flex items-center justify-center">
-                          <Globe className="w-6 h-6 text-[#B8860B]" />
+                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group border border-gray-100 hover:border-gray-200">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
+                          <Globe className="w-4 h-4 text-[#B8860B]" />
                         </div>
                         <div className="text-left">
-                          <h3 className="text-lg font-bold text-[#2D3748]">
+                          <h3 className="text-sm font-medium text-gray-900">
                             Choose Language
                           </h3>
-                          <p className="text-[#2D3748]/70 text-sm">
+                          <p className="text-gray-500 text-xs">
                             Select your preferred language and region
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-6 h-6 text-[#2D3748]/50 group-hover:text-[#B8860B] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
                     </button>
 
-                    <button className="w-full flex items-center justify-between p-6 hover:bg-[#B8860B]/5 rounded-xl transition-colors group border-2 border-gray-200 hover:border-[#B8860B]/30">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-[#B8860B]/10 rounded-xl flex items-center justify-center">
-                          <HelpCircle className="w-6 h-6 text-[#B8860B]" />
+                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group border border-gray-100 hover:border-gray-200">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
+                          <HelpCircle className="w-4 h-4 text-[#B8860B]" />
                         </div>
                         <div className="text-left">
-                          <h3 className="text-lg font-bold text-[#2D3748]">
+                          <h3 className="text-sm font-medium text-gray-900">
                             About
                           </h3>
-                          <p className="text-[#2D3748]/70 text-sm">
+                          <p className="text-gray-500 text-xs">
                             Learn more about our platform and services
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-6 h-6 text-[#2D3748]/50 group-hover:text-[#B8860B] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
                     </button>
 
-                    <button className="w-full flex items-center justify-between p-6 hover:bg-[#B8860B]/5 rounded-xl transition-colors group border-2 border-gray-200 hover:border-[#B8860B]/30">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-[#B8860B]/10 rounded-xl flex items-center justify-center">
-                          <Bell className="w-6 h-6 text-[#B8860B]" />
+                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group border border-gray-100 hover:border-gray-200">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
+                          <Bell className="w-4 h-4 text-[#B8860B]" />
                         </div>
                         <div className="text-left">
-                          <h3 className="text-lg font-bold text-[#2D3748]">
+                          <h3 className="text-sm font-medium text-gray-900">
                             Send Feedback
                           </h3>
-                          <p className="text-[#2D3748]/70 text-sm">
+                          <p className="text-gray-500 text-xs">
                             Help us improve by sharing your thoughts
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-6 h-6 text-[#2D3748]/50 group-hover:text-[#B8860B] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
                     </button>
 
-                    <Separator className="my-6" />
+                    <Separator className="my-3" />
 
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center justify-between p-6 hover:bg-red-50 rounded-xl transition-colors group border-2 border-red-200 hover:border-red-300"
+                      className="w-full flex items-center justify-between p-3 hover:bg-red-50 rounded-lg transition-colors group border border-red-100 hover:border-red-200"
                     >
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                          <LogOut className="w-6 h-6 text-red-600" />
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                          <LogOut className="w-4 h-4 text-red-600" />
                         </div>
                         <div className="text-left">
-                          <h3 className="text-lg font-bold text-red-600">
+                          <h3 className="text-sm font-medium text-red-600">
                             Logout
                           </h3>
-                          <p className="text-red-500/70 text-sm">
+                          <p className="text-red-500 text-xs">
                             Sign out of your account
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-6 h-6 text-red-500/50 group-hover:text-red-600 transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-red-400 group-hover:text-red-600 transition-colors" />
                     </button>
                   </div>
                 </CardContent>

@@ -44,15 +44,18 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 bg-gradient-to-r from-[#B8860B] to-[#2D3748] backdrop-blur-sm border-b border-[#B8860B]/30 shadow-lg">
+    <nav
+      className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm"
+      style={{ fontFamily: "Nunito, sans-serif" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
               <img
-                src="/logos.png"
+                src="/pureyellowlogo.png"
                 alt="10000Ideas Logo"
-                className="w-8 h-8 sm:w-[200px] sm:h-[40px] object-contain"
+                className="h-10 w-auto object-contain"
               />
             </div>
           </div>
@@ -61,19 +64,19 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             <a
               href="/ideas"
-              className="text-white hover:text-[#B8860B] transition-colors font-semibold tracking-wide text-base"
+              className="text-[#061F59] hover:text-[#FDCC29] transition-colors font-semibold text-base"
             >
               Ideas
             </a>
             <a
               href="/categories"
-              className="text-white hover:text-[#B8860B] transition-colors font-semibold tracking-wide text-base"
+              className="text-[#061F59] hover:text-[#FDCC29] transition-colors font-semibold text-base"
             >
               Categories
             </a>
             <a
               href="#"
-              className="text-white hover:text-[#B8860B] transition-colors font-semibold tracking-wide text-base"
+              className="text-[#061F59] hover:text-[#FDCC29] transition-colors font-semibold text-base"
             >
               About
             </a>
@@ -81,34 +84,34 @@ export default function Navbar() {
             {loading ? (
               // Skeleton Loading for Desktop
               <div className="flex items-center space-x-3 p-2">
-                <div className="w-9 h-9 bg-white/20 rounded-full animate-pulse"></div>
+                <div className="w-9 h-9 bg-gray-200 rounded-full animate-pulse"></div>
                 <div className="hidden lg:block space-y-1">
-                  <div className="w-20 h-3 bg-white/20 rounded animate-pulse"></div>
-                  <div className="w-16 h-2 bg-white/20 rounded animate-pulse"></div>
+                  <div className="w-20 h-3 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="w-16 h-2 bg-gray-200 rounded animate-pulse"></div>
                 </div>
-                <div className="w-4 h-4 bg-white/20 rounded animate-pulse"></div>
+                <div className="w-4 h-4 bg-gray-200 rounded animate-pulse"></div>
               </div>
             ) : isAuthenticated ? (
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={toggleUserMenu}
-                  className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#B8860B]/10 transition-all duration-300 group"
+                  className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 group"
                 >
-                  <div className="w-9 h-9 bg-[#B8860B] rounded-full flex items-center justify-center shadow-lg border-2 border-white overflow-hidden">
+                  <div className="w-9 h-9 bg-[#061F59] rounded-full flex items-center justify-center shadow-lg overflow-hidden">
                     <img
                       src="/profileicon.png"
                       alt="Profile"
-                      className="w-5 h-5 object-cover rounded-full"
+                      className="w-5 h-5 object-cover rounded-full text-white bg-white"
                     />
                   </div>
                   <div className="hidden lg:block text-left">
-                    <p className="text-white font-semibold text-sm">
+                    <p className="text-[#061F59] font-semibold text-sm">
                       {user?.name || "User"}
                     </p>
-                    <p className="text-white/70 text-xs">View Profile</p>
+                    <p className="text-[#061F59]/70 text-xs">View Profile</p>
                   </div>
                   <ChevronDown
-                    className={`w-4 h-4 text-white transition-transform duration-200 ${
+                    className={`w-4 h-4 text-[#061F59] transition-transform duration-200 ${
                       isUserMenuOpen ? "rotate-180" : ""
                     }`}
                   />
@@ -116,12 +119,12 @@ export default function Navbar() {
 
                 {/* Dropdown Menu */}
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-[#B8860B]/20 py-2 z-50">
-                    <div className="px-4 py-3 border-b border-[#B8860B]/10">
-                      <p className="text-[#2D3748] font-semibold text-sm">
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-[#061F59] font-semibold text-sm">
                         {user?.name || "User"}
                       </p>
-                      <p className="text-[#2D3748]/60 text-xs">
+                      <p className="text-[#061F59]/60 text-xs">
                         {user?.email || "user@example.com"}
                       </p>
                     </div>
@@ -129,32 +132,45 @@ export default function Navbar() {
                     <div className="py-2">
                       <a
                         href="/profile"
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-[#2D3748] hover:bg-[#B8860B]/10 transition-colors duration-200"
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-[#061F59] hover:bg-[#FDCC29]/10 transition-colors duration-200"
                       >
-                        <UserCircle className="w-5 h-5 text-[#B8860B]" />
+                        <UserCircle className="w-5 h-5 text-[#FDCC29]" />
                         <span className="font-medium">My Profile</span>
                       </a>
 
                       <a
                         href="/your-ideas"
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-[#2D3748] hover:bg-[#B8860B]/10 transition-colors duration-200"
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-[#061F59] hover:bg-[#FDCC29]/10 transition-colors duration-200"
                       >
-                        <Lightbulb className="w-5 h-5 text-[#B8860B]" />
+                        <Lightbulb className="w-5 h-5 text-[#FDCC29]" />
                         <span className="font-medium">Your Ideas</span>
                       </a>
 
-                      <button className="w-full flex items-center space-x-3 px-4 py-3 text-[#2D3748] hover:bg-[#B8860B]/10 transition-colors duration-200">
-                        <Bookmark className="w-5 h-5 text-[#B8860B]" />
+                      <button className="w-full flex items-center space-x-3 px-4 py-3 text-[#061F59] hover:bg-[#FDCC29]/10 transition-colors duration-200">
+                        <Bookmark className="w-5 h-5 text-[#FDCC29]" />
                         <span className="font-medium">My Saved Ideas</span>
                       </button>
 
-                      <button className="w-full flex items-center space-x-3 px-4 py-3 text-[#2D3748] hover:bg-[#B8860B]/10 transition-colors duration-200">
-                        <Settings className="w-5 h-5 text-[#B8860B]" />
+                      <button className="w-full flex items-center space-x-3 px-4 py-3 text-[#061F59] hover:bg-[#FDCC29]/10 transition-colors duration-200">
+                        <Settings className="w-5 h-5 text-[#FDCC29]" />
                         <span className="font-medium">Settings</span>
                       </button>
                     </div>
 
-                    <div className="border-t border-[#B8860B]/10 py-2">
+                    <div className="border-t border-gray-100 py-2">
+                      <button
+                        onClick={() => {
+                          window.location.href = "/admin";
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-200"
+                      >
+                        <Settings className="w-5 h-5" />
+                        <span className="font-medium">Are you admin?</span>
+                      </button>
+
+                      <div className="border-t border-gray-100 my-2"></div>
+
                       <button
                         onClick={() => {
                           logout();
@@ -172,7 +188,7 @@ export default function Navbar() {
             ) : (
               <Button
                 onClick={() => (window.location.href = "/auth")}
-                className="bg-[#B8860B] hover:bg-[#2D3748] text-white hover:text-white px-6 py-2 rounded-lg font-semibold tracking-wide shadow-lg transition-all duration-300"
+                className="bg-[#FDCC29] hover:bg-[#061F59] text-[#061F59] hover:text-white px-6 py-2 rounded-lg font-semibold shadow-lg transition-all duration-300"
               >
                 Get Started
               </Button>
@@ -183,7 +199,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={toggleMobileMenu}
-              className="p-2 text-white hover:text-[#B8860B] transition-colors"
+              className="p-2 text-[#061F59] hover:text-[#FDCC29] transition-colors"
             >
               {isMobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -196,25 +212,25 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-[#B8860B]/30 bg-gradient-to-r from-[#B8860B] to-[#2D3748] backdrop-blur-sm">
+          <div className="md:hidden border-t border-gray-200 bg-white">
             <div className="px-2 pt-2 pb-3 space-y-1">
               <a
                 href="/ideas"
-                className="block px-3 py-3 text-white hover:text-[#B8860B] hover:bg-[#B8860B]/10 transition-colors font-semibold tracking-wide rounded-lg"
+                className="block px-3 py-3 text-[#061F59] hover:text-[#FDCC29] hover:bg-[#FDCC29]/10 transition-colors font-semibold rounded-lg"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Ideas
               </a>
               <a
                 href="/categories"
-                className="block px-3 py-3 text-white hover:text-[#B8860B] hover:bg-[#B8860B]/10 transition-colors font-semibold tracking-wide rounded-lg"
+                className="block px-3 py-3 text-[#061F59] hover:text-[#FDCC29] hover:bg-[#FDCC29]/10 transition-colors font-semibold rounded-lg"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Categories
               </a>
               <a
                 href="#"
-                className="block px-3 py-3 text-white hover:text-[#B8860B] hover:bg-[#B8860B]/10 transition-colors font-semibold tracking-wide rounded-lg"
+                className="block px-3 py-3 text-[#061F59] hover:text-[#FDCC29] hover:bg-[#FDCC29]/10 transition-colors font-semibold rounded-lg"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 About
@@ -222,24 +238,24 @@ export default function Navbar() {
 
               {loading ? (
                 // Skeleton Loading for Mobile
-                <div className="px-3 py-2 border-t border-[#B8860B]/20 mt-2">
-                  <div className="flex items-center space-x-3 mb-4 p-3 bg-[#B8860B]/10 rounded-lg">
-                    <div className="w-10 h-10 bg-white/20 rounded-full animate-pulse"></div>
+                <div className="px-3 py-2 border-t border-gray-200 mt-2">
+                  <div className="flex items-center space-x-3 mb-4 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse"></div>
                     <div className="space-y-2">
-                      <div className="w-24 h-3 bg-white/20 rounded animate-pulse"></div>
-                      <div className="w-32 h-2 bg-white/20 rounded animate-pulse"></div>
+                      <div className="w-24 h-3 bg-gray-200 rounded animate-pulse"></div>
+                      <div className="w-32 h-2 bg-gray-200 rounded animate-pulse"></div>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <div className="w-full h-12 bg-white/10 rounded-lg animate-pulse"></div>
-                    <div className="w-full h-12 bg-white/10 rounded-lg animate-pulse"></div>
-                    <div className="w-full h-12 bg-white/10 rounded-lg animate-pulse"></div>
+                    <div className="w-full h-12 bg-gray-100 rounded-lg animate-pulse"></div>
+                    <div className="w-full h-12 bg-gray-100 rounded-lg animate-pulse"></div>
+                    <div className="w-full h-12 bg-gray-100 rounded-lg animate-pulse"></div>
                   </div>
                 </div>
               ) : isAuthenticated ? (
-                <div className="px-3 py-2 border-t border-[#B8860B]/20 mt-2">
-                  <div className="flex items-center space-x-3 mb-4 p-3 bg-[#B8860B]/10 rounded-lg">
-                    <div className="w-10 h-10 bg-[#B8860B] rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                <div className="px-3 py-2 border-t border-gray-200 mt-2">
+                  <div className="flex items-center space-x-3 mb-4 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-10 h-10 bg-[#061F59] rounded-full flex items-center justify-center shadow-lg overflow-hidden">
                       <img
                         src="/profileicon.png"
                         alt="Profile"
@@ -247,10 +263,10 @@ export default function Navbar() {
                       />
                     </div>
                     <div>
-                      <p className="text-white font-semibold text-sm">
+                      <p className="text-[#061F59] font-semibold text-sm">
                         {user?.name || "User"}
                       </p>
-                      <p className="text-white/70 text-xs">
+                      <p className="text-[#061F59]/70 text-xs">
                         {user?.email || "user@example.com"}
                       </p>
                     </div>
@@ -259,28 +275,41 @@ export default function Navbar() {
                   <div className="space-y-2">
                     <a
                       href="/profile"
-                      className="w-full flex items-center space-x-3 px-3 py-3 text-white hover:bg-[#B8860B]/10 rounded-lg transition-colors duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-3 text-[#061F59] hover:bg-[#FDCC29]/10 rounded-lg transition-colors duration-200"
                     >
-                      <UserCircle className="w-5 h-5 text-[#B8860B]" />
+                      <UserCircle className="w-5 h-5 text-[#FDCC29]" />
                       <span className="font-medium">My Profile</span>
                     </a>
 
                     <a
                       href="/your-ideas"
-                      className="w-full flex items-center space-x-3 px-3 py-3 text-white hover:bg-[#B8860B]/10 rounded-lg transition-colors duration-200"
+                      className="w-full flex items-center space-x-3 px-3 py-3 text-[#061F59] hover:bg-[#FDCC29]/10 rounded-lg transition-colors duration-200"
                     >
-                      <Lightbulb className="w-5 h-5 text-[#B8860B]" />
+                      <Lightbulb className="w-5 h-5 text-[#FDCC29]" />
                       <span className="font-medium">Your Ideas</span>
                     </a>
 
-                    <button className="w-full flex items-center space-x-3 px-3 py-3 text-white hover:bg-[#B8860B]/10 rounded-lg transition-colors duration-200">
-                      <Bookmark className="w-5 h-5 text-[#B8860B]" />
+                    <button className="w-full flex items-center space-x-3 px-3 py-3 text-[#061F59] hover:bg-[#FDCC29]/10 rounded-lg transition-colors duration-200">
+                      <Bookmark className="w-5 h-5 text-[#FDCC29]" />
                       <span className="font-medium">My Saved Ideas</span>
                     </button>
 
-                    <button className="w-full flex items-center space-x-3 px-3 py-3 text-white hover:bg-[#B8860B]/10 rounded-lg transition-colors duration-200">
-                      <Settings className="w-5 h-5 text-[#B8860B]" />
+                    <button className="w-full flex items-center space-x-3 px-3 py-3 text-[#061F59] hover:bg-[#FDCC29]/10 rounded-lg transition-colors duration-200">
+                      <Settings className="w-5 h-5 text-[#FDCC29]" />
                       <span className="font-medium">Settings</span>
+                    </button>
+
+                    <div className="border-t border-gray-200 my-2"></div>
+
+                    <button
+                      onClick={() => {
+                        window.location.href = "/admin";
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center space-x-3 px-3 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                    >
+                      <Settings className="w-5 h-5" />
+                      <span className="font-medium">Are you admin?</span>
                     </button>
 
                     <button
@@ -296,13 +325,13 @@ export default function Navbar() {
                   </div>
                 </div>
               ) : (
-                <div className="px-3 py-2 border-t border-[#B8860B]/20 mt-2">
+                <div className="px-3 py-2 border-t border-gray-200 mt-2">
                   <Button
                     onClick={() => {
                       window.location.href = "/auth";
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full bg-[#B8860B] hover:bg-[#2D3748] text-white hover:text-white py-3 rounded-lg font-semibold tracking-wide shadow-lg transition-all duration-300"
+                    className="w-full bg-[#FDCC29] hover:bg-[#061F59] text-[#061F59] hover:text-white py-3 rounded-lg font-semibold shadow-lg transition-all duration-300"
                   >
                     Get Started
                   </Button>

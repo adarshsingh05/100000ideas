@@ -353,96 +353,156 @@ export default function YourIdeasPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                   >
-                    <Card className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 group">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <CardTitle className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                              {idea.title}
-                            </CardTitle>
-                            <div className="flex items-center gap-2 mb-2">
-                              <Badge
-                                variant="secondary"
-                                className="bg-[#B8860B]/10 text-[#B8860B] border-[#B8860B]/20"
-                              >
-                                {idea.category}
-                              </Badge>
-                              <Badge variant="outline" className="text-xs">
-                                {idea.status}
-                              </Badge>
-                            </div>
-                          </div>
-                          <div className="flex gap-1">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEditIdea(idea)}
-                              className="text-gray-400 hover:text-[#B8860B] hover:bg-[#B8860B]/10"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteIdea(idea)}
-                              className="text-gray-400 hover:text-red-600 hover:bg-red-50"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
+                    <Card className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full">
+                      {/* Image Section */}
+                      <div className="relative h-40 sm:mt-[-25px]">
+                        <img
+                          src={`/demo${(index % 7) + 1}.jpeg`}
+                          alt={idea.title}
+                          className="w-full h-full object-cover"
+                        />
+
+                        {/* Top Left Banner - Price Range */}
+                        <div className="absolute top-0 left-0">
+                          <div className="bg-[#FDCC29] text-[#2D3748] px-4 py-4 text-sm font-bold shadow-md rounded-br-xl">
+                            {idea.investmentRange ||
+                              idea.investment ||
+                              "< ₹ 3Lakhs"}
                           </div>
                         </div>
-                      </CardHeader>
 
-                      <CardContent className="pt-0">
-                        <CardDescription className="text-gray-600 text-sm mb-4 line-clamp-3">
+                        {/* Top Right Banner - Discount Corner Ribbon */}
+                        <div className="absolute top-0 right-0">
+                          <div className="bg-[#2D3748] text-white p-4 text-sm font-bold shadow-md rounded-bl-xl">
+                            <span
+                              style={{
+                                transform: "rotate(-45deg)",
+                                fontSize: "10px",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              10% Off
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Edit/Delete Buttons */}
+                        <div className="absolute top-2 right-16 flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditIdea(idea);
+                            }}
+                            className="text-gray-400 hover:text-[#B8860B] hover:bg-[#B8860B]/10 bg-white/90"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteIdea(idea);
+                            }}
+                            className="text-gray-400 hover:text-red-600 hover:bg-red-50 bg-white/90"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="p-3 flex flex-col flex-grow">
+                        {/* Category */}
+                        <div className="mb-1">
+                          <span className="text-xs text-gray-500 font-medium">
+                            {idea.category}
+                          </span>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-lg font-bold text-[#2D3748] mb-2 leading-tight">
+                          {idea.title}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2 flex-grow">
                           {idea.description}
-                        </CardDescription>
+                        </p>
 
-                        <div className="space-y-2 mb-4">
-                          <div className="flex items-center text-sm text-gray-500">
-                            <DollarSign className="w-4 h-4 mr-2" />
-                            <span>{idea.investmentRange}</span>
+                        {/* Rating */}
+                        <div className="flex flex-col space-y-1 mb-2">
+                          <div className="text-md font-semibold text-[#2D3748]">
+                            {(idea.rating || 4.5).toFixed(1)}
                           </div>
-                          <div className="flex items-center text-sm text-gray-500">
-                            <Clock className="w-4 h-4 mr-2" />
-                            <span>{idea.timeToStart}</span>
+                          <div className="flex items-center space-x-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`w-4 h-4 ${
+                                  star <= Math.floor(idea.rating || 4.5)
+                                    ? "text-[#FDCC29] fill-current"
+                                    : star === Math.ceil(idea.rating || 4.5) &&
+                                      (idea.rating || 4.5) % 1 !== 0
+                                    ? "text-[#FDCC29] fill-current opacity-50"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
                           </div>
-                          <div className="flex items-center text-sm text-gray-500">
-                            <MapPin className="w-4 h-4 mr-2" />
-                            <span>{idea.marketSize}</span>
+                          <div className="text-sm text-gray-500">
+                            ({Math.floor(Math.random() * 50) + 10})
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between pt-3 border-t border-gray-100 mb-3">
-                          <div className="flex items-center gap-4 text-sm text-gray-500">
-                            <div className="flex items-center">
-                              <Eye className="w-4 h-4 mr-1" />
-                              <span>{idea.views || 0}</span>
+                        {/* Action Buttons */}
+                        <div className="flex items-center justify-between mt-auto">
+                          <div className="flex items-center space-x-2">
+                            {/* Lightbulb with count */}
+                            <div className="flex items-center space-x-1 rounded-full px-2 py-2 bg-gray-100">
+                              <Lightbulb className="w-4 h-4 text-[#2D3748]" />
+                              <span className="text-xs font-semibold text-[#2D3748]">
+                                {Math.floor(Math.random() * 100) + 20}
+                              </span>
                             </div>
-                            <div className="flex items-center">
-                              <Heart className="w-4 h-4 mr-1" />
-                              <span>{idea.likes || 0}</span>
+
+                            {/* Heart */}
+                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-red-50 transition-colors">
+                              <Heart className="w-5 h-5 text-[#2D3748] hover:text-red-500" />
                             </div>
-                          </div>
-                          <div className="text-xs text-gray-400">
-                            {new Date(idea.createdAt).toLocaleDateString()}
+
+                            {/* Comment */}
+                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors">
+                              <svg
+                                className="w-5 h-5 text-[#2D3748]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                />
+                              </svg>
+                            </div>
+
+                            {/* More options */}
+                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
+                              <svg
+                                className="w-5 h-5 text-[#2D3748]"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                              </svg>
+                            </div>
                           </div>
                         </div>
-
-                        <button
-                          onClick={() => {
-                            console.log(
-                              "Button clicked! Opening:",
-                              `/community-ideas/${idea._id}`
-                            );
-                            window.location.href = `/community-ideas/${idea._id}`;
-                          }}
-                          className="w-full bg-[#B8860B] hover:bg-[#B8860B]/90 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
-                        >
-                          <Eye className="w-4 h-4" />
-                          View Details
-                        </button>
-                      </CardContent>
+                      </div>
                     </Card>
                   </motion.div>
                 );

@@ -39,6 +39,19 @@ export async function GET(request) {
       Idea.countDocuments(query),
     ]);
 
+    console.log("All ideas query:", query);
+    console.log("All ideas found:", ideas.length);
+    console.log(
+      "Sample idea fields:",
+      ideas[0] ? Object.keys(ideas[0]) : "No ideas"
+    );
+    console.log("Sample idea isAdmin:", ideas[0]?.isAdmin);
+    console.log("Sample idea source:", ideas[0]?.source);
+    console.log(
+      "Admin ideas in results:",
+      ideas.filter((idea) => idea.isAdmin === true || idea.source === "admin")
+    );
+
     const totalPages = Math.ceil(total / limit);
 
     return NextResponse.json({

@@ -14,8 +14,15 @@ export async function GET(request) {
     const search = searchParams.get("search");
     const featured = searchParams.get("featured") === "true";
 
-    // Build query for static ideas only
-    const query = { isStaticIdea: true, status: "published" };
+    // Build query for static ideas and admin ideas
+    const query = {
+      status: "published",
+      $or: [
+        { isStaticIdea: true },
+        { isAdmin: true },
+        { uploadedByName: "Admin" },
+      ],
+    };
 
     if (category && category !== "all") {
       query.category = category;
@@ -75,15 +82,15 @@ export async function POST(request) {
 
     const { limit = 8 } = await request.json();
 
-    // Get featured static ideas
-    const ideas = await Idea.find({ 
-      isStaticIdea: true, 
+    // Get featured static ideas and admin ideas
+    const ideas = await Idea.find({
       status: "published",
-      featured: true // You might want to add this field to the schema
+      $or: [{ isStaticIdea: true }, { isAdmin: true }],
+      featured: true, // You might want to add this field to the schema
     })
-    .sort({ createdAt: -1 })
-    .limit(limit)
-    .select("-__v");
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .select("-__v");
 
     return NextResponse.json({
       success: true,

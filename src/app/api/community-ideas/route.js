@@ -14,9 +14,11 @@ export async function GET(request) {
     const search = searchParams.get("search");
 
     // Build query to filter only community ideas
-    // Community ideas are those where isStaticIdea is not true (false or undefined)
+    // Community ideas are those where isStaticIdea is not true (false or undefined) AND not admin ideas
     const query = {
       status: "published",
+      isAdmin: { $ne: true }, // Exclude admin ideas
+      source: { $ne: "admin" }, // Exclude admin source
       $or: [
         { isStaticIdea: { $ne: true } }, // isStaticIdea is not true
         { isStaticIdea: { $exists: false } }, // isStaticIdea field doesn't exist

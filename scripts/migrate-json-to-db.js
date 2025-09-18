@@ -220,7 +220,8 @@ const Idea = mongoose.models.Idea || mongoose.model("Idea", ideaSchema);
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      process.env.MONGODB_URI || "mongodb+srv://project_1:project_1@cluster0.pwx2r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      process.env.MONGODB_URI ||
+        "mongodb+srv://project_1:project_1@cluster0.pwx2r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
     console.log("✅ Connected to MongoDB");
   } catch (error) {

@@ -204,6 +204,33 @@ const ideaSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // Admin-specific fields
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    source: {
+      type: String,
+      enum: ["user", "admin", "migrated"],
+      default: "user",
+    },
+    difficulty: {
+      type: String,
+      enum: ["Beginner", "Intermediate", "Advanced"],
+      default: "Beginner",
+    },
+    successFactors: {
+      type: String,
+      trim: true,
+    },
+    resources: {
+      type: String,
+      trim: true,
+    },
+    nextSteps: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,

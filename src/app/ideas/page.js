@@ -593,136 +593,131 @@ export default function IdeasPage() {
                     className="group"
                   >
                     <Card
-                      className="bg-white border border-gray-200 shadow-sm cursor-pointer rounded-xl overflow-hidden transition-all duration-300 group-hover:shadow-lg"
+                      className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full"
                       onClick={() => handleCardClick(idea._id || idea.id)}
                     >
-                      {/* Image Placeholder */}
-                      <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-200">
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#FDCC29]/20 to-[#2D3748]/20"></div>
-                        <div className="absolute top-4 left-4">
-                          <div className="bg-[#FDCC29] text-[#2D3748] px-3 py-1 rounded-lg text-sm font-medium">
-                            {idea.investmentRange || idea.investment || "₹25L"}
+                      {/* Image Section */}
+                      <div className="relative h-40 sm:mt-[-25px]">
+                        <img
+                          src={`/demo${(index % 7) + 1}.jpeg`}
+                          alt={idea.title}
+                          className="w-full h-full object-cover"
+                        />
+
+                        {/* Top Left Banner - Price Range */}
+                        <div className="absolute top-0 left-0">
+                          <div className="bg-[#FDCC29] text-[#2D3748] px-4 py-4 text-sm font-bold shadow-md rounded-br-xl">
+                            {idea.investmentRange ||
+                              idea.investment ||
+                              "< ₹ 3Lakhs"}
                           </div>
                         </div>
-                        <div className="absolute top-4 right-4">
-                          <div className="bg-white/90 text-[#2D3748] px-3 py-1 rounded-lg text-sm font-medium">
-                            {idea.difficulty || "Medium"}
-                          </div>
-                        </div>
-                        <div className="absolute bottom-4 right-4">
-                          <div className="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center">
-                            <IconComponent className="w-4 h-4 text-[#2D3748]" />
+
+                        {/* Top Right Banner - Discount Corner Ribbon */}
+                        <div className="absolute top-0 right-0">
+                          <div className="bg-[#2D3748] text-white p-4 text-sm font-bold shadow-md rounded-bl-xl">
+                            <span
+                              style={{
+                                transform: "rotate(-45deg)",
+                                fontSize: "10px",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              10% Off
+                            </span>
                           </div>
                         </div>
                       </div>
 
                       {/* Content Section */}
-                      <div className="p-5">
-                        {/* Category and Rating */}
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                      <div className="p-3 flex flex-col flex-grow">
+                        {/* Category */}
+                        <div className="mb-1">
+                          <span className="text-xs text-gray-500 font-medium">
                             {idea.category}
                           </span>
-                          <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 text-[#FDCC29] fill-current" />
-                            <span className="text-sm text-[#2D3748] font-medium">
-                              {idea.rating || 4.5}
-                            </span>
-                          </div>
                         </div>
 
                         {/* Title */}
-                        <CardTitle className="text-lg font-semibold text-[#2D3748] leading-tight mb-3 line-clamp-2">
+                        <h3 className="text-lg font-bold text-[#2D3748] mb-2 leading-tight">
                           {idea.title}
-                        </CardTitle>
+                        </h3>
 
                         {/* Description */}
-                        <CardDescription className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-2">
+                        <p className="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2 flex-grow">
                           {idea.description}
-                        </CardDescription>
+                        </p>
 
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {idea.tags?.slice(0, 2).map((tag, tagIndex) => (
-                            <span
-                              key={tagIndex}
-                              className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
-                            >
-                              {tag}
-                            </span>
-                          )) || [
-                            <span
-                              key="0"
-                              className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
-                            >
-                              Community
-                            </span>,
-                            <span
-                              key="1"
-                              className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
-                            >
-                              Innovation
-                            </span>,
-                          ]}
-                        </div>
-
-                        {/* Metrics */}
-                        <div className="space-y-3 mb-4">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-500">
-                              Revenue Potential
-                            </span>
-                            <span className="text-sm text-[#2D3748] font-medium">
-                              {idea.revenue || "High potential"}
-                            </span>
+                        {/* Rating */}
+                        <div className="flex flex-col space-y-1 mb-2">
+                          <div className="text-md font-semibold text-[#2D3748]">
+                            {(idea.rating || 4.5).toFixed(1)}
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-500">
-                              Time to Market
-                            </span>
-                            <span className="text-sm text-[#2D3748] font-medium">
-                              {idea.timeToStart ||
-                                idea.timeToMarket ||
-                                "2-3 months"}
-                            </span>
+                          <div className="flex items-center space-x-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`w-4 h-4 ${
+                                  star <= Math.floor(idea.rating || 4.5)
+                                    ? "text-[#FDCC29] fill-current"
+                                    : star === Math.ceil(idea.rating || 4.5) &&
+                                      (idea.rating || 4.5) % 1 !== 0
+                                    ? "text-[#FDCC29] fill-current opacity-50"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            ({Math.floor(Math.random() * 50) + 10})
                           </div>
                         </div>
 
-                        {/* User Info - Compact */}
-                        <div className="flex items-center justify-between pt-3 border-t border-gray-100 mb-4">
+                        {/* Action Buttons */}
+                        <div className="flex items-center justify-between mt-auto">
                           <div className="flex items-center space-x-2">
-                            <div className="w-6 h-6 bg-[#FDCC29] rounded-full flex items-center justify-center">
-                              <User className="w-3 h-3 text-white" />
+                            {/* Lightbulb with count */}
+                            <div className="flex items-center space-x-1 rounded-full px-2 py-2 bg-gray-100">
+                              <Lightbulb className="w-4 h-4 text-[#2D3748]" />
+                              <span className="text-xs font-semibold text-[#2D3748]">
+                                {Math.floor(Math.random() * 100) + 20}
+                              </span>
                             </div>
-                            <span className="text-xs text-gray-500">
-                              {idea.uploadedByName?.split(" ")[0] ||
-                                "Anonymous"}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-4 text-xs text-gray-500">
-                            <div className="flex items-center">
-                              <Eye className="w-3 h-3 mr-1" />
-                              <span>{idea.views || 0}</span>
+
+                            {/* Heart */}
+                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-red-50 transition-colors">
+                              <Heart className="w-5 h-5 text-[#2D3748] hover:text-red-500" />
                             </div>
-                            <div className="flex items-center">
-                              <Heart className="w-3 h-3 mr-1" />
-                              <span>{idea.likes || 0}</span>
+
+                            {/* Comment */}
+                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors">
+                              <svg
+                                className="w-5 h-5 text-[#2D3748]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                />
+                              </svg>
+                            </div>
+
+                            {/* More options */}
+                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
+                              <svg
+                                className="w-5 h-5 text-[#2D3748]"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                              </svg>
                             </div>
                           </div>
                         </div>
-
-                        {/* Action Button */}
-                        <Button
-                          variant="outline"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCardClick(idea._id || idea.id);
-                          }}
-                          className="w-full text-sm font-medium border border-[#2D3748] text-[#2D3748] py-2 group-hover:bg-[#2D3748] group-hover:text-white transition-all duration-300"
-                        >
-                          View Details
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </Button>
                       </div>
                     </Card>
                   </motion.div>

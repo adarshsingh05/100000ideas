@@ -41,6 +41,7 @@ import {
   CheckCircle,
   AlertCircle,
   X,
+  Star,
 } from "lucide-react";
 import IdeaUploadModal from "@/components/IdeaUploadModal";
 import IdeaViewModal from "@/components/IdeaViewModal";

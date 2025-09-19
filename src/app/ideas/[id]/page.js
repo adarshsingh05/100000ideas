@@ -16,8 +16,10 @@ import { Separator } from "@/components/ui/separator";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Toast from "@/components/ui/toast";
+import AIFloatingButton from "@/components/AIFloatingButton";
 import { useAuth } from "@/contexts/AuthContext";
 import apiClient from "@/lib/api";
+import { geminiService } from "@/lib/geminiService";
 import {
   ArrowLeft,
   Star,
@@ -61,6 +63,11 @@ import {
   Crown,
   Banknote,
   BookOpen,
+  Brain,
+  Building2,
+  DollarSign as DollarIcon,
+  Users as UsersIcon,
+  Loader2,
 } from "lucide-react";
 
 export default function IdeaDetailPage({ params }) {
@@ -72,6 +79,8 @@ export default function IdeaDetailPage({ params }) {
   const [message, setMessage] = useState({ type: "", text: "" });
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedSections, setExpandedSections] = useState({});
+  const [aiAnalysis, setAiAnalysis] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const reviewsPerPage = 3;
   const [idea, setIdea] = useState(null);
 
@@ -84,6 +93,41 @@ export default function IdeaDetailPage({ params }) {
       ...prev,
       [section]: !prev[section],
     }));
+  };
+
+  const handleAIAnalysis = async () => {
+    if (!idea) return;
+
+    setIsAnalyzing(true);
+    try {
+      const prompt = `Analyze the business idea "${idea.title}" and provide information about:
+1. Current companies doing similar business ideas
+2. Their revenue models and estimated revenue
+3. Market competition analysis
+4. Key players in this space
+5. Market opportunities and gaps
+
+Please provide specific company names, their business models, and revenue estimates where possible. Format the response as a structured analysis.`;
+
+      const response = await geminiService.sendMessage(idea, prompt, []);
+
+      if (response.success) {
+        setAiAnalysis(response.message);
+      } else {
+        setMessage({
+          type: "error",
+          text: "Failed to get AI analysis. Please try again.",
+        });
+      }
+    } catch (error) {
+      console.error("Error getting AI analysis:", error);
+      setMessage({
+        type: "error",
+        text: "Failed to get AI analysis. Please try again.",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const { isAuthenticated } = useAuth();
@@ -267,6 +311,7 @@ export default function IdeaDetailPage({ params }) {
     { id: "overview", label: "Overview" },
     { id: "details", label: "Details" },
     { id: "reviews", label: "Reviews" },
+    { id: "ai-analysis", label: "AI Analysis" },
   ];
 
   return (
@@ -293,7 +338,7 @@ export default function IdeaDetailPage({ params }) {
 
       <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
-        <div className="relative w-full h-64 sm:h-80 lg:h-96 mb-6">
+        <div className="relative w-full h-64 sm:h-80 lg:h-96 mb-6 mt-6">
           <img
             src={`/demo${Math.floor(Math.random() * 7) + 1}.jpeg`}
             alt={idea.title}
@@ -470,15 +515,15 @@ export default function IdeaDetailPage({ params }) {
                 </Card>
 
                 {/* Business Model & Revenue */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                   <Card className="bg-white shadow-sm border border-gray-200">
-                    <CardHeader>
+                    <CardHeader className="pb-4">
                       <CardTitle className="text-[#2D3748] flex items-center space-x-2">
                         <Building className="w-5 h-5" />
                         <span>Business Model</span>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-0">
                       <p className="text-[#2D3748] font-medium">
                         {idea.businessModel}
                       </p>
@@ -486,25 +531,31 @@ export default function IdeaDetailPage({ params }) {
                   </Card>
 
                   <Card className="bg-white shadow-sm border border-gray-200">
-                    <CardHeader>
+                    <CardHeader className="pb-4">
                       <CardTitle className="text-[#2D3748] flex items-center space-x-2">
                         <DollarSign className="w-5 h-5" />
                         <span>Revenue Streams</span>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-0">
                       <div className="space-y-2">
-                        {idea.revenueStreams?.map((stream, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center space-x-2"
-                          >
-                            <div className="w-2 h-2 bg-[#B8860B] rounded-full"></div>
-                            <span className="text-[#2D3748] text-sm">
-                              {stream}
-                            </span>
-                          </div>
-                        ))}
+                        {idea.revenueStreams?.length > 0 ? (
+                          idea.revenueStreams.map((stream, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center space-x-2"
+                            >
+                              <div className="w-2 h-2 bg-[#B8860B] rounded-full"></div>
+                              <span className="text-[#2D3748] text-sm">
+                                {stream}
+                              </span>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-gray-500 text-sm italic">
+                            None for now
+                          </p>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -716,7 +767,7 @@ export default function IdeaDetailPage({ params }) {
                 )}
 
                 {/* Reviews List */}
-                <div className="space-y-4">
+                <div className="space-y-4 mb-8">
                   {currentReviews.length > 0 ? (
                     currentReviews.map((review, index) => (
                       <Card
@@ -756,9 +807,9 @@ export default function IdeaDetailPage({ params }) {
                     ))
                   ) : (
                     <Card className="bg-white shadow-sm border border-gray-200">
-                      <CardContent className="p-6 text-center">
+                      <CardContent className="p-8 text-center">
                         <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-[#2D3748]">
+                        <p className="text-[#2D3748] text-lg">
                           No reviews yet. Be the first to review this idea!
                         </p>
                       </CardContent>
@@ -768,7 +819,7 @@ export default function IdeaDetailPage({ params }) {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex justify-center space-x-2">
+                  <div className="flex justify-center space-x-2 mb-12">
                     <Button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
@@ -805,11 +856,98 @@ export default function IdeaDetailPage({ params }) {
                 )}
               </div>
             )}
+
+            {activeTab === "ai-analysis" && (
+              <div className="space-y-8">
+                {/* AI Analysis Section */}
+                <Card className="bg-white shadow-sm border border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                      <Brain className="w-5 h-5" />
+                      <span>AI Market Analysis</span>
+                    </CardTitle>
+                    <CardDescription>
+                      Get AI-powered insights about competitors and market
+                      analysis
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {!aiAnalysis && !isAnalyzing && (
+                      <div className="text-center py-8">
+                        <Brain className="w-12 h-12 text-[#FDCC29] mx-auto mb-4" />
+                        <h3 className="text-lg font-semibold text-[#2D3748] mb-2">
+                          Get AI-Powered Market Analysis
+                        </h3>
+                        <p className="text-gray-600 mb-4">
+                          Discover current companies in this space, their
+                          revenue models, and market opportunities
+                        </p>
+                        <Button
+                          onClick={handleAIAnalysis}
+                          className="bg-[#FDCC29] hover:bg-[#FDCC29]/90 text-[#2D3748]"
+                        >
+                          <Brain className="w-4 h-4 mr-2" />
+                          Analyze Market
+                        </Button>
+                      </div>
+                    )}
+
+                    {isAnalyzing && (
+                      <div className="py-8">
+                        <div className="flex items-center justify-center mb-6">
+                          <div className="w-12 h-12 bg-[#FDCC29]/10 rounded-full flex items-center justify-center">
+                            <Loader2 className="w-6 h-6 text-[#FDCC29] animate-spin" />
+                          </div>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                          <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                          <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
+                          <div className="h-4 bg-gray-200 rounded animate-pulse w-5/6"></div>
+                          <div className="h-4 bg-gray-200 rounded animate-pulse w-2/3"></div>
+                        </div>
+                        <p className="text-center text-[#2D3748] mt-4 font-medium">
+                          AI is analyzing the market...
+                        </p>
+                      </div>
+                    )}
+
+                    {aiAnalysis && (
+                      <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-lg font-semibold text-[#2D3748]">
+                            Market Analysis Results
+                          </h3>
+                          <Button
+                            onClick={handleAIAnalysis}
+                            variant="outline"
+                            size="sm"
+                            className="text-[#2D3748] border-[#2D3748] hover:bg-[#2D3748] hover:text-white"
+                          >
+                            <TrendingUp className="w-4 h-4 mr-2" />
+                            Refresh Analysis
+                          </Button>
+                        </div>
+
+                        <div className="prose prose-sm max-w-none">
+                          <div className="whitespace-pre-wrap text-[#2D3748] leading-relaxed">
+                            {aiAnalysis?.replace(/\*\*/g, "")}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       <Footer />
+
+      {/* AI Floating Button */}
+      {idea && <AIFloatingButton idea={idea} />}
     </div>
   );
 }

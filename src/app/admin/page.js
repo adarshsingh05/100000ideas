@@ -292,12 +292,12 @@ export default function AdminPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#B8860B] to-[#2D3748] flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-white/95 backdrop-blur-sm border border-[#B8860B]/20 shadow-xl">
+      <div className="min-h-screen bg-[#FCFCFC] flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-white border border-gray-200 shadow-xl">
           <div className="p-8">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-[#B8860B] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lock className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 bg-[#FDCC29] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-8 h-8 text-[#2D3748]" />
               </div>
               <h1 className="text-2xl font-bold text-[#2D3748] mb-2">
                 Admin Access
@@ -321,7 +321,7 @@ export default function AdminPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter admin password"
-                  className="mt-1"
+                  className="mt-1 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
                   required
                 />
               </div>
@@ -333,7 +333,7 @@ export default function AdminPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[#B8860B] hover:bg-[#2D3748] text-white font-semibold py-2"
+                className="w-full bg-[#FDCC29] hover:bg-[#FDCC29]/90 text-[#2D3748] font-semibold py-2"
               >
                 {isLoading ? "Verifying..." : "Access Admin Panel"}
               </Button>
@@ -345,14 +345,14 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#B8860B] to-[#2D3748] p-4">
+    <div className="min-h-screen bg-[#FCFCFC] p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-xl border border-[#B8860B]/20 p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-[#B8860B] rounded-full flex items-center justify-center">
-                <Lightbulb className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-[#FDCC29] rounded-full flex items-center justify-center">
+                <Lightbulb className="w-6 h-6 text-[#2D3748]" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-[#2D3748]">
@@ -374,10 +374,10 @@ export default function AdminPage() {
         </div>
 
         {/* Upload Form - Matching Community Modal Structure */}
-        <Card className="bg-white/95 backdrop-blur-sm border border-[#B8860B]/20 shadow-xl">
+        <Card className="bg-white border border-gray-200 shadow-lg">
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-6">
-              <Upload className="w-6 h-6 text-[#B8860B]" />
+              <Upload className="w-6 h-6 text-[#FDCC29]" />
               <h2 className="text-xl font-semibold text-[#2D3748]">
                 Upload New Admin Idea
               </h2>
@@ -438,7 +438,7 @@ export default function AdminPage() {
                       onChange={(e) =>
                         handleInputChange("category", e.target.value)
                       }
-                      className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#B8860B]/20 focus:border-[#B8860B]"
+                      className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
                       required
                     >
                       <option value="">Select category</option>
@@ -492,7 +492,7 @@ export default function AdminPage() {
                       onChange={(e) =>
                         handleInputChange("investmentRange", e.target.value)
                       }
-                      className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#B8860B]/20 focus:border-[#B8860B]"
+                      className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
                       required
                     >
                       <option value="">Select investment range</option>
@@ -517,7 +517,7 @@ export default function AdminPage() {
                       onChange={(e) =>
                         handleInputChange("timeToStart", e.target.value)
                       }
-                      className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#B8860B]/20 focus:border-[#B8860B]"
+                      className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
                       required
                     >
                       <option value="">Select time to start</option>
@@ -635,7 +635,7 @@ export default function AdminPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => addArrayItem("keyFeatures")}
-                  className="text-[#B8860B] border-[#B8860B] hover:bg-[#B8860B]/10"
+                  className="text-[#FDCC29] border-[#FDCC29] hover:bg-[#FDCC29]/10"
                 >
                   <Plus className="w-4 h-4 mr-1" />
                   Add Feature
@@ -681,7 +681,7 @@ export default function AdminPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => addArrayItem("revenueStreams")}
-                  className="text-[#B8860B] border-[#B8860B] hover:bg-[#B8860B]/10"
+                  className="text-[#FDCC29] border-[#FDCC29] hover:bg-[#FDCC29]/10"
                 >
                   <Plus className="w-4 h-4 mr-1" />
                   Add Revenue Stream
@@ -727,7 +727,7 @@ export default function AdminPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => addArrayItem("requiredSkills")}
-                  className="text-[#B8860B] border-[#B8860B] hover:bg-[#B8860B]/10"
+                  className="text-[#FDCC29] border-[#FDCC29] hover:bg-[#FDCC29]/10"
                 >
                   <Plus className="w-4 h-4 mr-1" />
                   Add Skill
@@ -880,11 +880,11 @@ export default function AdminPage() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-[#B8860B] hover:bg-[#B8860B]/90 text-white"
+                  className="bg-[#FDCC29] hover:bg-[#FDCC29]/90 text-[#2D3748]"
                 >
                   {loading ? (
                     <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#2D3748] mr-2"></div>
                       Uploading...
                     </>
                   ) : (
@@ -900,10 +900,10 @@ export default function AdminPage() {
         </Card>
 
         {/* Uploaded Ideas Section */}
-        <Card className="bg-white/95 backdrop-blur-sm border border-[#B8860B]/20 shadow-xl mt-6">
+        <Card className="bg-white border border-gray-200 shadow-lg mt-6">
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-6">
-              <Lightbulb className="w-6 h-6 text-[#B8860B]" />
+              <Lightbulb className="w-6 h-6 text-[#FDCC29]" />
               <h2 className="text-xl font-semibold text-[#2D3748]">
                 Uploaded Admin Ideas ({uploadedIdeas.length})
               </h2>
@@ -926,7 +926,7 @@ export default function AdminPage() {
                         <h3 className="font-semibold text-gray-900 text-sm line-clamp-2">
                           {idea.title}
                         </h3>
-                        <span className="text-xs bg-[#B8860B] text-white px-2 py-1 rounded-full">
+                        <span className="text-xs bg-[#FDCC29] text-[#2D3748] px-2 py-1 rounded-full">
                           Admin
                         </span>
                       </div>

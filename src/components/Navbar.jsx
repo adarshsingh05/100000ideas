@@ -74,6 +74,12 @@ export default function Navbar() {
             >
               About
             </a>
+            <a
+              href="/admin"
+              className="text-[#061F59] hover:text-[#FDCC29] transition-colors font-semibold text-base"
+            >
+              Admin Panel
+            </a>
 
             {loading ? (
               // Skeleton Loading for Desktop
@@ -154,19 +160,6 @@ export default function Navbar() {
                     <div className="border-t border-gray-100 py-2">
                       <button
                         onClick={() => {
-                          window.location.href = "/admin";
-                          setIsUserMenuOpen(false);
-                        }}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-200"
-                      >
-                        <Settings className="w-5 h-5" />
-                        <span className="font-medium">Are you admin?</span>
-                      </button>
-
-                      <div className="border-t border-gray-100 my-2"></div>
-
-                      <button
-                        onClick={() => {
                           logout();
                           setIsUserMenuOpen(false);
                         }}
@@ -221,6 +214,13 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 About
+              </a>
+              <a
+                href="/admin"
+                className="block px-3 py-3 text-[#061F59] hover:text-[#FDCC29] hover:bg-[#FDCC29]/10 transition-colors font-semibold rounded-lg"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin Panel
               </a>
 
               {loading ? (
@@ -287,17 +287,6 @@ export default function Navbar() {
                     </button>
 
                     <div className="border-t border-gray-200 my-2"></div>
-
-                    <button
-                      onClick={() => {
-                        window.location.href = "/admin";
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="w-full flex items-center space-x-3 px-3 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
-                    >
-                      <Settings className="w-5 h-5" />
-                      <span className="font-medium">Are you admin?</span>
-                    </button>
 
                     <button
                       onClick={() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, use } from "react";
+import React, { useState, use, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -19,55 +19,71 @@ import Toast from "@/components/ui/toast";
 import { useAuth } from "@/contexts/AuthContext";
 import apiClient from "@/lib/api";
 import {
-  Building2,
-  Smartphone,
-  Leaf,
-  Utensils,
-  Car,
-  Heart,
-  Laptop,
-  ShoppingBag,
-  Camera,
-  Dumbbell,
-  TrendingUp,
-  Users,
-  Lightbulb,
+  ArrowLeft,
   Star,
   Clock,
   DollarSign,
-  ArrowRight,
-  Download,
-  MessageCircle,
-  Share2,
-  CheckCircle,
-  Target,
-  Zap,
-  Calendar,
+  Users,
   MapPin,
+  Building,
+  Target,
+  TrendingUp,
+  Shield,
+  Award,
+  Globe,
+  ChevronDown,
+  ChevronRight,
+  Heart,
+  Share2,
+  MessageCircle,
+  ThumbsUp,
+  ThumbsDown,
+  Send,
+  AlertTriangle,
+  CheckCircle,
+  Lightbulb,
   BarChart3,
   PieChart,
   Settings,
   User,
-  ChevronRight,
+  Calendar,
+  Zap,
   Home,
-  AlertTriangle,
-  Send,
-  ThumbsUp,
+  Smartphone,
+  Leaf,
+  Utensils,
+  Car,
+  Laptop,
+  ShoppingBag,
+  Camera,
+  Dumbbell,
+  FileText,
+  Crown,
+  Banknote,
+  BookOpen,
 } from "lucide-react";
 
 export default function CommunityIdeaDetailPage({ params }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [newReview, setNewReview] = useState({ comment: "" });
+  const [newReview, setNewReview] = useState({ comment: "", rating: 5 });
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [currentPage, setCurrentPage] = useState(1);
+  const [expandedSections, setExpandedSections] = useState({});
   const reviewsPerPage = 3;
   const [idea, setIdea] = useState(null);
 
   const clearMessage = () => {
     setMessage({ type: "", text: "" });
+  };
+
+  const toggleSection = (section) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
   };
 
   const { isAuthenticated } = useAuth();
@@ -121,55 +137,55 @@ export default function CommunityIdeaDetailPage({ params }) {
     e.preventDefault();
     console.log("Form submitted!", { newReview, isAuthenticated });
 
-    if (!newReview.comment.trim()) {
-      console.log("No comment provided");
-      return;
-    }
-
-    // Check if user is authenticated
     if (!isAuthenticated) {
-      console.log("User not authenticated");
       setMessage({
         type: "error",
-        text: "You need to be logged in to add a review. Please sign in first.",
+        text: "Please log in to submit a review",
       });
       return;
     }
 
-    console.log("Starting review submission...");
-    setSubmitting(true);
+    if (!newReview.comment.trim()) {
+      setMessage({
+        type: "error",
+        text: "Please enter a review comment",
+      });
+      return;
+    }
+
     try {
-      const data = await apiClient.post("/reviews", {
-        ideaId: idea._id,
+      setSubmitting(true);
+      const response = await apiClient.post("/reviews", {
+        ideaId: resolvedParams.id,
         comment: newReview.comment,
+        rating: newReview.rating,
       });
 
-      if (data.success) {
-        setMessage({ type: "success", text: "Review submitted successfully!" });
-        setNewReview({ comment: "" });
+      if (response.success) {
+        setMessage({
+          type: "success",
+          text: "Review submitted successfully!",
+        });
+        setNewReview({ comment: "", rating: 5 });
         fetchReviews(); // Refresh reviews
       } else {
-        setMessage({ type: "error", text: data.message });
+        setMessage({
+          type: "error",
+          text: response.message || "Failed to submit review",
+        });
       }
     } catch (error) {
-      if (error.message.includes("Access denied")) {
-        setMessage({
-          type: "error",
-          text: "You need to be logged in to add a review. Please sign in first.",
-        });
-      } else {
-        setMessage({
-          type: "error",
-          text: error.message || "Failed to submit review",
-        });
-      }
+      console.error("Error submitting review:", error);
+      setMessage({
+        type: "error",
+        text: "Failed to submit review. Please try again.",
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
-  // Load data on component mount
-  React.useEffect(() => {
+  useEffect(() => {
     console.log("Community idea page loaded with ID:", resolvedParams.id);
     fetchIdea();
     fetchReviews();
@@ -203,561 +219,587 @@ export default function CommunityIdeaDetailPage({ params }) {
           <p className="text-gray-600 mb-4">
             The idea you&apos;re looking for doesn&apos;t exist.
           </p>
-          <Link href="/your-ideas">
+          <Link href="/">
             <Button className="bg-[#B8860B] hover:bg-[#2D3748] text-white">
-              Back to Your Ideas
+              Back to Home
             </Button>
           </Link>
         </div>
       </div>
     );
   }
+
+  // Calculate average rating from real reviews
+  const averageRating =
+    reviews.length > 0
+      ? (
+          reviews.reduce((sum, review) => sum + (review.rating || 5), 0) /
+          reviews.length
+        ).toFixed(1)
+      : "0.0";
+
+  // Get category icon
+  const getCategoryIcon = (category) => {
+    const iconMap = {
+      Technology: Laptop,
+      Healthcare: Heart,
+      Education: BookOpen,
+      Finance: DollarSign,
+      "E-commerce": ShoppingBag,
+      "Food & Beverage": Utensils,
+      "Travel & Tourism": Globe,
+      "Real Estate": Building,
+      Entertainment: Camera,
+      Fashion: ShoppingBag,
+      Sports: Dumbbell,
+      Automotive: Car,
+      Agriculture: Leaf,
+      Energy: Zap,
+      Manufacturing: Settings,
+      Other: Lightbulb,
+    };
+    return iconMap[category] || Lightbulb;
+  };
+
+  const CategoryIcon = getCategoryIcon(idea.category);
 
   const tabs = [
     { id: "overview", label: "Overview" },
-    { id: "business-model", label: "Business Model" },
-    { id: "skills", label: "Skills Required" },
+    { id: "details", label: "Details" },
     { id: "reviews", label: "Reviews" },
   ];
 
-  try {
-    return (
-      <div className="min-h-screen bg-[#FCFCFC]">
-        <Toast message={message} onClose={clearMessage} />
-        <Navbar />
+  return (
+    <div className="min-h-screen bg-[#FCFCFC]">
+      <Toast message={message} onClose={clearMessage} />
+      <Navbar />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-          {/* Breadcrumbs */}
-          <div className="flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base text-[#2D3748] mb-4 sm:mb-6 overflow-x-auto">
-            <Link
-              href="/"
-              className="hover:text-[#B8860B] transition-colors duration-200 flex items-center"
-            >
-              <Home className="w-4 h-4 mr-1" />
-              Home
-            </Link>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
-            <Link
-              href="/your-ideas"
-              className="hover:text-[#B8860B] transition-colors duration-200"
-            >
-              Your Ideas
-            </Link>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
-            <span className="text-gray-500 truncate">{idea.title}</span>
+      {/* Mobile Header */}
+      <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex items-center">
+            <ArrowLeft className="w-5 h-5 text-[#2D3748]" />
+          </Link>
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-[#2D3748] rounded-full flex items-center justify-center">
+              <Heart className="w-4 h-4 text-white" />
+            </div>
+            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+              <Share2 className="w-4 h-4 text-[#2D3748]" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto">
+        {/* Hero Section */}
+        <div className="relative w-full h-64 sm:h-80 lg:h-96 mb-6">
+          <img
+            src={`/demo${Math.floor(Math.random() * 7) + 1}.jpeg`}
+            alt={idea.title}
+            className="w-full h-full object-cover rounded-lg"
+          />
+
+          {/* Investment Range Badge */}
+          <div className="absolute top-4 left-4">
+            <Badge className="bg-[#FDCC29] text-[#2D3748] px-4 py-2 text-sm font-bold">
+              {idea.investmentRange}
+            </Badge>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-2">
-              {/* Idea Header */}
-              <Card className="bg-gradient-to-br from-white to-[#FDCC29]/10 border-[#B8860B]/30 shadow-lg mb-6">
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Badge
-                          variant="secondary"
-                          className="bg-[#B8860B]/10 text-[#B8860B] border-[#B8860B]/20"
-                        >
-                          {idea.category}
-                        </Badge>
-                        <Badge variant="outline" className="text-xs">
-                          {idea.status}
-                        </Badge>
-                      </div>
-                      <CardTitle className="text-2xl sm:text-3xl font-bold text-[#2D3748] mb-3 leading-tight">
-                        {idea.title}
-                      </CardTitle>
-                      <CardDescription className="text-[#2D3748] text-base sm:text-lg leading-relaxed">
-                        {idea.description}
-                      </CardDescription>
-                    </div>
-                  </div>
+          {/* Category Badge */}
+          <div className="absolute top-4 right-4">
+            <Badge className="bg-[#2D3748] text-white px-4 py-2 text-sm font-bold">
+              {idea.category}
+            </Badge>
+          </div>
+        </div>
 
-                  {/* Quick Stats */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                    <Card className="bg-gradient-to-br from-[#FDCC29]/15 to-[#FDCC29]/25 border-[#FDCC29]/50 shadow-lg">
-                      <CardContent className="p-3 sm:p-4 text-center">
-                        <DollarSign className="w-6 h-6 sm:w-7 sm:h-7 text-[#B8860B] mx-auto mb-2" />
-                        <p className="text-sm text-[#2D3748] font-medium mb-1">
-                          Investment
-                        </p>
-                        <p className="text-sm sm:text-base font-semibold text-[#2D3748]">
-                          {idea.investmentRange}
-                        </p>
-                      </CardContent>
-                    </Card>
-                    <Card className="bg-gradient-to-br from-[#FDCC29]/15 to-[#FDCC29]/25 border-[#FDCC29]/50 shadow-lg">
-                      <CardContent className="p-3 sm:p-4 text-center">
-                        <Clock className="w-6 h-6 sm:w-7 sm:h-7 text-[#B8860B] mx-auto mb-2" />
-                        <p className="text-sm text-[#2D3748] font-medium mb-1">
-                          Time to Start
-                        </p>
-                        <p className="text-sm sm:text-base font-semibold text-[#2D3748]">
-                          {idea.timeToStart}
-                        </p>
-                      </CardContent>
-                    </Card>
-                    <Card className="bg-gradient-to-br from-[#FDCC29]/15 to-[#FDCC29]/25 border-[#FDCC29]/50 shadow-lg">
-                      <CardContent className="p-3 sm:p-4 text-center">
-                        <Users className="w-6 h-6 sm:w-7 sm:h-7 text-[#B8860B] mx-auto mb-2" />
-                        <p className="text-sm text-[#2D3748] font-medium mb-1">
-                          Reviews
-                        </p>
-                        <p className="text-sm sm:text-base font-semibold text-[#2D3748]">
-                          {reviews.length}
-                        </p>
-                      </CardContent>
-                    </Card>
-                    <Card className="bg-gradient-to-br from-[#FDCC29]/15 to-[#FDCC29]/25 border-[#FDCC29]/50 shadow-lg">
-                      <CardContent className="p-3 sm:p-4 text-center">
-                        <MapPin className="w-6 h-6 sm:w-7 sm:h-7 text-[#B8860B] mx-auto mb-2" />
-                        <p className="text-sm text-[#2D3748] font-medium mb-1">
-                          Market
-                        </p>
-                        <p className="text-sm sm:text-base font-semibold text-[#2D3748]">
-                          {idea.marketSize}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CardHeader>
-              </Card>
-
-              {/* Tabs */}
-              <Card className="bg-gradient-to-br from-white to-[#FDCC29]/10 border-[#B8860B]/30 shadow-lg">
-                <CardHeader className="pb-4">
-                  <div className="flex flex-wrap gap-2">
-                    {tabs.map((tab) => (
-                      <Button
-                        key={tab.id}
-                        variant={activeTab === tab.id ? "default" : "ghost"}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`${
-                          activeTab === tab.id
-                            ? "bg-[#B8860B] text-white"
-                            : "text-[#2D3748] hover:bg-[#B8860B]/10"
-                        }`}
-                      >
-                        {tab.label}
-                      </Button>
-                    ))}
-                  </div>
-                </CardHeader>
-
-                <CardContent>
-                  {/* Overview Tab */}
-                  {activeTab === "overview" && (
-                    <div className="space-y-6">
-                      <div>
-                        <h3 className="text-lg font-semibold text-[#2D3748] mb-3">
-                          About This Idea
-                        </h3>
-                        <p className="text-[#2D3748] leading-relaxed">
-                          {idea.description}
-                        </p>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-2">
-                            Investment Required
-                          </h4>
-                          <p className="text-[#2D3748]">
-                            {idea.investmentRange}
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-2">
-                            Time to Start
-                          </h4>
-                          <p className="text-[#2D3748]">{idea.timeToStart}</p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-2">
-                            Market Size
-                          </h4>
-                          <p className="text-[#2D3748]">{idea.marketSize}</p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-2">
-                            Category
-                          </h4>
-                          <p className="text-[#2D3748]">{idea.category}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Business Model Tab */}
-                  {activeTab === "business-model" && (
-                    <div className="space-y-6">
-                      <div>
-                        <h3 className="text-lg font-semibold text-[#2D3748] mb-3">
-                          Business Model
-                        </h3>
-                        <p className="text-[#2D3748] leading-relaxed mb-4">
-                          {idea.businessModel}
-                        </p>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-2">
-                            Revenue Streams
-                          </h4>
-                          <div className="space-y-2">
-                            {idea.revenueStreams?.map((stream, index) => (
-                              <div key={index} className="flex items-center">
-                                <div className="w-2 h-2 bg-[#B8860B] rounded-full mr-2"></div>
-                                <span className="text-[#2D3748]">{stream}</span>
-                              </div>
-                            )) || (
-                              <p className="text-gray-500">
-                                No revenue streams specified
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-2">
-                            Target Audience
-                          </h4>
-                          <p className="text-[#2D3748]">
-                            {idea.targetAudience}
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-2">
-                            Competitive Advantage
-                          </h4>
-                          <p className="text-[#2D3748]">
-                            {idea.competitiveAdvantage}
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-2">
-                            Key Challenges
-                          </h4>
-                          <p className="text-[#2D3748]">{idea.challenges}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Skills Required Tab */}
-                  {activeTab === "skills" && (
-                    <div className="space-y-6">
-                      <div>
-                        <h3 className="text-lg font-semibold text-[#2D3748] mb-3">
-                          Skills Required
-                        </h3>
-                        <p className="text-[#2D3748] leading-relaxed mb-4">
-                          Here are the key skills and expertise needed to
-                          successfully implement this business idea:
-                        </p>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-3">
-                            Required Skills
-                          </h4>
-                          <div className="space-y-2">
-                            {idea.requiredSkills?.map((skill, index) => (
-                              <div key={index} className="flex items-center">
-                                <div className="w-2 h-2 bg-[#B8860B] rounded-full mr-2"></div>
-                                <span className="text-[#2D3748]">{skill}</span>
-                              </div>
-                            )) || (
-                              <p className="text-gray-500">
-                                No specific skills listed
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-[#2D3748] mb-3">
-                            Key Features
-                          </h4>
-                          <div className="space-y-2">
-                            {idea.keyFeatures?.map((feature, index) => (
-                              <div key={index} className="flex items-center">
-                                <div className="w-2 h-2 bg-[#B8860B] rounded-full mr-2"></div>
-                                <span className="text-[#2D3748]">
-                                  {feature}
-                                </span>
-                              </div>
-                            )) || (
-                              <p className="text-gray-500">
-                                No key features specified
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Reviews Tab */}
-                  {activeTab === "reviews" && (
-                    <div className="space-y-8">
-                      {/* Add Review Form */}
-                      <Card className="bg-gradient-to-br from-white to-[#FDCC29]/10 border-[#B8860B]/30 shadow-lg">
-                        <CardHeader>
-                          <CardTitle className="text-[#2D3748] font-medium tracking-wide flex items-center">
-                            <MessageCircle className="w-5 h-5 text-[#B8860B] mr-2" />
-                            Write a Review
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <form
-                            onSubmit={handleSubmitReview}
-                            className="space-y-4"
-                          >
-                            <div>
-                              <label className="block text-[#2D3748] font-medium mb-2">
-                                Comment
-                              </label>
-                              <textarea
-                                value={newReview.comment}
-                                onChange={(e) =>
-                                  setNewReview({
-                                    ...newReview,
-                                    comment: e.target.value,
-                                  })
-                                }
-                                placeholder="Share your thoughts about this idea..."
-                                className="w-full p-3 border border-[#B8860B]/30 rounded-lg focus:ring-2 focus:ring-[#B8860B]/50 focus:border-[#B8860B] resize-none"
-                                rows={4}
-                                required
-                              />
-                            </div>
-                            <Button
-                              type="submit"
-                              disabled={submitting || !newReview.comment.trim()}
-                              onClick={() =>
-                                console.log("Button clicked!", {
-                                  submitting,
-                                  comment: newReview.comment,
-                                  disabled:
-                                    submitting || !newReview.comment.trim(),
-                                })
-                              }
-                              className="bg-[#B8860B] hover:bg-[#2D3748] text-white hover:text-white px-6 py-3 rounded-xl font-semibold tracking-wide transition-all duration-300"
-                            >
-                              {submitting ? (
-                                "Submitting..."
-                              ) : (
-                                <>
-                                  <Send className="w-4 h-4 mr-2" />
-                                  Submit Review
-                                </>
-                              )}
-                            </Button>
-                          </form>
-                        </CardContent>
-                      </Card>
-
-                      {/* Reviews List */}
-                      <Card className="bg-gradient-to-br from-white to-[#FDCC29]/10 border-[#B8860B]/30 shadow-lg">
-                        <CardHeader>
-                          <CardTitle className="text-[#2D3748] font-medium tracking-wide flex items-center">
-                            <Users className="w-5 h-5 text-[#B8860B] mr-2" />
-                            Community Reviews
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          {loading ? (
-                            <div className="text-center py-8">
-                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B8860B] mx-auto"></div>
-                              <p className="text-[#2D3748] mt-2">
-                                Loading reviews...
-                              </p>
-                            </div>
-                          ) : reviews.length === 0 ? (
-                            <div className="text-center py-8">
-                              <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                              <p className="text-[#2D3748] font-medium">
-                                No reviews yet
-                              </p>
-                              <p className="text-gray-600">
-                                Be the first to review this idea!
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="space-y-4">
-                              {currentReviews.map((review) => (
-                                <div
-                                  key={review._id}
-                                  className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm"
-                                >
-                                  <div className="flex items-start justify-between mb-2">
-                                    <div className="flex items-center space-x-2">
-                                      <div className="w-8 h-8 bg-gradient-to-br from-[#B8860B] to-[#2D3748] rounded-full flex items-center justify-center">
-                                        <User className="w-4 h-4 text-white" />
-                                      </div>
-                                      <div>
-                                        <p className="font-semibold text-[#2D3748] text-sm">
-                                          {review.userName}
-                                        </p>
-                                      </div>
-                                    </div>
-                                    <div className="text-xs text-gray-500">
-                                      {new Date(
-                                        review.createdAt
-                                      ).toLocaleDateString()}
-                                    </div>
-                                  </div>
-                                  <p className="text-[#2D3748] text-sm leading-relaxed">
-                                    {review.comment}
-                                  </p>
-                                </div>
-                              ))}
-
-                              {/* Pagination */}
-                              {totalPages > 1 && (
-                                <div className="flex justify-center items-center space-x-2 mt-6">
-                                  <Button
-                                    onClick={() =>
-                                      handlePageChange(currentPage - 1)
-                                    }
-                                    disabled={currentPage === 1}
-                                    variant="outline"
-                                    size="sm"
-                                    className="border-[#B8860B] text-[#B8860B] hover:bg-[#B8860B] hover:text-white"
-                                  >
-                                    Previous
-                                  </Button>
-
-                                  <div className="flex space-x-1">
-                                    {Array.from(
-                                      { length: totalPages },
-                                      (_, i) => i + 1
-                                    ).map((page) => (
-                                      <Button
-                                        key={page}
-                                        onClick={() => handlePageChange(page)}
-                                        variant={
-                                          currentPage === page
-                                            ? "default"
-                                            : "outline"
-                                        }
-                                        size="sm"
-                                        className={
-                                          currentPage === page
-                                            ? "bg-[#B8860B] text-white"
-                                            : "border-[#B8860B] text-[#B8860B] hover:bg-[#B8860B] hover:text-white"
-                                        }
-                                      >
-                                        {page}
-                                      </Button>
-                                    ))}
-                                  </div>
-
-                                  <Button
-                                    onClick={() =>
-                                      handlePageChange(currentPage + 1)
-                                    }
-                                    disabled={currentPage === totalPages}
-                                    variant="outline"
-                                    size="sm"
-                                    className="border-[#B8860B] text-[#B8860B] hover:bg-[#B8860B] hover:text-white"
-                                  >
-                                    Next
-                                  </Button>
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+        {/* Main Content */}
+        <div className="px-4 sm:px-6 lg:px-8">
+          {/* Title and Rating Section */}
+          <div className="mb-6">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#2D3748] mb-2">
+              {idea.title}
+            </h1>
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-2xl font-bold text-[#2D3748]">
+                  {averageRating}
+                </span>
+                <div className="flex items-center space-x-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`w-4 h-4 ${
+                        star <= Math.floor(averageRating)
+                          ? "text-[#FDCC29] fill-current"
+                          : star === Math.ceil(averageRating) &&
+                            averageRating % 1 !== 0
+                          ? "text-[#FDCC29] fill-current opacity-50"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm text-gray-600">
+                  ({reviews.length} reviews)
+                </span>
+              </div>
             </div>
 
-            {/* Right Sidebar */}
-            <div className="w-80 flex-shrink-0">
-              <div className="sticky top-32 space-y-6">
-                {/* Quick Actions */}
-                <Card className="bg-gradient-to-br from-white to-[#FDCC29]/10 border-[#B8860B]/30 shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="text-[#2D3748] font-semibold tracking-wide text-lg">
-                      Quick Actions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {[
-                      "Business Plan Template",
-                      "Expert Consultation",
-                      "Find Partners",
-                    ].map((action, index) => (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        className="w-full justify-start border-2 border-[#B8860B] text-[#B8860B] hover:bg-[#B8860B] hover:text-white font-semibold tracking-wide transition-all duration-300"
-                      >
-                        <ArrowRight className="w-4 h-4 mr-2" />
-                        {action}
-                      </Button>
-                    ))}
-                  </CardContent>
-                </Card>
+            {/* Key Info Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+              <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Clock className="w-5 h-5 text-[#B8860B]" />
+                  <span className="text-sm font-medium text-[#2D3748]">
+                    Time to Start
+                  </span>
+                </div>
+                <p className="text-lg font-bold text-[#2D3748]">
+                  {idea.timeToStart}
+                </p>
+              </div>
 
-                {/* Share Idea */}
-                <Card className="bg-gradient-to-br from-white to-[#FDCC29]/10 border-[#B8860B]/30 shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="text-[#2D3748] font-semibold tracking-wide text-lg">
-                      Share This Idea
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start border-2 border-[#B8860B] text-[#B8860B] hover:bg-[#B8860B] hover:text-white font-semibold tracking-wide transition-all duration-300"
-                    >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share on Social Media
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start border-2 border-[#B8860B] text-[#B8860B] hover:bg-[#B8860B] hover:text-white font-semibold tracking-wide transition-all duration-300"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download PDF
-                    </Button>
-                  </CardContent>
-                </Card>
+              <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Users className="w-5 h-5 text-[#B8860B]" />
+                  <span className="text-sm font-medium text-[#2D3748]">
+                    Target Audience
+                  </span>
+                </div>
+                <p className="text-sm text-[#2D3748] line-clamp-2">
+                  {idea.targetAudience}
+                </p>
+              </div>
+
+              <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Globe className="w-5 h-5 text-[#B8860B]" />
+                  <span className="text-sm font-medium text-[#2D3748]">
+                    Market Size
+                  </span>
+                </div>
+                <p className="text-sm text-[#2D3748]">{idea.marketSize}</p>
+              </div>
+
+              <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                <div className="flex items-center space-x-2 mb-2">
+                  <CategoryIcon className="w-5 h-5 text-[#B8860B]" />
+                  <span className="text-sm font-medium text-[#2D3748]">
+                    Category
+                  </span>
+                </div>
+                <p className="text-sm text-[#2D3748]">{idea.category}</p>
               </div>
             </div>
           </div>
-        </div>
 
-        <Footer />
-      </div>
-    );
-  } catch (error) {
-    console.error("Error rendering community idea page:", error);
-    return (
-      <div className="min-h-screen bg-[#FCFCFC] flex items-center justify-center">
-        <div className="text-center">
-          <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-[#2D3748] mb-2">
-            Error Loading Page
-          </h2>
-          <p className="text-gray-600 mb-4">
-            There was an error loading this idea page.
-          </p>
-          <Link href="/your-ideas">
-            <Button className="bg-[#B8860B] hover:bg-[#2D3748] text-white">
-              Back to Your Ideas
-            </Button>
-          </Link>
+          {/* Tab Navigation */}
+          <div className="border-b border-gray-200 mb-6">
+            <nav className="flex space-x-8">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`py-4 px-1 border-b-2 font-medium transition-colors ${
+                    activeTab === tab.id
+                      ? "border-[#2D3748] text-[#2D3748]"
+                      : "border-transparent text-gray-500 hover:text-[#2D3748]"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          {/* Tab Content */}
+          <div className="space-y-8">
+            {activeTab === "overview" && (
+              <div className="space-y-8">
+                {/* Description */}
+                <Card className="bg-white shadow-sm border border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                      <FileText className="w-5 h-5" />
+                      <span>Description</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-[#2D3748] leading-relaxed">
+                      {idea.description}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Key Features */}
+                <Card className="bg-white shadow-sm border border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                      <Target className="w-5 h-5" />
+                      <span>Key Features</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {idea.keyFeatures?.map((feature, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-2 p-3 bg-[#FDCC29]/10 rounded-lg"
+                        >
+                          <CheckCircle className="w-4 h-4 text-[#B8860B] flex-shrink-0" />
+                          <span className="text-[#2D3748] text-sm">
+                            {feature}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Business Model & Revenue */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <Card className="bg-white shadow-sm border border-gray-200">
+                    <CardHeader>
+                      <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                        <Building className="w-5 h-5" />
+                        <span>Business Model</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-[#2D3748] font-medium">
+                        {idea.businessModel}
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white shadow-sm border border-gray-200">
+                    <CardHeader>
+                      <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                        <DollarSign className="w-5 h-5" />
+                        <span>Revenue Streams</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        {idea.revenueStreams?.map((stream, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center space-x-2"
+                          >
+                            <div className="w-2 h-2 bg-[#B8860B] rounded-full"></div>
+                            <span className="text-[#2D3748] text-sm">
+                              {stream}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "details" && (
+              <div className="space-y-8">
+                {/* Competitive Advantage */}
+                <Card className="bg-white shadow-sm border border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                      <Award className="w-5 h-5" />
+                      <span>Competitive Advantage</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-[#2D3748] leading-relaxed">
+                      {idea.competitiveAdvantage}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Challenges */}
+                <Card className="bg-white shadow-sm border border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                      <AlertTriangle className="w-5 h-5" />
+                      <span>Challenges</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-[#2D3748] leading-relaxed">
+                      {idea.challenges}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Required Skills */}
+                <Card className="bg-white shadow-sm border border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                      <User className="w-5 h-5" />
+                      <span>Required Skills</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      {idea.requiredSkills?.map((skill, index) => (
+                        <Badge
+                          key={index}
+                          className="bg-[#FDCC29] text-[#2D3748] px-3 py-1"
+                        >
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Contact Information */}
+                <Card className="bg-white shadow-sm border border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                      <MessageCircle className="w-5 h-5" />
+                      <span>Contact Information</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-sm font-medium text-[#2D3748]">
+                          Email:
+                        </span>
+                        <span className="text-sm text-[#2D3748]">
+                          {idea.contactInfo?.email}
+                        </span>
+                      </div>
+                      {idea.contactInfo?.phone && (
+                        <div className="flex items-center space-x-3">
+                          <span className="text-sm font-medium text-[#2D3748]">
+                            Phone:
+                          </span>
+                          <span className="text-sm text-[#2D3748]">
+                            {idea.contactInfo.phone}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center space-x-3">
+                        <span className="text-sm font-medium text-[#2D3748]">
+                          Submitted by:
+                        </span>
+                        <span className="text-sm text-[#2D3748]">
+                          {idea.uploadedByName}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === "reviews" && (
+              <div className="space-y-8">
+                {/* Review Summary */}
+                <Card className="bg-white shadow-sm border border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="text-[#2D3748] flex items-center space-x-2">
+                      <Star className="w-5 h-5" />
+                      <span>Reviews ({reviews.length})</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center space-x-4">
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-[#2D3748]">
+                          {averageRating}
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className={`w-4 h-4 ${
+                                star <= Math.floor(averageRating)
+                                  ? "text-[#FDCC29] fill-current"
+                                  : star === Math.ceil(averageRating) &&
+                                    averageRating % 1 !== 0
+                                  ? "text-[#FDCC29] fill-current opacity-50"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[#2D3748] text-sm">
+                          Based on {reviews.length} review
+                          {reviews.length !== 1 ? "s" : ""}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Submit Review Form */}
+                {isAuthenticated && (
+                  <Card className="bg-white shadow-sm border border-gray-200">
+                    <CardHeader>
+                      <CardTitle className="text-[#2D3748]">
+                        Write a Review
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <form onSubmit={handleSubmitReview} className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-[#2D3748] mb-2">
+                            Rating
+                          </label>
+                          <div className="flex space-x-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <button
+                                key={star}
+                                type="button"
+                                onClick={() =>
+                                  setNewReview({ ...newReview, rating: star })
+                                }
+                                className="focus:outline-none"
+                              >
+                                <Star
+                                  className={`w-6 h-6 ${
+                                    star <= newReview.rating
+                                      ? "text-[#FDCC29] fill-current"
+                                      : "text-gray-300"
+                                  }`}
+                                />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-[#2D3748] mb-2">
+                            Comment
+                          </label>
+                          <textarea
+                            value={newReview.comment}
+                            onChange={(e) =>
+                              setNewReview({
+                                ...newReview,
+                                comment: e.target.value,
+                              })
+                            }
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B8860B] focus:border-transparent"
+                            rows={4}
+                            placeholder="Share your thoughts about this idea..."
+                            required
+                          />
+                        </div>
+                        <Button
+                          type="submit"
+                          disabled={submitting}
+                          className="bg-[#B8860B] hover:bg-[#2D3748] text-white"
+                        >
+                          {submitting ? "Submitting..." : "Submit Review"}
+                        </Button>
+                      </form>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Reviews List */}
+                <div className="space-y-4">
+                  {currentReviews.length > 0 ? (
+                    currentReviews.map((review, index) => (
+                      <Card
+                        key={index}
+                        className="bg-white shadow-sm border border-gray-200"
+                      >
+                        <CardContent className="p-6">
+                          <div className="flex items-start space-x-4">
+                            <div className="w-10 h-10 bg-[#FDCC29] rounded-full flex items-center justify-center">
+                              <User className="w-5 h-5 text-[#2D3748]" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-2">
+                                <div className="flex items-center space-x-1">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <Star
+                                      key={star}
+                                      className={`w-4 h-4 ${
+                                        star <= (review.rating || 5)
+                                          ? "text-[#FDCC29] fill-current"
+                                          : "text-gray-300"
+                                      }`}
+                                    />
+                                  ))}
+                                </div>
+                                <span className="text-sm text-gray-500">
+                                  {new Date(
+                                    review.createdAt
+                                  ).toLocaleDateString()}
+                                </span>
+                              </div>
+                              <p className="text-[#2D3748]">{review.comment}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : (
+                    <Card className="bg-white shadow-sm border border-gray-200">
+                      <CardContent className="p-6 text-center">
+                        <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                        <p className="text-[#2D3748]">
+                          No reviews yet. Be the first to review this idea!
+                        </p>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex justify-center space-x-2">
+                    <Button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      variant="outline"
+                      className="text-[#2D3748] border-[#2D3748] hover:bg-[#2D3748] hover:text-white"
+                    >
+                      Previous
+                    </Button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => (
+                        <Button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`${
+                            currentPage === page
+                              ? "bg-[#2D3748] text-white"
+                              : "text-[#2D3748] border-[#2D3748] hover:bg-[#2D3748] hover:text-white"
+                          }`}
+                          variant={currentPage === page ? "default" : "outline"}
+                        >
+                          {page}
+                        </Button>
+                      )
+                    )}
+                    <Button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      variant="outline"
+                      className="text-[#2D3748] border-[#2D3748] hover:bg-[#2D3748] hover:text-white"
+                    >
+                      Next
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    );
-  }
+
+      <Footer />
+    </div>
+  );
 }

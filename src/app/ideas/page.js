@@ -243,20 +243,19 @@ export default function IdeasPage() {
   ]);
 
   const handleCardClick = (id) => {
+    // Always allow navigation, but increment view count if user has access
     if (hasAccess) {
       incrementView();
-      // Route community ideas to community-ideas page, static ideas to ideas page
-      // Community ideas have _id (MongoDB ObjectId), static ideas have id (number)
-      if (id && typeof id === "string" && id.length > 10) {
-        // This is a community idea (MongoDB ObjectId)
-        window.location.href = `/community-ideas/${id}`;
-      } else {
-        // This is a static idea (number ID)
-        window.location.href = `/ideas/${id}`;
-      }
+    }
+
+    // Route community ideas to community-ideas page, static ideas to ideas page
+    // Community ideas have _id (MongoDB ObjectId), static ideas have id (number)
+    if (id && typeof id === "string" && id.length > 10) {
+      // This is a community idea (MongoDB ObjectId)
+      window.location.href = `/community-ideas/${id}`;
     } else {
-      // Show premium modal or redirect to auth
-      window.location.href = "/auth";
+      // This is a static idea (number ID)
+      window.location.href = `/ideas/${id}`;
     }
   };
 
@@ -319,11 +318,6 @@ export default function IdeasPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-6"
         >
-          <div className="flex items-center justify-center mb-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-[#FDCC29] to-[#2D3748] rounded-xl flex items-center justify-center shadow-md">
-              <Lightbulb className="w-6 h-6 text-white" />
-            </div>
-          </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-[#2D3748] mb-2 tracking-tight">
             Discover Business Ideas
           </h1>

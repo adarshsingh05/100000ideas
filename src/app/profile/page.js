@@ -322,7 +322,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
+    <div className="min-h-screen bg-[#FCFCFC]">
       <Navbar />
 
       {/* Toast Notification - Fixed Overlay */}
@@ -330,8 +330,8 @@ export default function ProfilePage() {
         <div
           className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 max-w-md w-full mx-4 ${
             message.type === "success"
-              ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/25"
-              : "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/25"
+              ? "bg-[#2D3748] text-white shadow-lg"
+              : "bg-red-600 text-white shadow-lg"
           } rounded-xl border border-white/20 backdrop-blur-sm animate-in slide-in-from-top-2 duration-300`}
         >
           <div className="p-4 flex items-center space-x-3">
@@ -375,11 +375,9 @@ export default function ProfilePage() {
       )}
 
       {/* Professional Header Section */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden bg-[#2D3748]">
         {/* Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#2D3748] via-[#1a202c] to-[#2D3748]"></div>
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
+        <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-48 translate-x-48"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-32 -translate-x-32"></div>
         </div>
@@ -394,17 +392,6 @@ export default function ProfilePage() {
             {/* User Info Section */}
             <div className="flex items-center space-x-3 mb-3 lg:mb-0">
               {/* Profile Avatar */}
-              <div className="relative group">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#B8860B] to-[#D4AF37] rounded-lg flex items-center justify-center shadow-md border border-white/20">
-                  <User className="w-6 h-6 text-white" />
-                </div>
-                {/* Completion Badge */}
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center border border-white">
-                  <span className="text-white text-xs font-medium">
-                    {profileStats.completionPercentage}%
-                  </span>
-                </div>
-              </div>
 
               {/* User Details */}
               <div>
@@ -419,7 +406,7 @@ export default function ProfilePage() {
 
                 {/* Status Badges */}
                 <div className="flex items-center gap-1">
-                  <Badge className="bg-[#B8860B]/20 text-[#B8860B] border-[#B8860B]/30 text-xs px-1.5 py-0.5">
+                  <Badge className="bg-[#FDCC29]/20 text-[#FDCC29] border-[#FDCC29]/30 text-xs px-1.5 py-0.5">
                     Premium
                   </Badge>
                   <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs px-1.5 py-0.5">
@@ -434,7 +421,7 @@ export default function ProfilePage() {
               {!isEditing ? (
                 <Button
                   onClick={() => setIsEditing(true)}
-                  className="bg-[#B8860B] hover:bg-[#B8860B]/90 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors duration-200"
+                  className="bg-[#FDCC29] hover:bg-[#FDCC29]/90 text-[#2D3748] px-3 py-1.5 rounded text-xs font-medium transition-colors duration-200"
                 >
                   <Edit3 className="w-3 h-3 mr-1" />
                   Edit Profile
@@ -484,12 +471,11 @@ export default function ProfilePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* Balance Icoins Card */}
-            <Card className="bg-gradient-to-br from-amber-50 to-orange-100 border border-amber-200 hover:shadow-md transition-all duration-300 overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-amber-200/30 to-transparent rounded-full -translate-y-6 translate-x-6"></div>
+            <Card className="bg-white border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden relative">
               <CardContent className="p-4 relative">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center shadow-md">
-                    <DollarSign className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 bg-[#FDCC29] rounded-lg flex items-center justify-center shadow-md">
+                    <DollarSign className="w-5 h-5 text-[#2D3748]" />
                   </div>
                   <div className="text-center flex-1">
                     <div className="flex items-center justify-center gap-2">
@@ -520,12 +506,11 @@ export default function ProfilePage() {
             </Card>
 
             {/* Saved Ideas Card */}
-            <Card className="bg-gradient-to-br from-[#B8860B]/10 to-[#D4AF37]/20 border border-[#B8860B]/30 hover:shadow-md transition-all duration-300 overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-14 h-14 bg-gradient-to-br from-[#B8860B]/20 to-transparent rounded-full -translate-y-7 translate-x-7"></div>
+            <Card className="bg-white border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden relative">
               <CardContent className="p-4 relative">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-[#B8860B] to-[#D4AF37] rounded-lg flex items-center justify-center shadow-md">
-                    <Heart className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 bg-[#FDCC29] rounded-lg flex items-center justify-center shadow-md">
+                    <Heart className="w-5 h-5 text-[#2D3748]" />
                   </div>
                   <div className="text-center flex-1">
                     <div className="flex items-center justify-center gap-2">
@@ -556,11 +541,10 @@ export default function ProfilePage() {
             </Card>
 
             {/* Purchased Card */}
-            <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-300 hover:shadow-md transition-all duration-300 overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-br from-gray-200/40 to-transparent rounded-full -translate-y-6 translate-x-6"></div>
+            <Card className="bg-white border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden relative">
               <CardContent className="p-4 relative">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center shadow-md">
+                  <div className="w-10 h-10 bg-[#2D3748] rounded-lg flex items-center justify-center shadow-md">
                     <ShoppingBag className="w-5 h-5 text-white" />
                   </div>
                   <div className="text-center flex-1">
@@ -605,8 +589,8 @@ export default function ProfilePage() {
               <Card className="bg-white border border-gray-200 shadow-sm">
                 <CardHeader className="bg-gray-50 border-b border-gray-200">
                   <CardTitle className="text-base font-medium flex items-center">
-                    <div className="w-6 h-6 bg-[#B8860B]/10 rounded-lg flex items-center justify-center mr-2">
-                      <User className="w-4 h-4 text-[#B8860B]" />
+                    <div className="w-6 h-6 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center mr-2">
+                      <User className="w-4 h-4 text-[#FDCC29]" />
                     </div>
                     Personal Information
                   </CardTitle>
@@ -624,7 +608,7 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("name", e.target.value)
                           }
-                          className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
+                          className="h-8 border border-gray-200 focus:border-[#FDCC29] focus:ring-[#FDCC29]/20 rounded text-xs px-2 transition-colors duration-200"
                           placeholder="Enter your full name"
                         />
                       ) : (
@@ -655,7 +639,7 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("email", e.target.value)
                           }
-                          className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
+                          className="h-8 border border-gray-200 focus:border-[#FDCC29] focus:ring-[#FDCC29]/20 rounded text-xs px-2 transition-colors duration-200"
                           placeholder="Enter your email"
                         />
                       ) : (
@@ -685,7 +669,7 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("phone", e.target.value)
                           }
-                          className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
+                          className="h-8 border border-gray-200 focus:border-[#FDCC29] focus:ring-[#FDCC29]/20 rounded text-xs px-2 transition-colors duration-200"
                           placeholder="Enter your phone number"
                         />
                       ) : (
@@ -715,7 +699,7 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("gender", e.target.value)
                           }
-                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
+                          className="h-8 w-full border border-gray-200 focus:border-[#FDCC29] focus:ring-[#FDCC29]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                         >
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
@@ -749,7 +733,7 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("age", e.target.value)
                           }
-                          className="h-8 border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs px-2 transition-colors duration-200"
+                          className="h-8 border border-gray-200 focus:border-[#FDCC29] focus:ring-[#FDCC29]/20 rounded text-xs px-2 transition-colors duration-200"
                           placeholder="Enter your age"
                         />
                       ) : (
@@ -779,7 +763,7 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("annualIncome", e.target.value)
                           }
-                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
+                          className="h-8 w-full border border-gray-200 focus:border-[#FDCC29] focus:ring-[#FDCC29]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                         >
                           <option value="Below 5 Lakhs">Below 5 Lakhs</option>
                           <option value="5-10 Lakhs">5-10 Lakhs</option>
@@ -814,7 +798,7 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("caste", e.target.value)
                           }
-                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
+                          className="h-8 w-full border border-gray-200 focus:border-[#FDCC29] focus:ring-[#FDCC29]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                         >
                           <option value="General">General</option>
                           <option value="OBC">OBC</option>
@@ -852,7 +836,7 @@ export default function ProfilePage() {
                           onChange={(e) =>
                             handleInputChange("area", e.target.value)
                           }
-                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
+                          className="h-8 w-full border border-gray-200 focus:border-[#FDCC29] focus:ring-[#FDCC29]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                         >
                           <option value="Urban">Urban</option>
                           <option value="Rural">Rural</option>
@@ -888,7 +872,7 @@ export default function ProfilePage() {
                               e.target.value
                             )
                           }
-                          className="h-8 w-full border border-gray-200 focus:border-[#B8860B] focus:ring-[#B8860B]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
+                          className="h-8 w-full border border-gray-200 focus:border-[#FDCC29] focus:ring-[#FDCC29]/20 rounded text-xs bg-white px-2 transition-colors duration-200"
                         >
                           <option value="No">No</option>
                           <option value="Yes">Yes</option>
@@ -925,15 +909,15 @@ export default function ProfilePage() {
               <Card className="bg-white border border-gray-200 shadow-sm">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium text-[#2D3748] flex items-center">
-                    <Zap className="w-4 h-4 mr-2 text-[#B8860B]" />
+                    <Zap className="w-4 h-4 mr-2 text-[#FDCC29]" />
                     Quick Actions
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-100 hover:border-gray-200">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                        <UserCircle className="w-4 h-4 text-[#B8860B]" />
+                      <div className="w-8 h-8 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center">
+                        <UserCircle className="w-4 h-4 text-[#FDCC29]" />
                       </div>
                       <div className="text-left">
                         <span className="text-[#2D3748] font-medium text-sm">
@@ -942,13 +926,13 @@ export default function ProfilePage() {
                         <p className="text-gray-500 text-xs">Recent actions</p>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#FDCC29] transition-colors" />
                   </button>
 
                   <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-100 hover:border-gray-200">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                        <BarChart3 className="w-4 h-4 text-[#B8860B]" />
+                      <div className="w-8 h-8 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center">
+                        <BarChart3 className="w-4 h-4 text-[#FDCC29]" />
                       </div>
                       <div className="text-left">
                         <span className="text-[#2D3748] font-medium text-sm">
@@ -959,13 +943,13 @@ export default function ProfilePage() {
                         </p>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#FDCC29] transition-colors" />
                   </button>
 
                   <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-100 hover:border-gray-200">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                        <Settings className="w-4 h-4 text-[#B8860B]" />
+                      <div className="w-8 h-8 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center">
+                        <Settings className="w-4 h-4 text-[#FDCC29]" />
                       </div>
                       <div className="text-left">
                         <span className="text-[#2D3748] font-medium text-sm">
@@ -976,13 +960,13 @@ export default function ProfilePage() {
                         </p>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#FDCC29] transition-colors" />
                   </button>
 
                   <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-100 hover:border-gray-200">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                        <HelpCircle className="w-4 h-4 text-[#B8860B]" />
+                      <div className="w-8 h-8 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center">
+                        <HelpCircle className="w-4 h-4 text-[#FDCC29]" />
                       </div>
                       <div className="text-left">
                         <span className="text-[#2D3748] font-medium text-sm">
@@ -991,7 +975,7 @@ export default function ProfilePage() {
                         <p className="text-gray-500 text-xs">Get support</p>
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#FDCC29] transition-colors" />
                   </button>
                 </CardContent>
               </Card>
@@ -1006,7 +990,7 @@ export default function ProfilePage() {
               <Card className="bg-white border border-gray-200 shadow-sm">
                 <CardHeader className="bg-gray-50 border-b border-gray-200">
                   <CardTitle className="text-base font-medium flex items-center">
-                    <Settings className="w-4 h-4 mr-2 text-[#B8860B]" />
+                    <Settings className="w-4 h-4 mr-2 text-[#FDCC29]" />
                     Account Settings
                   </CardTitle>
                 </CardHeader>
@@ -1014,8 +998,8 @@ export default function ProfilePage() {
                   <div className="space-y-2">
                     <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group border border-gray-100 hover:border-gray-200">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                          <UserCircle className="w-4 h-4 text-[#B8860B]" />
+                        <div className="w-8 h-8 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center">
+                          <UserCircle className="w-4 h-4 text-[#FDCC29]" />
                         </div>
                         <div className="text-left">
                           <h3 className="text-sm font-medium text-gray-900">
@@ -1026,13 +1010,13 @@ export default function ProfilePage() {
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#FDCC29] transition-colors" />
                     </button>
 
                     <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group border border-gray-100 hover:border-gray-200">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                          <Globe className="w-4 h-4 text-[#B8860B]" />
+                        <div className="w-8 h-8 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center">
+                          <Globe className="w-4 h-4 text-[#FDCC29]" />
                         </div>
                         <div className="text-left">
                           <h3 className="text-sm font-medium text-gray-900">
@@ -1043,13 +1027,13 @@ export default function ProfilePage() {
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#FDCC29] transition-colors" />
                     </button>
 
                     <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group border border-gray-100 hover:border-gray-200">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                          <HelpCircle className="w-4 h-4 text-[#B8860B]" />
+                        <div className="w-8 h-8 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center">
+                          <HelpCircle className="w-4 h-4 text-[#FDCC29]" />
                         </div>
                         <div className="text-left">
                           <h3 className="text-sm font-medium text-gray-900">
@@ -1060,13 +1044,13 @@ export default function ProfilePage() {
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#FDCC29] transition-colors" />
                     </button>
 
                     <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group border border-gray-100 hover:border-gray-200">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                          <Bell className="w-4 h-4 text-[#B8860B]" />
+                        <div className="w-8 h-8 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center">
+                          <Bell className="w-4 h-4 text-[#FDCC29]" />
                         </div>
                         <div className="text-left">
                           <h3 className="text-sm font-medium text-gray-900">
@@ -1077,7 +1061,7 @@ export default function ProfilePage() {
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#B8860B] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-[#FDCC29] transition-colors" />
                     </button>
 
                     <Separator className="my-3" />

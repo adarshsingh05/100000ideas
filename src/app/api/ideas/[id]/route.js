@@ -17,7 +17,7 @@ export async function GET(request, { params }) {
 
     return NextResponse.json({
       success: true,
-      idea,
+      data: { idea },
     });
   } catch (error) {
     console.error("Error fetching idea:", error);

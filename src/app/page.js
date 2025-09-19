@@ -88,8 +88,10 @@ function FeaturedIdeasCarousel() {
   const handleCardClick = (idea) => {
     // Route based on whether it's a static idea or community idea
     if (idea.isStaticIdea) {
+      // This is a static idea
       window.location.href = `/ideas/${idea._id}`;
     } else {
+      // This is a community idea
       window.location.href = `/community-ideas/${idea._id}`;
     }
   };
@@ -404,8 +406,14 @@ function StaticIdeas() {
   }, []);
 
   const handleCardClick = (idea) => {
-    // Route to static idea detail page
-    window.location.href = `/ideas/${idea._id}`;
+    // Route based on whether it's a static idea or community idea
+    if (idea.isStaticIdea) {
+      // This is a static idea
+      window.location.href = `/ideas/${idea._id}`;
+    } else {
+      // This is a community idea
+      window.location.href = `/community-ideas/${idea._id}`;
+    }
   };
 
   if (loading) {
@@ -674,6 +682,17 @@ function ExploreMoreIdeas() {
   const endIndex = startIndex + cardsPerPage;
   const currentCards = ideas.slice(startIndex, endIndex);
 
+  const handleCardClick = (idea) => {
+    // Route based on whether it's a static idea or community idea
+    if (idea.isStaticIdea) {
+      // This is a static idea
+      window.location.href = `/ideas/${idea._id}`;
+    } else {
+      // This is a community idea
+      window.location.href = `/community-ideas/${idea._id}`;
+    }
+  };
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
     // Scroll to top of the explore ideas section
@@ -718,7 +737,8 @@ function ExploreMoreIdeas() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="break-inside-avoid mb-8"
+              className="break-inside-avoid mb-8 cursor-pointer"
+              onClick={() => handleCardClick(idea)}
             >
               <Card className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full">
                 {/* Image Section */}
@@ -920,6 +940,11 @@ function UserUploadedIdeas() {
     fetchIdeas();
   }, [currentPage]);
 
+  const handleCardClick = (idea) => {
+    // Route community ideas to community-ideas page
+    window.location.href = `/community-ideas/${idea._id}`;
+  };
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
     // Scroll to top of the community section
@@ -964,7 +989,8 @@ function UserUploadedIdeas() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="break-inside-avoid mb-8"
+              className="break-inside-avoid mb-8 cursor-pointer"
+              onClick={() => handleCardClick(idea)}
             >
               <Card className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full">
                 {/* Image Section */}

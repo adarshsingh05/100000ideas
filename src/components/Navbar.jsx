@@ -69,12 +69,6 @@ export default function Navbar() {
               Ideas
             </a>
             <a
-              href="/categories"
-              className="text-[#061F59] hover:text-[#FDCC29] transition-colors font-semibold text-base"
-            >
-              Categories
-            </a>
-            <a
               href="#"
               className="text-[#061F59] hover:text-[#FDCC29] transition-colors font-semibold text-base"
             >
@@ -97,7 +91,7 @@ export default function Navbar() {
                   onClick={toggleUserMenu}
                   className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 group"
                 >
-                  <div className="w-9 h-9 bg-[#061F59] rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                  <div className="w-9 h-9  rounded-full flex items-center justify-center shadow-lg overflow-hidden">
                     <img
                       src="/profileicon.png"
                       alt="Profile"
@@ -220,13 +214,6 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Ideas
-              </a>
-              <a
-                href="/categories"
-                className="block px-3 py-3 text-[#061F59] hover:text-[#FDCC29] hover:bg-[#FDCC29]/10 transition-colors font-semibold rounded-lg"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Categories
               </a>
               <a
                 href="#"

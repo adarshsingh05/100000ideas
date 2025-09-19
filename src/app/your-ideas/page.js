@@ -177,14 +177,17 @@ export default function YourIdeasPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
+      <div className="min-h-screen bg-[#FCFCFC]">
         <Navbar />
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl font-bold text-[#2D3748] mb-4">
               Please log in to view your ideas
             </h1>
-            <Button asChild>
+            <Button
+              asChild
+              className="bg-[#FDCC29] hover:bg-[#FDCC29]/90 text-[#2D3748]"
+            >
               <a href="/auth">Login</a>
             </Button>
           </div>
@@ -195,7 +198,7 @@ export default function YourIdeasPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
+    <div className="min-h-screen bg-[#FCFCFC]">
       <Navbar />
 
       {/* Toast Notification */}
@@ -203,20 +206,20 @@ export default function YourIdeasPage() {
         <div
           className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 max-w-sm w-full mx-4 ${
             message.type === "success"
-              ? "bg-green-50 border border-green-200 text-green-800"
-              : "bg-red-50 border border-red-200 text-red-800"
+              ? "bg-[#2D3748] text-white"
+              : "bg-red-600 text-white"
           } rounded-lg shadow-sm animate-in slide-in-from-top-2 duration-300`}
         >
           <div className="p-3 flex items-center space-x-2">
             <div
               className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                message.type === "success" ? "bg-green-100" : "bg-red-100"
+                message.type === "success" ? "bg-white/20" : "bg-white/20"
               }`}
             >
               {message.type === "success" ? (
-                <CheckCircle className="w-3 h-3 text-green-600" />
+                <CheckCircle className="w-3 h-3 text-white" />
               ) : (
-                <AlertCircle className="w-3 h-3 text-red-600" />
+                <AlertCircle className="w-3 h-3 text-white" />
               )}
             </div>
             <p className="text-sm font-medium flex-1">{message.text}</p>
@@ -240,11 +243,11 @@ export default function YourIdeasPage() {
             className="flex items-center justify-between"
           >
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-[#B8860B]/10 rounded-lg flex items-center justify-center">
-                <Lightbulb className="w-5 h-5 text-[#B8860B]" />
+              <div className="w-10 h-10 bg-[#FDCC29]/10 rounded-lg flex items-center justify-center">
+                <Lightbulb className="w-5 h-5 text-[#FDCC29]" />
               </div>
               <div>
-                <h1 className="text-2xl font-semibold text-gray-900">
+                <h1 className="text-2xl font-semibold text-[#2D3748]">
                   Your Ideas
                 </h1>
                 <p className="text-sm text-gray-500">
@@ -255,7 +258,7 @@ export default function YourIdeasPage() {
 
             <Button
               onClick={() => setIsUploadModalOpen(true)}
-              className="bg-[#B8860B] hover:bg-[#B8860B]/90 text-white px-4 py-2 rounded-lg text-sm font-medium"
+              className="bg-[#FDCC29] hover:bg-[#FDCC29]/90 text-[#2D3748] px-4 py-2 rounded-lg text-sm font-medium"
             >
               <Plus className="w-4 h-4 mr-2" />
               Upload Idea
@@ -282,7 +285,7 @@ export default function YourIdeasPage() {
                 placeholder="Search your ideas..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#B8860B]/20 focus:border-[#B8860B] transition-colors"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29] transition-colors"
               />
             </div>
 
@@ -295,7 +298,7 @@ export default function YourIdeasPage() {
                   onClick={() => setFilterStatus(status)}
                   className={`capitalize ${
                     filterStatus === status
-                      ? "bg-[#B8860B] text-white"
+                      ? "bg-[#FDCC29] text-[#2D3748]"
                       : "text-gray-600 border-gray-200"
                   }`}
                 >
@@ -310,7 +313,7 @@ export default function YourIdeasPage() {
         <div id="ideas-section">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B8860B]"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FDCC29]"></div>
             </div>
           ) : filteredIdeas.length === 0 ? (
             <motion.div
@@ -322,7 +325,7 @@ export default function YourIdeasPage() {
               <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Lightbulb className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-[#2D3748] mb-2">
                 No ideas found
               </h3>
               <p className="text-gray-500 mb-4 text-sm">
@@ -332,7 +335,7 @@ export default function YourIdeasPage() {
               </p>
               <Button
                 onClick={() => setIsUploadModalOpen(true)}
-                className="bg-[#B8860B] hover:bg-[#B8860B]/90 text-white text-sm"
+                className="bg-[#FDCC29] hover:bg-[#FDCC29]/90 text-[#2D3748] text-sm"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Upload Your First Idea
@@ -396,7 +399,7 @@ export default function YourIdeasPage() {
                               e.stopPropagation();
                               handleEditIdea(idea);
                             }}
-                            className="text-gray-400 hover:text-[#B8860B] hover:bg-[#B8860B]/10 bg-white/90"
+                            className="text-gray-400 hover:text-[#FDCC29] hover:bg-[#FDCC29]/10 bg-white/90"
                           >
                             <Edit className="w-4 h-4" />
                           </Button>

@@ -2,13 +2,17 @@
   "name": "1000ideas",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "vercel-build": "next build",
-    "migrate": "node scripts/migrate-json-to-db.js"
+    "migrate": "node scripts/migrate-json-to-db.js",
+    "seed": "node scripts/seed-database.js",
+    "seed:run": "node scripts/run-seed.js",
+    "verify": "node scripts/verify-seed.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",

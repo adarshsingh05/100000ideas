@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/carousel";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import DynamicBanner from "@/components/DynamicBanner";
 import {
   Building2,
   Smartphone,
@@ -54,8 +55,26 @@ import {
   Heart,
   Music,
   Zap,
+  Briefcase,
+  BarChart3,
+  Rocket,
+  Cpu,
   Sparkles,
+  Plus,
+  Download,
+  Filter,
+  SlidersHorizontal,
 } from "lucide-react";
+
+// Helper function to get random difficulty level
+const getRandomDifficulty = () => {
+  const difficulties = [
+    { level: "EASY", color: "text-green-500", bgColor: "bg-green-500" },
+    { level: "MEDIUM", color: "text-yellow-500", bgColor: "bg-yellow-500" },
+    { level: "HARD", color: "text-red-500", bgColor: "bg-red-500" },
+  ];
+  return difficulties[Math.floor(Math.random() * difficulties.length)];
+};
 
 // Featured Ideas Carousel Component
 function FeaturedIdeasCarousel() {
@@ -148,13 +167,20 @@ function FeaturedIdeasCarousel() {
                       </div>
                     </div>
 
-                    {/* Top Right Banner - Discount Corner Ribbon */}
+                    {/* Top Right Banner - Difficulty Level */}
                     <div className="absolute top-0 right-0 ">
-                      <div className="bg-[#2D3748] text-white p-2 text-lg font-bold text-green-500 shadow-md rounded-bl-xl">
-                        <span className="text-green-500">
-                          {Math.floor(Math.random() * 50) + 10}% Off
-                        </span>
-                      </div>
+                      {(() => {
+                        const difficulty = getRandomDifficulty();
+                        return (
+                          <div
+                            className={`${difficulty.bgColor} text-white p-2 text-sm font-bold shadow-md rounded-bl-xl`}
+                          >
+                            <span className="text-white">
+                              {difficulty.level}
+                            </span>
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     {/* Bottom Center Banner - Idea of the Day (only first card) */}
@@ -188,9 +214,40 @@ function FeaturedIdeasCarousel() {
 
                     {/* Rating */}
                     <div className="flex flex-col space-y-1 mb-2">
-                      <div className="text-md font-semibold text-[#2D3748]">
-                        {rating}
+                      <div className="flex items-center justify-between w-full">
+                        <div className="text-md font-semibold text-[#2D3748]">
+                          {rating}
+                        </div>
+
+                        {/* 4 Random Business Icons - Spread evenly */}
+                        <div className="flex items-center justify-center flex-1 space-x-2">
+                          {(() => {
+                            const businessIcons = [
+                              Briefcase,
+                              BarChart3,
+                              Rocket,
+                              Cpu,
+                              Building2,
+                              TrendingUp,
+                              Target,
+                              Zap,
+                            ];
+                            const selectedIcons = businessIcons
+                              .sort(() => Math.random() - 0.5)
+                              .slice(0, 4);
+
+                            return selectedIcons.map((Icon, iconIndex) => (
+                              <div
+                                key={iconIndex}
+                                className="w-7 h-7  sm:ml-2 sm:mr-1 bg-[#fdcc29] rounded-md flex items-center justify-center hover:bg-[#061F59]/20 transition-colors space-x-1"
+                              >
+                                <Icon className="w-4 h-4 text-[#061F59]" />
+                              </div>
+                            ));
+                          })()}
+                        </div>
                       </div>
+
                       <div className="flex items-center space-x-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
@@ -204,9 +261,6 @@ function FeaturedIdeasCarousel() {
                             }`}
                           />
                         ))}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        ({reviewCount})
                       </div>
                     </div>
 
@@ -485,13 +539,18 @@ function StaticIdeas() {
                     </div>
                   </div>
 
-                  {/* Top Right Banner - Discount Corner Ribbon */}
+                  {/* Top Right Banner - Difficulty Level */}
                   <div className="absolute top-0 right-0 ">
-                    <div className="bg-[#2D3748] text-white p-2 text-lg font-bold text-green-500 shadow-md rounded-bl-xl">
-                      <span className="text-green-500">
-                        {Math.floor(Math.random() * 50) + 10}% Off
-                      </span>
-                    </div>
+                    {(() => {
+                      const difficulty = getRandomDifficulty();
+                      return (
+                        <div
+                          className={`${difficulty.bgColor} text-white p-2 text-sm font-bold shadow-md rounded-bl-xl`}
+                        >
+                          <span className="text-white">{difficulty.level}</span>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 
@@ -516,9 +575,40 @@ function StaticIdeas() {
 
                   {/* Rating */}
                   <div className="flex flex-col space-y-1 mb-2">
-                    <div className="text-md font-semibold text-[#2D3748]">
-                      {(idea.rating || 4.5).toFixed(1)}
+                    <div className="flex items-center justify-between w-full">
+                      <div className="text-md font-semibold text-[#2D3748]">
+                        {(idea.rating || 4.5).toFixed(1)}
+                      </div>
+
+                      {/* 4 Random Business Icons - Spread evenly */}
+                      <div className="flex items-center justify-center flex-1 space-x-2">
+                        {(() => {
+                          const businessIcons = [
+                            Briefcase,
+                            BarChart3,
+                            Rocket,
+                            Cpu,
+                            Building2,
+                            TrendingUp,
+                            Target,
+                            Zap,
+                          ];
+                          const selectedIcons = businessIcons
+                            .sort(() => Math.random() - 0.5)
+                            .slice(0, 4);
+
+                          return selectedIcons.map((Icon, iconIndex) => (
+                            <div
+                              key={iconIndex}
+                              className="w-7 h-7 sm:ml-2 sm:mr-1 bg-[#fdcc29] rounded-md flex items-center justify-center hover:bg-[#061F59]/20 transition-colors space-x-1"
+                            >
+                              <Icon className="w-4 h-4 text-[#061F59]" />
+                            </div>
+                          ));
+                        })()}
+                      </div>
                     </div>
+
                     <div className="flex items-center space-x-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
@@ -533,9 +623,6 @@ function StaticIdeas() {
                           }`}
                         />
                       ))}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      ({Math.floor(Math.random() * 50) + 10})
                     </div>
                   </div>
 
@@ -756,13 +843,18 @@ function ExploreMoreIdeas() {
                     </div>
                   </div>
 
-                  {/* Top Right Banner - Discount Corner Ribbon */}
+                  {/* Top Right Banner - Difficulty Level */}
                   <div className="absolute top-0 right-0 ">
-                    <div className="bg-[#2D3748] text-white p-2 text-lg font-bold text-green-500 shadow-md rounded-bl-xl">
-                      <span className="text-green-500">
-                        {Math.floor(Math.random() * 50) + 10}% Off
-                      </span>
-                    </div>
+                    {(() => {
+                      const difficulty = getRandomDifficulty();
+                      return (
+                        <div
+                          className={`${difficulty.bgColor} text-white p-2 text-sm font-bold shadow-md rounded-bl-xl`}
+                        >
+                          <span className="text-white">{difficulty.level}</span>
+                        </div>
+                      );
+                    })()}
                   </div>
                   {/* </div> */}
                 </div>
@@ -788,9 +880,40 @@ function ExploreMoreIdeas() {
 
                   {/* Rating */}
                   <div className="flex flex-col space-y-1 mb-2">
-                    <div className="text-md font-semibold text-[#2D3748]">
-                      {(idea.rating || 4.5).toFixed(1)}
+                    <div className="flex items-center justify-between w-full">
+                      <div className="text-md font-semibold text-[#2D3748]">
+                        {(idea.rating || 4.5).toFixed(1)}
+                      </div>
+
+                      {/* 4 Random Business Icons - Spread evenly */}
+                      <div className="flex items-center justify-center flex-1 space-x-2">
+                        {(() => {
+                          const businessIcons = [
+                            Briefcase,
+                            BarChart3,
+                            Rocket,
+                            Cpu,
+                            Building2,
+                            TrendingUp,
+                            Target,
+                            Zap,
+                          ];
+                          const selectedIcons = businessIcons
+                            .sort(() => Math.random() - 0.5)
+                            .slice(0, 4);
+
+                          return selectedIcons.map((Icon, iconIndex) => (
+                            <div
+                              key={iconIndex}
+                              className="w-7 h-7 sm:ml-2 sm:mr-1 bg-[#fdcc29] rounded-md flex items-center justify-center hover:bg-[#061F59]/20 transition-colors space-x-1"
+                            >
+                              <Icon className="w-4 h-4 text-[#061F59]" />
+                            </div>
+                          ));
+                        })()}
+                      </div>
                     </div>
+
                     <div className="flex items-center space-x-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
@@ -805,9 +928,6 @@ function ExploreMoreIdeas() {
                           }`}
                         />
                       ))}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      ({Math.floor(Math.random() * 50) + 10})
                     </div>
                   </div>
 
@@ -1008,14 +1128,21 @@ function UserUploadedIdeas() {
                     </div>
                   </div>
 
-                  {/* Top Right Banner - Discount Corner Ribbon */}
+                  {/* Top Right Banner - Difficulty Level */}
                   <div className="absolute top-0 right-0">
                     <div className="absolute top-0 right-0 ">
-                      <div className="bg-[#2D3748] text-white p-2 text-lg font-bold text-green-500 shadow-md rounded-bl-xl">
-                        <span className="text-green-500">
-                          {Math.floor(Math.random() * 50) + 10}% Off
-                        </span>
-                      </div>
+                      {(() => {
+                        const difficulty = getRandomDifficulty();
+                        return (
+                          <div
+                            className={`${difficulty.bgColor} text-white p-2 text-sm font-bold shadow-md rounded-bl-xl`}
+                          >
+                            <span className="text-white">
+                              {difficulty.level}
+                            </span>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>
@@ -1041,9 +1168,40 @@ function UserUploadedIdeas() {
 
                   {/* Rating */}
                   <div className="flex flex-col space-y-1 mb-2">
-                    <div className="text-md font-semibold text-[#2D3748]">
-                      {(idea.rating || 4.5).toFixed(1)}
+                    <div className="flex items-center justify-between w-full">
+                      <div className="text-md font-semibold text-[#2D3748]">
+                        {(idea.rating || 4.5).toFixed(1)}
+                      </div>
+
+                      {/* 4 Random Business Icons - Spread evenly */}
+                      <div className="flex items-center justify-center flex-1 space-x-2">
+                        {(() => {
+                          const businessIcons = [
+                            Briefcase,
+                            BarChart3,
+                            Rocket,
+                            Cpu,
+                            Building2,
+                            TrendingUp,
+                            Target,
+                            Zap,
+                          ];
+                          const selectedIcons = businessIcons
+                            .sort(() => Math.random() - 0.5)
+                            .slice(0, 4);
+
+                          return selectedIcons.map((Icon, iconIndex) => (
+                            <div
+                              key={iconIndex}
+                              className="w-7 h-7 sm:ml-2 sm:mr-1 bg-[#fdcc29] rounded-md flex items-center justify-center hover:bg-[#061F59]/20 transition-colors space-x-1"
+                            >
+                              <Icon className="w-4 h-4 text-[#061F59]" />
+                            </div>
+                          ));
+                        })()}
+                      </div>
                     </div>
+
                     <div className="flex items-center space-x-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
@@ -1058,9 +1216,6 @@ function UserUploadedIdeas() {
                           }`}
                         />
                       ))}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      ({Math.floor(Math.random() * 50) + 10})
                     </div>
                   </div>
 
@@ -1179,6 +1334,14 @@ export default function Home() {
   const { viewCount, hasAccess, incrementView, remainingViews } =
     useIdeaAccess();
 
+  // Search functionality
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      // Navigate to ideas page with search query
+      window.location.href = `/ideas?search=${encodeURIComponent(searchQuery)}`;
+    }
+  };
+
   // Note: Static ideas are now handled by the StaticIdeas component
   // The old filtering logic has been removed since we're fetching from API
 
@@ -1186,8 +1349,8 @@ export default function Home() {
     <div className="min-h-screen bg-[#FCFCFC]">
       <Navbar />
 
-      {/* Hero Section - Full Width */}
-      <div className="relative w-full bg-[#FDCC29] py-12 sm:py-16 overflow-hidden">
+      {/* Hero Section with Integrated Banner */}
+      <div className="relative w-full bg-[#FDCC29] py-6 sm:py-12 overflow-hidden">
         {/* Decorative Circles */}
         <div className="absolute inset-0">
           <div className="absolute top-4 left-8 w-16 h-16 bg-[#061F59] rounded-full opacity-20"></div>
@@ -1198,53 +1361,143 @@ export default function Home() {
           <div className="absolute top-1/2 right-16 w-14 h-14 bg-[#061F59] rounded-full opacity-15"></div>
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            {/* Main Heading */}
-            <h1
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#061F59] mb-4 leading-tight"
-              style={{ fontFamily: "Nunito, sans-serif" }}
-            >
-              Discover 10,000+ Business Ideas
-            </h1>
-
-            {/* Subheading */}
-            <p
-              className="text-lg sm:text-xl text-[#061F59]/80 mb-8 max-w-2xl mx-auto leading-relaxed"
-              style={{ fontFamily: "Nunito, sans-serif" }}
-            >
-              Find the perfect business opportunity that matches your skills and
-              investment capacity
-            </p>
-
-            {/* CTA Button */}
-            <div className="mb-8">
-              <Button
-                onClick={() => (window.location.href = "/ideas")}
-                className="bg-[#061F59] hover:bg-[#061F59]/90 text-white px-8 py-3 text-lg font-bold rounded-lg shadow-lg transition-all duration-300 hover:scale-105"
+        <div className="relative z-10 max-w-7xl mx-auto px-4 ">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Side - Main Content */}
+            <div className="text-center lg:text-left">
+              {/* Main Heading */}
+              <h1
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#061F59] mb-4 leading-tight"
                 style={{ fontFamily: "Nunito, sans-serif" }}
               >
-                Get Started
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+                Discover 10,000+ Business Ideas
+              </h1>
+
+              {/* Subheading */}
+              <p
+                className="text-lg sm:text-xl text-[#061F59]/80 mb-6 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
+                style={{ fontFamily: "Nunito, sans-serif" }}
+              >
+                Find the perfect business opportunity that matches your skills
+                and investment capacity
+              </p>
+
+              {/* CTA Button */}
+              <div className="mb-6">
+                <Button
+                  onClick={() => (window.location.href = "/ideas")}
+                  className="bg-[#061F59] hover:bg-[#061F59]/90 text-white px-8 py-3 text-lg font-bold rounded-lg shadow-lg transition-all duration-300 hover:scale-105"
+                  style={{ fontFamily: "Nunito, sans-serif" }}
+                >
+                  Get Started
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm mb-6">
+                <div className="flex items-center space-x-1 bg-[#061F59]/10 rounded-full px-4 py-2">
+                  <Star className="w-4 h-4 text-[#061F59]" />
+                  <span className="text-[#061F59] font-medium">
+                    4.9/5 Rating
+                  </span>
+                </div>
+                <div className="flex items-center space-x-1 bg-[#061F59]/10 rounded-full px-4 py-2">
+                  <Users className="w-4 h-4 text-[#061F59]" />
+                  <span className="text-[#061F59] font-medium">50K+ Users</span>
+                </div>
+                <div className="flex items-center space-x-1 bg-[#061F59]/10 rounded-full px-4 py-2">
+                  <Award className="w-4 h-4 text-[#061F59]" />
+                  <span className="text-[#061F59] font-medium">
+                    Success Stories
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
-              <div className="flex items-center space-x-1 bg-[#061F59]/10 rounded-full px-4 py-2">
-                <Star className="w-4 h-4 text-[#061F59]" />
-                <span className="text-[#061F59] font-medium">4.9/5 Rating</span>
+            {/* Right Side - Dynamic Banner */}
+            <div className="relative">
+              <DynamicBanner />
+            </div>
+          </div>
+
+          {/* Search Section Inside Hero Banner */}
+          <div className="mt-8 pb-1 sm:pb-[-30px]">
+            <div className="relative max-w-4xl mx-auto">
+              {/* Sleek Tilted Banner - Crown Effect */}
+              {viewCount > 0 && (
+                <div className="absolute -top-1 -left-10 z-20">
+                  <div
+                    className="bg-gradient-to-r from-[#061F59] to-[#0A2A6B] text-white px-4 py-2 text-xs font-bold shadow-xl transform -rotate-12 rounded-md border border-[#FDCC29]/30"
+                    style={{
+                      clipPath: "polygon(0 0, 90% 0, 100% 100%, 10% 100%)",
+                      minWidth: "110px",
+                    }}
+                  >
+                    {hasAccess ? (
+                      <span className="flex items-center justify-center">
+                        <span className="text-white font-bold text-xs">
+                          {remainingViews}
+                        </span>
+                        <span className="ml-1 text-white/90 text-xs">
+                          Views remaining
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center px-1">
+                        <span className="text-white font-bold text-xs">
+                          No free views left
+                        </span>
+                        <span className="ml-1 text-[#FDCC29] font-bold text-xs">
+                          - Upgrade now
+                        </span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Search Component Inside Hero */}
+              <div className="bg-white rounded-2xl p-4 shadow-lg border-2 border-[#061F59]/20">
+                <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                  {/* Search Input */}
+                  <div className="flex-1 w-full">
+                    <div className="bg-gray-50 rounded-full shadow-sm overflow-hidden">
+                      <div className="flex items-center px-4 sm:px-6 py-3 sm:py-4">
+                        <img
+                          src="/searchicon.png"
+                          alt="Search"
+                          className="w-4 h-4 sm:w-5 sm:h-5 mr-3 sm:mr-4"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Search business ideas, categories, or keywords..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="flex-1 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none text-sm sm:text-base font-medium"
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                              handleSearch();
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Filter Icons */}
+                  <div className="flex items-center space-x-4">
+                    <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-[#061F59] opacity-70 hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
+                    <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5 text-[#061F59] opacity-70 hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
+                  </div>
+                </div>
+
+                {/* Category Quick Filters */}
               </div>
-              <div className="flex items-center space-x-1 bg-[#061F59]/10 rounded-full px-4 py-2">
-                <Users className="w-4 h-4 text-[#061F59]" />
-                <span className="text-[#061F59] font-medium">50K+ Users</span>
-              </div>
-              <div className="flex items-center space-x-1 bg-[#061F59]/10 rounded-full px-4 py-2">
-                <Award className="w-4 h-4 text-[#061F59]" />
-                <span className="text-[#061F59] font-medium">
-                  Success Stories
-                </span>
-              </div>
+
+              {/* Decorative Elements */}
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#061F59]/20 rounded-full"></div>
+              <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-[#061F59]/20 rounded-full"></div>
             </div>
           </div>
         </div>
@@ -1252,7 +1505,7 @@ export default function Home() {
       {/* </div> */}
 
       {/* Main Content Container */}
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="w-full">
           {/* Categories Section */}
           <div className="mb-12">
@@ -1417,228 +1670,328 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Mobile-Style Search Bar */}
-          <div className="mb-8 sm:mb-12">
-            <div className="w-full sm:w-[70%] mx-auto px-3 sm:px-4 lg:px-12">
-              {/* Mobile-Style Search Component */}
-              <div className="bg-[#FDCC29] rounded-2xl p-3 sm:p-4 lg:p-6 shadow-lg">
-                <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
-                  {/* Search Input */}
-                  <div className="flex-1 relative">
-                    <div className="bg-white rounded-full shadow-md overflow-hidden">
-                      <div className="flex items-center px-3 sm:px-4 py-2.5 sm:py-3 lg:py-4">
-                        <img
-                          src="/searchicon.png"
-                          alt="Search"
-                          className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 mr-2 sm:mr-3"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Search on 10000Ideas"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="flex-1 bg-transparent text-[#2D3748] placeholder-gray-500 focus:outline-none text-xs sm:text-sm lg:text-base font-medium"
-                        />
+          {/* Main Content with Sidebar Layout */}
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Left Content - 75% width */}
+            <div className="flex-1 lg:w-3/4">
+              {/* Featured Ideas Carousel */}
+              <div className="mb-8">
+                <div className="text-center mb-4 sm:mb-6 px-4 sm:px-0">
+                  <p className="text-base sm:text-xl text-[#2D3748] ftracking-wide">
+                    Discover Our Featured trending opportunities
+                  </p>
+                </div>
+
+                <FeaturedIdeasCarousel />
+              </div>
+
+              {/* Separator with Description */}
+              <div className="mb-8 sm:mb-12">
+                <div className="flex items-center justify-center mb-6 px-4 sm:px-0">
+                  <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#FDCC29]/20 to-transparent"></div>
+                  <div className="mx-4 px-4 py-2 bg-[#FDCC29] rounded-lg shadow-sm">
+                    <span className="text-sm font-medium text-[#2D3748] tracking-wide">
+                      Explore More Ideas
+                    </span>
+                  </div>
+                  <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#FDCC29]/20 to-transparent"></div>
+                </div>
+              </div>
+
+              {/* Explore More Ideas Component */}
+              <div id="explore-ideas">
+                <ExploreMoreIdeas />
+              </div>
+
+              {/* User Uploaded Ideas Section */}
+              <div id="community-ideas" className="mt-8">
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold text-[#2D3748] mb-4">
+                    Community Ideas
+                  </h2>
+                  <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Discover innovative business ideas shared by our community
+                    members
+                  </p>
+                </div>
+
+                <UserUploadedIdeas />
+              </div>
+            </div>
+
+            {/* Right Sidebar - 25% width */}
+            <div className="w-full lg:w-1/4 lg:max-w-sm">
+              <div className="sticky top-8 space-y-4">
+                {/* Classifieds Section */}
+                <Card className="bg-white border border-gray-200 shadow-lg rounded-2xl overflow-hidden">
+                  <CardHeader className="py-4 bg-gradient-to-r from-[#2D3748] to-[#1A202C] text-white">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 bg-[#FDCC29] rounded-lg flex items-center justify-center">
+                          <FileText className="w-3 h-3 text-[#2D3748]" />
+                        </div>
+                        <CardTitle className="text-lg font-bold text-white">
+                          Classifieds
+                        </CardTitle>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="text-xs text-white/80">Live</span>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Filter Funnel Button */}
-                  <div className="bg-white rounded-full w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 shadow-md flex items-center justify-center cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105">
-                    <img
-                      src="/filterfunnel.png"
-                      alt="Filter"
-                      className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
-                    />
-                  </div>
-
-                  {/* Settings/Advanced Filter Button */}
-                  <div className="bg-white rounded-full w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 shadow-md flex items-center justify-center cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105">
-                    <img
-                      src="/filter.png"
-                      alt="Settings"
-                      className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* View Counter Banner */}
-          {viewCount > 0 && (
-            <div className="mb-6 flex justify-center px-4 sm:px-0">
-              <div className="bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-gray-200/50 shadow-sm">
-                <p className="text-gray-600 text-sm font-medium text-center">
-                  {hasAccess ? (
-                    <span>
-                      <span className="text-[#FDCC29] font-semibold">
-                        {remainingViews}
-                      </span>{" "}
-                      free views remaining
-                    </span>
-                  ) : (
-                    <span className="text-red-500">
-                      Free limit reached -{" "}
-                      <span className="text-[#2D3748] font-medium">
-                        Upgrade to Premium
-                      </span>
-                    </span>
-                  )}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Featured Ideas Carousel */}
-          <div className="mb-8 sm:mb-12 ">
-            <div className="text-center mb-4 sm:mb-6 px-4 sm:px-0">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#2D3748] mb-3 tracking-tight">
-                Featured Ideas
-              </h2>
-              <p className="text-base sm:text-lg text-[#2D3748] ftracking-wide">
-                Discover trending business opportunities
-              </p>
-            </div>
-
-            <FeaturedIdeasCarousel />
-          </div>
-
-          {/* Separator with Description */}
-          <div className="mb-8 sm:mb-12">
-            <div className="flex items-center justify-center mb-6 px-4 sm:px-0">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#FDCC29]/20 to-transparent"></div>
-              <div className="mx-4 px-4 py-2 bg-[#FDCC29] rounded-lg shadow-sm">
-                <span className="text-sm font-medium text-[#2D3748] tracking-wide">
-                  Explore More Ideas
-                </span>
-              </div>
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#FDCC29]/20 to-transparent"></div>
-            </div>
-            <div className="text-center max-w-2xl mx-auto px-4 sm:px-0">
-              <p className="text-sm text-[#2D3748] font-medium leading-relaxed">
-                Each business idea card contains detailed information including
-                investment requirements, revenue potential, difficulty level,
-                and estimated timeline to help you make informed decisions.
-                Click on any card to explore comprehensive business plans,
-                market analysis, and step-by-step implementation guides.
-              </p>
-            </div>
-          </div>
-
-          {/* Explore More Ideas Component */}
-          <div id="explore-ideas">
-            <ExploreMoreIdeas />
-          </div>
-
-          {/* No Results Message - Removed since StaticIdeas component handles its own empty state */}
-
-          {/* Old pagination removed - StaticIdeas component handles its own pagination */}
-        </div>
-      </div>
-
-      {/* User Uploaded Ideas Section */}
-      <div
-        id="community-ideas"
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
-      >
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-[#2D3748] mb-4">
-            Community Ideas
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover innovative business ideas shared by our community members
-          </p>
-        </div>
-
-        <UserUploadedIdeas />
-      </div>
-
-      {/* Compact Sidebar Content - Horizontal Layout */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Classifieds Section */}
-          <Card className="bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden">
-            <CardHeader className="py-4 bg-[#2D3748] text-white">
-              <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 bg-[#FDCC29] rounded-lg flex items-center justify-center">
-                  <FileText className="w-3 h-3 text-[#2D3748]" />
-                </div>
-                <CardTitle className="text-lg font-bold text-white">
-                  Classifieds
-                </CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="p-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {sidebarLinks.classifieds.slice(0, 4).map((item, index) => {
-                  const IconComponent = item.icon;
-                  return (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 1.02 }}
-                      className="flex items-start space-x-3 p-3 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#FDCC29]/30"
-                    >
-                      <div className="w-8 h-8 bg-[#FDCC29]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#FDCC29]/30 transition-colors">
-                        <IconComponent className="w-4 h-4 text-[#FDCC29]" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                          {item.title}
+                    <p className="text-sm text-white/80 mt-2">
+                      Buy, sell, and trade business opportunities
+                    </p>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    <div className="space-y-3">
+                      {/* Featured Classified */}
+                      <div className="bg-gradient-to-r from-[#FDCC29]/10 to-[#FFD700]/10 rounded-xl p-3 border border-[#FDCC29]/20">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <div className="w-6 h-6 bg-[#FDCC29] rounded-lg flex items-center justify-center">
+                            <Star className="w-3 h-3 text-[#2D3748]" />
+                          </div>
+                          <span className="text-sm font-bold text-[#2D3748]">
+                            Featured
+                          </span>
+                          <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                            Hot
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-semibold text-[#2D3748] mb-1">
+                          Tech Partnership Opportunity
                         </h4>
-                        <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-                          {item.description}
+                        <p className="text-xs text-gray-600 mb-2">
+                          Looking for AI/ML developers for startup collaboration
                         </p>
-                        <p className="text-xs text-[#FDCC29] mt-1 font-medium">
-                          {item.time}
-                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-[#FDCC29] font-medium">
+                            2 hours ago
+                          </span>
+                          <span className="text-xs bg-[#FDCC29] text-[#2D3748] px-2 py-1 rounded-full font-semibold">
+                            ₹50K+
+                          </span>
+                        </div>
                       </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Resources Section */}
-          <Card className="bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden">
-            <CardHeader className="py-4 bg-[#2D3748] text-white">
-              <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 bg-[#FDCC29] rounded-lg flex items-center justify-center">
-                  <Award className="w-3 h-3 text-[#2D3748]" />
-                </div>
-                <CardTitle className="text-lg font-bold text-white">
-                  Resources
-                </CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="p-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {sidebarLinks.resources.slice(0, 4).map((item, index) => {
-                  const IconComponent = item.icon;
-                  return (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: 1.02 }}
-                      className="flex items-start space-x-3 p-3 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#FDCC29]/30"
-                    >
-                      <div className="w-8 h-8 bg-[#FDCC29]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#FDCC29]/30 transition-colors">
-                        <IconComponent className="w-4 h-4 text-[#FDCC29]" />
+                      {/* Regular Classifieds */}
+                      {sidebarLinks.classifieds
+                        .slice(0, 3)
+                        .map((item, index) => {
+                          const IconComponent = item.icon;
+                          const statusColors = [
+                            "bg-green-100 text-green-800",
+                            "bg-blue-100 text-blue-800",
+                            "bg-orange-100 text-orange-800",
+                          ];
+                          const statusTexts = ["Active", "New", "Urgent"];
+                          return (
+                            <motion.div
+                              key={index}
+                              whileHover={{ scale: 1.02 }}
+                              className="flex items-start space-x-3 p-3 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#FDCC29]/30"
+                            >
+                              <div className="w-8 h-8 bg-[#FDCC29]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#FDCC29]/30 transition-colors">
+                                <IconComponent className="w-4 h-4 text-[#FDCC29]" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between mb-1">
+                                  <h4 className="text-sm font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
+                                    {item.title}
+                                  </h4>
+                                  <span
+                                    className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[index]}`}
+                                  >
+                                    {statusTexts[index]}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-gray-600 mb-2 leading-relaxed">
+                                  {item.description}
+                                </p>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs text-[#FDCC29] font-medium">
+                                    {item.time}
+                                  </span>
+                                  <div className="flex items-center space-x-1">
+                                    <Eye className="w-3 h-3 text-gray-400" />
+                                    <span className="text-xs text-gray-500">
+                                      {Math.floor(Math.random() * 50) + 10}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </motion.div>
+                          );
+                        })}
+
+                      {/* View All Button */}
+                      <div className="pt-2 border-t border-gray-200">
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          className="flex items-center justify-center space-x-2 p-2 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group"
+                        >
+                          <span className="text-sm font-medium text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
+                            View All Classifieds
+                          </span>
+                          <ArrowRight className="w-3 h-3 text-[#FDCC29] group-hover:translate-x-1 transition-transform" />
+                        </motion.div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                          {item.title}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Resources Section */}
+                <Card className="bg-white border border-gray-200 shadow-lg rounded-2xl overflow-hidden">
+                  <CardHeader className="py-4 bg-gradient-to-r from-[#2D3748] to-[#1A202C] text-white">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 bg-[#FDCC29] rounded-lg flex items-center justify-center">
+                          <Award className="w-3 h-3 text-[#2D3748]" />
+                        </div>
+                        <CardTitle className="text-lg font-bold text-white">
+                          Resources
+                        </CardTitle>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span className="text-xs text-white/80">Free</span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-white/80 mt-2">
+                      Free templates, guides, and tools for entrepreneurs
+                    </p>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    <div className="space-y-3">
+                      {/* Quick Stats */}
+                      <div className="bg-gradient-to-r from-[#061F59]/10 to-[#0A2A6B]/10 rounded-xl p-3 border border-[#061F59]/20">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <BarChart3 className="w-4 h-4 text-[#061F59]" />
+                          <span className="text-sm font-bold text-[#2D3748]">
+                            Quick Stats
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-[#FDCC29]">
+                              150+
+                            </div>
+                            <div className="text-xs text-gray-600">
+                              Templates
+                            </div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-[#FDCC29]">
+                              25K+
+                            </div>
+                            <div className="text-xs text-gray-600">
+                              Downloads
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Featured Resource */}
+                      <div className="bg-gradient-to-r from-[#FDCC29]/10 to-[#FFD700]/10 rounded-xl p-3 border border-[#FDCC29]/20">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <div className="w-6 h-6 bg-[#FDCC29] rounded-lg flex items-center justify-center">
+                            <FileText className="w-3 h-3 text-[#2D3748]" />
+                          </div>
+                          <span className="text-sm font-bold text-[#2D3748]">
+                            Featured
+                          </span>
+                          <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">
+                            New
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-semibold text-[#2D3748] mb-1">
+                          Business Plan Template 2024
                         </h4>
-                        <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-                          {item.description}
+                        <p className="text-xs text-gray-600 mb-2">
+                          Complete startup business plan with financial
+                          projections
                         </p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-1">
+                            <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                            <span className="text-xs text-gray-600">
+                              4.9 (120)
+                            </span>
+                          </div>
+                          <span className="text-xs bg-[#FDCC29] text-[#2D3748] px-2 py-1 rounded-full font-semibold">
+                            Free
+                          </span>
+                        </div>
                       </div>
-                    </motion.div>
-                  );
-                })}
+
+                      {/* Regular Resources */}
+                      {sidebarLinks.resources.slice(0, 2).map((item, index) => {
+                        const IconComponent = item.icon;
+                        const resourceTypes = [
+                          "PDF",
+                          "Template",
+                          "Guide",
+                          "Tool",
+                        ];
+                        const ratings = [4.8, 4.6, 4.7, 4.9];
+                        return (
+                          <motion.div
+                            key={index}
+                            whileHover={{ scale: 1.02 }}
+                            className="flex items-start space-x-3 p-3 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#FDCC29]/30"
+                          >
+                            <div className="w-8 h-8 bg-[#FDCC29]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#FDCC29]/30 transition-colors">
+                              <IconComponent className="w-4 h-4 text-[#FDCC29]" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between mb-1">
+                                <h4 className="text-sm font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
+                                  {item.title}
+                                </h4>
+                                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-semibold">
+                                  {resourceTypes[index]}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-600 mb-2 leading-relaxed">
+                                {item.description}
+                              </p>
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-1">
+                                  <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                                  <span className="text-xs text-gray-600">
+                                    {ratings[index]} (45)
+                                  </span>
+                                </div>
+                                <div className="flex items-center space-x-1">
+                                  <Download className="w-3 h-3 text-gray-400" />
+                                  <span className="text-xs text-gray-500">
+                                    {Math.floor(Math.random() * 500) + 50}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+
+                      {/* View All Button */}
+                      <div className="pt-2 border-t border-gray-200">
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          className="flex items-center justify-center space-x-2 p-2 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group"
+                        >
+                          <span className="text-sm font-medium text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
+                            Browse All Resources
+                          </span>
+                          <ArrowRight className="w-3 h-3 text-[#FDCC29] group-hover:translate-x-1 transition-transform" />
+                        </motion.div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
 

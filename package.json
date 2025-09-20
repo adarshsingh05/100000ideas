@@ -12,6 +12,7 @@
     "migrate": "node scripts/migrate-json-to-db.js",
     "seed": "node scripts/seed-database.js",
     "seed:run": "node scripts/run-seed.js",
+    "seed:banners": "node scripts/seed-banners.js",
     "verify": "node scripts/verify-seed.js"
   },
   "dependencies": {

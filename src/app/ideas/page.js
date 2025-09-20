@@ -48,6 +48,10 @@ import {
   SortDesc,
   Calendar,
   Zap,
+  Briefcase,
+  BarChart3,
+  Rocket,
+  Cpu,
   Sparkles,
 } from "lucide-react";
 
@@ -644,9 +648,40 @@ export default function IdeasPage() {
 
                         {/* Rating */}
                         <div className="flex flex-col space-y-1 mb-2">
-                          <div className="text-md font-semibold text-[#2D3748]">
-                            {(idea.rating || 4.5).toFixed(1)}
+                          <div className="flex items-center justify-between w-full">
+                            <div className="text-md font-semibold text-[#2D3748]">
+                              {(idea.rating || 4.5).toFixed(1)}
+                            </div>
+
+                            {/* 4 Random Business Icons - Spread evenly */}
+                            <div className="flex items-center justify-center flex-1 space-x-2">
+                              {(() => {
+                                const businessIcons = [
+                                  Briefcase,
+                                  BarChart3,
+                                  Rocket,
+                                  Cpu,
+                                  Building2,
+                                  TrendingUp,
+                                  Target,
+                                  Zap,
+                                ];
+                                const selectedIcons = businessIcons
+                                  .sort(() => Math.random() - 0.5)
+                                  .slice(0, 4);
+
+                                return selectedIcons.map((Icon, iconIndex) => (
+                                  <div
+                                    key={iconIndex}
+                                    className="w-7 h-7 sm:ml-2 sm:mr-1 bg-[#fdcc29] rounded-md flex items-center justify-center hover:bg-[#061F59]/20 transition-colors space-x-1"
+                                  >
+                                    <Icon className="w-4 h-4 text-[#061F59]" />
+                                  </div>
+                                ));
+                              })()}
+                            </div>
                           </div>
+
                           <div className="flex items-center space-x-1">
                             {[1, 2, 3, 4, 5].map((star) => (
                               <Star
@@ -661,9 +696,6 @@ export default function IdeasPage() {
                                 }`}
                               />
                             ))}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            ({Math.floor(Math.random() * 50) + 10})
                           </div>
                         </div>
 

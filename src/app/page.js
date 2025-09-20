@@ -1331,7 +1331,7 @@ export default function Home() {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedInvestment, setSelectedInvestment] = useState("");
 
-  const { viewCount, hasAccess, incrementView, remainingViews } =
+  const { viewCount, hasAccess, incrementView, remainingViews, isClient } =
     useIdeaAccess();
 
   // Search functionality
@@ -1425,7 +1425,7 @@ export default function Home() {
           <div className="mt-8 pb-1 sm:pb-[-30px]">
             <div className="relative max-w-4xl mx-auto">
               {/* Sleek Tilted Banner - Crown Effect */}
-              {viewCount > 0 && (
+              {isClient && (
                 <div className="absolute -top-1 -left-10 z-20">
                   <div
                     className="bg-gradient-to-r from-[#061F59] to-[#0A2A6B] text-white px-4 py-2 text-xs font-bold shadow-xl transform -rotate-12 rounded-md border border-[#FDCC29]/30"
@@ -1434,22 +1434,33 @@ export default function Home() {
                       minWidth: "110px",
                     }}
                   >
-                    {hasAccess ? (
-                      <span className="flex items-center justify-center">
-                        <span className="text-white font-bold text-xs">
-                          {remainingViews}
+                    {viewCount > 0 ? (
+                      hasAccess ? (
+                        <span className="flex items-center justify-center">
+                          <span className="text-white font-bold text-xs">
+                            {remainingViews}
+                          </span>
+                          <span className="ml-1 text-white/90 text-xs">
+                            Views remaining
+                          </span>
                         </span>
-                        <span className="ml-1 text-white/90 text-xs">
-                          Views remaining
+                      ) : (
+                        <span className="flex items-center justify-center px-1">
+                          <span className="text-white font-bold text-xs">
+                            No free views left
+                          </span>
+                          <span className="ml-1 text-[#FDCC29] font-bold text-xs">
+                            - Upgrade now
+                          </span>
                         </span>
-                      </span>
+                      )
                     ) : (
                       <span className="flex items-center justify-center px-1">
                         <span className="text-white font-bold text-xs">
-                          No free views left
+                          Free Access
                         </span>
-                        <span className="ml-1 text-[#FDCC29] font-bold text-xs">
-                          - Upgrade now
+                        <span className="ml-1 text-white/90 text-xs">
+                          - Start exploring
                         </span>
                       </span>
                     )}

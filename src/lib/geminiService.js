@@ -47,6 +47,99 @@ You should help users understand this business idea, provide insights, answer qu
 What would you like to know about this idea?`;
   }
 
+  // Generate business ideas based on user preferences
+  async generateIdeas(prompt) {
+    try {
+      const requestBody = {
+        contents: [
+          {
+            parts: [
+              {
+                text: prompt,
+              },
+            ],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.8,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 2048,
+        },
+        safetySettings: [
+          {
+            category: "HARM_CATEGORY_HARASSMENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE",
+          },
+          {
+            category: "HARM_CATEGORY_HATE_SPEECH",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE",
+          },
+          {
+            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE",
+          },
+          {
+            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE",
+          },
+        ],
+      };
+
+      console.log("Sending idea generation request to Gemini API");
+
+      const response = await fetch(`${this.apiUrl}?key=${this.apiKey}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Gemini API Error Response:", errorText);
+        throw new Error(
+          `Gemini API error: ${response.status} ${response.statusText} - ${errorText}`
+        );
+      }
+
+      const data = await response.json();
+      console.log("Gemini API Response:", data);
+
+      if (data.candidates && data.candidates[0]) {
+        const candidate = data.candidates[0];
+        console.log("Candidate data:", candidate);
+
+        if (
+          candidate.content &&
+          candidate.content.parts &&
+          candidate.content.parts[0]
+        ) {
+          const text = candidate.content.parts[0].text;
+          console.log("Extracted text:", text);
+          return text;
+        } else if (candidate.text) {
+          console.log("Using candidate.text:", candidate.text);
+          return candidate.text;
+        } else {
+          console.error("Unexpected candidate structure:", candidate);
+          throw new Error(
+            "Invalid response format from Gemini API - no text found"
+          );
+        }
+      } else {
+        console.error("No candidates found in response:", data);
+        throw new Error(
+          "Invalid response format from Gemini API - no candidates"
+        );
+      }
+    } catch (error) {
+      console.error("Error calling Gemini API for idea generation:", error);
+      throw error;
+    }
+  }
+
   // Send message to Gemini API
   async sendMessage(idea, userMessage, conversationHistory = []) {
     try {

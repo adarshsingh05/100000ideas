@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useIdeaAccess } from "@/hooks/useIdeaAccess";
 import { ideasService } from "@/lib/ideasService";
+import { geminiService } from "@/lib/geminiService";
 import {
   Card,
   CardContent,
@@ -53,6 +54,10 @@ import {
   Rocket,
   Cpu,
   Sparkles,
+  Bot,
+  ChevronRight,
+  ChevronLeft,
+  Loader2,
 } from "lucide-react";
 
 // Icon mapping for dynamic icons
@@ -95,8 +100,12 @@ export default function IdeasPage() {
   const [selectedInvestment, setSelectedInvestment] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [showFilters, setShowFilters] = useState(false);
-  const [viewMode, setViewMode] = useState("card"); // "card" or "list"
-  const ideasPerPage = viewMode === "card" ? 12 : 10; // Show more ideas per page
+  const [showAIModal, setShowAIModal] = useState(false);
+  const [aiStep, setAiStep] = useState(0);
+  const [aiAnswers, setAiAnswers] = useState({});
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResponse, setAiResponse] = useState("");
+  const ideasPerPage = 12; // Fixed to card view
 
   const { viewCount, hasAccess, incrementView } = useIdeaAccess();
 
@@ -152,10 +161,10 @@ export default function IdeasPage() {
     fetchIdeas();
   }, [currentPage]);
 
-  // Reset to page 1 when view mode changes
+  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [viewMode]);
+  }, [searchQuery, selectedCategory, selectedDifficulty, selectedInvestment]);
 
   // Filter and sort ideas
   const filteredAndSortedIdeas = useMemo(() => {
@@ -247,11 +256,7 @@ export default function IdeasPage() {
   ]);
 
   const handleCardClick = (id) => {
-    // Always allow navigation, but increment view count if user has access
-    if (hasAccess) {
-      incrementView();
-    }
-
+    // No view counting for regular ideas - only featured ideas count views
     // Route community ideas to community-ideas page, static ideas to ideas page
     // Community ideas have _id (MongoDB ObjectId), static ideas have id (number)
     if (id && typeof id === "string" && id.length > 10) {
@@ -274,6 +279,150 @@ export default function IdeasPage() {
     setSelectedDifficulty("");
     setSelectedInvestment("");
     setSortBy("newest");
+  };
+
+  // AI Modal Questions
+  const aiQuestions = [
+    {
+      id: "domain",
+      question: "What domain or industry interests you most?",
+      placeholder:
+        "e.g., Technology, Healthcare, Food & Beverage, E-commerce...",
+      type: "text",
+    },
+    {
+      id: "budget",
+      question: "What's your investment budget range?",
+      placeholder: "e.g., Under ₹5L, ₹5L-₹50L, ₹50L+...",
+      type: "select",
+      options: [
+        "Under ₹5L",
+        "₹5L - ₹25L",
+        "₹25L - ₹50L",
+        "₹50L - ₹1Cr",
+        "₹1Cr+",
+      ],
+    },
+    {
+      id: "location",
+      question: "Where do you want to start your business?",
+      placeholder: "e.g., Mumbai, Delhi, Bangalore, Online...",
+      type: "text",
+    },
+    {
+      id: "skills",
+      question: "What are your key skills or expertise?",
+      placeholder: "e.g., Marketing, Technology, Sales, Management...",
+      type: "text",
+    },
+    {
+      id: "experience",
+      question: "What's your business experience level?",
+      placeholder: "Select your experience level",
+      type: "select",
+      options: [
+        "Complete Beginner",
+        "Some Experience",
+        "Experienced",
+        "Very Experienced",
+      ],
+    },
+    {
+      id: "goals",
+      question: "What are your main business goals?",
+      placeholder: "e.g., Financial freedom, Social impact, Innovation...",
+      type: "text",
+    },
+  ];
+
+  // AI Modal Functions
+  const handleAIAnswer = (questionId, answer) => {
+    setAiAnswers((prev) => ({
+      ...prev,
+      [questionId]: answer,
+    }));
+  };
+
+  const nextAIQuestion = () => {
+    if (aiStep < aiQuestions.length - 1) {
+      setAiStep(aiStep + 1);
+    } else {
+      generateAIIdeas();
+    }
+  };
+
+  const prevAIQuestion = () => {
+    if (aiStep > 0) {
+      setAiStep(aiStep - 1);
+    }
+  };
+
+  const generateAIIdeas = async () => {
+    setAiLoading(true);
+    setAiStep(aiQuestions.length + 1); // Move to loading step
+
+    try {
+      const prompt = `Based on the following information, generate 3 detailed business ideas:
+
+Domain: ${aiAnswers.domain || "Not specified"}
+Budget: ${aiAnswers.budget || "Not specified"}
+Location: ${aiAnswers.location || "Not specified"}
+Skills: ${aiAnswers.skills || "Not specified"}
+Experience: ${aiAnswers.experience || "Not specified"}
+Goals: ${aiAnswers.goals || "Not specified"}
+
+Please provide 3 unique business ideas with the following format for each:
+
+**Idea Title**
+Brief description of the business concept.
+
+**Investment Required**
+Estimated initial investment needed.
+
+**Time to Start**
+How long it takes to launch this business.
+
+**Revenue Potential**
+Expected income potential and growth prospects.
+
+**Key Steps to Start**
+Step-by-step guide to get started.
+
+**Challenges & Solutions**
+Main challenges and how to overcome them.
+
+**Target Market**
+Who your customers will be.
+
+Make sure each idea is practical, actionable, and tailored to the provided information. Remove any markdown formatting like ** and use clean, professional language.`;
+
+      const response = await geminiService.generateIdeas(prompt);
+      console.log("AI Response received:", response);
+
+      // Move to results step immediately
+      setAiStep(aiQuestions.length + 2);
+      setAiResponse(response);
+    } catch (error) {
+      console.error("Error generating AI ideas:", error);
+      setAiResponse(
+        "Sorry, I couldn't generate ideas at the moment. Please try again."
+      );
+      setAiStep(aiQuestions.length + 2); // Move to results step even on error
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const resetAIModal = () => {
+    setAiStep(0);
+    setAiAnswers({});
+    setAiResponse("");
+    setAiLoading(false);
+  };
+
+  const closeAIModal = () => {
+    setShowAIModal(false);
+    resetAIModal();
   };
 
   const categories = [
@@ -312,6 +461,19 @@ export default function IdeasPage() {
 
   return (
     <div className="min-h-screen bg-[#FCFCFC]">
+      <style jsx>{`
+        @keyframes gradientShift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+      `}</style>
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -323,60 +485,58 @@ export default function IdeasPage() {
           className="text-center mb-6"
         >
           <h1 className="text-2xl sm:text-3xl font-bold text-[#2D3748] mb-2 tracking-tight">
-            Discover Business Ideas
+            Discover 10000+ Ideas
           </h1>
-          <p className="text-sm sm:text-base text-[#2D3748]/70 max-w-2xl mx-auto leading-relaxed">
-            Explore innovative business ideas from our community. Find the
-            perfect opportunity that matches your skills and investment
-            capacity.
-          </p>
         </motion.div>
 
-        {/* Search and Filter Section */}
+        {/* Compact Search and Filter Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8"
+          className="mb-6"
         >
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-            {/* Search Bar */}
-            <div className="relative mb-6">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <div className="bg-white rounded-xl p-4 shadow-md border border-gray-100">
+            {/* Compact Search Bar */}
+            <div className="relative mb-4">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
-                placeholder="Search for business ideas, categories, or keywords..."
+                placeholder="Search business ideas, categories, or keywords..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29] transition-all duration-300 text-lg"
+                className="w-full pl-10 pr-10 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29] transition-all duration-300 text-sm"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4" />
                 </button>
               )}
             </div>
 
-            {/* Filter Toggle */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-4">
+            {/* Compact Controls Row */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              {/* Left Controls */}
+              <div className="flex items-center gap-3">
                 <Button
                   onClick={() => setShowFilters(!showFilters)}
                   variant="outline"
-                  className="border-[#2D3748]/30 text-[#2D3748] hover:bg-[#2D3748]/10"
+                  size="sm"
+                  className="border-[#2D3748]/30 text-[#2D3748] hover:bg-[#2D3748]/10 text-xs px-3 py-2"
                 >
-                  <Filter className="w-4 h-4 mr-2" />
+                  <Filter className="w-3 h-3 mr-1" />
                   Filters
                 </Button>
-                <div className="flex items-center space-x-2">
-                  <SortAsc className="w-4 h-4 text-gray-400" />
+
+                <div className="flex items-center gap-2">
+                  <SortAsc className="w-3 h-3 text-gray-400" />
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
+                    className="border border-gray-200 rounded-md px-2 py-1.5 text-xs focus:ring-1 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
                   >
                     {sortOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -387,75 +547,63 @@ export default function IdeasPage() {
                 </div>
               </div>
 
-              {/* View Toggle */}
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-[#2D3748] font-medium">
-                  View:
-                </span>
-                <div className="flex border border-gray-200 rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => setViewMode("card")}
-                    className={`px-3 py-2 text-sm font-medium transition-all duration-200 ${
-                      viewMode === "card"
-                        ? "bg-[#2D3748] text-white"
-                        : "bg-white text-[#2D3748] hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className="w-4 h-4 grid grid-cols-2 gap-0.5">
-                      <div className="bg-current rounded-sm"></div>
-                      <div className="bg-current rounded-sm"></div>
-                      <div className="bg-current rounded-sm"></div>
-                      <div className="bg-current rounded-sm"></div>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => setViewMode("list")}
-                    className={`px-3 py-2 text-sm font-medium transition-all duration-200 ${
-                      viewMode === "list"
-                        ? "bg-[#2D3748] text-white"
-                        : "bg-white text-[#2D3748] hover:bg-gray-50"
-                    }`}
-                  >
-                    <div className="w-4 h-4 flex flex-col space-y-0.5">
-                      <div className="bg-current h-1 rounded-sm"></div>
-                      <div className="bg-current h-1 rounded-sm"></div>
-                      <div className="bg-current h-1 rounded-sm"></div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-              {(searchQuery ||
-                selectedCategory ||
-                selectedDifficulty ||
-                selectedInvestment) && (
+              {/* Right Controls */}
+              <div className="flex items-center gap-3">
+                {/* AI Custom Ideas Button */}
                 <Button
-                  onClick={clearFilters}
-                  variant="ghost"
-                  className="text-gray-500 hover:text-[#2D3748]"
+                  onClick={() => setShowAIModal(true)}
+                  className="relative bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-500 text-white text-xs px-4 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 border border-white/20 hover:border-white/40 animate-pulse hover:animate-none"
+                  style={{
+                    background:
+                      "linear-gradient(45deg, #ff6b9d, #c44569, #f8b500, #4ecdc4)",
+                    backgroundSize: "300% 300%",
+                    animation: "gradientShift 3s ease infinite",
+                    boxShadow:
+                      "0 0 20px rgba(255, 107, 157, 0.4), 0 0 40px rgba(196, 69, 105, 0.2)",
+                  }}
                 >
-                  Clear Filters
+                  <div className="relative">
+                    <Sparkles className="w-3 h-3 animate-spin" />
+                    <div className="absolute inset-0 bg-white/30 rounded-full blur-sm"></div>
+                  </div>
+                  <span className="font-semibold">AI Ideas</span>
                 </Button>
-              )}
+
+                {/* Clear Filters */}
+                {(searchQuery ||
+                  selectedCategory ||
+                  selectedDifficulty ||
+                  selectedInvestment) && (
+                  <Button
+                    onClick={clearFilters}
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-500 hover:text-[#2D3748] text-xs px-2 py-1"
+                  >
+                    Clear
+                  </Button>
+                )}
+              </div>
             </div>
 
-            {/* Filter Options */}
+            {/* Compact Filter Options */}
             {showFilters && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-100"
+                className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 mt-3 border-t border-gray-100"
               >
                 {/* Category Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-[#2D3748] mb-2">
+                  <label className="block text-xs font-medium text-[#2D3748] mb-1">
                     Category
                   </label>
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
+                    className="w-full border border-gray-200 rounded-md px-2 py-1.5 text-xs focus:ring-1 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
                   >
                     <option value="">All Categories</option>
                     {categories.map((category) => (
@@ -468,13 +616,13 @@ export default function IdeasPage() {
 
                 {/* Difficulty Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-[#2D3748] mb-2">
+                  <label className="block text-xs font-medium text-[#2D3748] mb-1">
                     Difficulty
                   </label>
                   <select
                     value={selectedDifficulty}
                     onChange={(e) => setSelectedDifficulty(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
+                    className="w-full border border-gray-200 rounded-md px-2 py-1.5 text-xs focus:ring-1 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
                   >
                     <option value="">All Levels</option>
                     {difficulties.map((difficulty) => (
@@ -487,13 +635,13 @@ export default function IdeasPage() {
 
                 {/* Investment Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-[#2D3748] mb-2">
-                    Investment Range
+                  <label className="block text-xs font-medium text-[#2D3748] mb-1">
+                    Investment
                   </label>
                   <select
                     value={selectedInvestment}
                     onChange={(e) => setSelectedInvestment(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
+                    className="w-full border border-gray-200 rounded-md px-2 py-1.5 text-xs focus:ring-1 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29]"
                   >
                     <option value="">All Ranges</option>
                     {investmentRanges.map((range) => (
@@ -508,15 +656,15 @@ export default function IdeasPage() {
           </div>
         </motion.div>
 
-        {/* Results Count */}
+        {/* Compact Results Count */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-6"
+          className="mb-4"
         >
           <div className="flex items-center justify-between">
-            <p className="text-[#2D3748] font-medium">
+            <p className="text-[#2D3748] font-medium text-sm">
               {filteredAndSortedIdeas.length} ideas found
               {searchQuery && (
                 <span className="text-gray-500 ml-2">
@@ -524,8 +672,8 @@ export default function IdeasPage() {
                 </span>
               )}
             </p>
-            <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <Sparkles className="w-4 h-4" />
+            <div className="flex items-center space-x-1 text-xs text-gray-500">
+              <Sparkles className="w-3 h-3" />
               <span>Community Ideas</span>
             </div>
           </div>
@@ -568,495 +716,180 @@ export default function IdeasPage() {
           </motion.div>
         ) : (
           <motion.div
-            key={viewMode}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className={
-              viewMode === "card"
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-                : "space-y-4"
-            }
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {filteredAndSortedIdeas.map((idea, index) => {
               const IconComponent = iconMap[idea.icon] || Lightbulb;
 
-              if (viewMode === "card") {
-                return (
-                  <motion.div
-                    key={idea._id || idea.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.05 }}
-                    className="group"
+              return (
+                <motion.div
+                  key={idea._id || idea.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  className="group"
+                >
+                  <Card
+                    className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full"
+                    onClick={() => handleCardClick(idea._id || idea.id)}
                   >
-                    <Card
-                      className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full"
-                      onClick={() => handleCardClick(idea._id || idea.id)}
-                    >
-                      {/* Image Section */}
-                      <div className="relative h-40 sm:mt-[-25px]">
-                        <img
-                          src={`/demo${(index % 7) + 1}.jpeg`}
-                          alt={idea.title}
-                          className="w-full h-full object-cover"
-                        />
+                    {/* Image Section */}
+                    <div className="relative h-40 sm:mt-[-25px]">
+                      <img
+                        src={`/demo${(index % 7) + 1}.jpeg`}
+                        alt={idea.title}
+                        className="w-full h-full object-cover"
+                      />
 
-                        {/* Top Left Banner - Price Range */}
-                        <div className="absolute top-0 left-0">
-                          <div className="bg-[#FDCC29] text-[#2D3748] px-4 py-4 text-sm font-bold shadow-md rounded-br-xl">
-                            {idea.investmentRange ||
-                              idea.investment ||
-                              "< ₹ 3Lakhs"}
-                          </div>
-                        </div>
-
-                        {/* Top Right Banner - Discount Corner Ribbon */}
-                        <div className="absolute top-0 right-0">
-                          <div className="bg-[#2D3748] text-white p-4 text-sm font-bold shadow-md rounded-bl-xl">
-                            <span
-                              style={{
-                                transform: "rotate(-45deg)",
-                                fontSize: "10px",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              10% Off
-                            </span>
-                          </div>
+                      {/* Top Left Banner - Price Range */}
+                      <div className="absolute top-0 left-0">
+                        <div className="bg-[#FDCC29] text-[#2D3748] px-4 py-4 text-sm font-bold shadow-md rounded-br-xl">
+                          {idea.investmentRange ||
+                            idea.investment ||
+                            "< ₹ 3Lakhs"}
                         </div>
                       </div>
 
-                      {/* Content Section */}
-                      <div className="p-3 flex flex-col flex-grow">
-                        {/* Category */}
-                        <div className="mb-1">
-                          <span className="text-xs text-gray-500 font-medium">
-                            {idea.category}
+                      {/* Top Right Banner - Discount Corner Ribbon */}
+                      <div className="absolute top-0 right-0">
+                        <div className="bg-[#2D3748] text-white p-4 text-sm font-bold shadow-md rounded-bl-xl">
+                          <span
+                            style={{
+                              transform: "rotate(-45deg)",
+                              fontSize: "10px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            10% Off
                           </span>
                         </div>
+                      </div>
+                    </div>
 
-                        {/* Title */}
-                        <h3 className="text-lg font-bold text-[#2D3748] mb-2 leading-tight">
-                          {idea.title}
-                        </h3>
+                    {/* Content Section */}
+                    <div className="p-3 flex flex-col flex-grow">
+                      {/* Category */}
+                      <div className="mb-1">
+                        <span className="text-xs text-gray-500 font-medium">
+                          {idea.category}
+                        </span>
+                      </div>
 
-                        {/* Description */}
-                        <p className="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2 flex-grow">
-                          {idea.description}
-                        </p>
+                      {/* Title */}
+                      <h3 className="text-lg font-bold text-[#2D3748] mb-2 leading-tight">
+                        {idea.title}
+                      </h3>
 
-                        {/* Rating */}
-                        <div className="flex flex-col space-y-1 mb-2">
-                          <div className="flex items-center justify-between w-full">
-                            <div className="text-md font-semibold text-[#2D3748]">
-                              {(idea.rating || 4.5).toFixed(1)}
-                            </div>
+                      {/* Description */}
+                      <p className="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2 flex-grow">
+                        {idea.description}
+                      </p>
 
-                            {/* 4 Random Business Icons - Spread evenly */}
-                            <div className="flex items-center justify-center flex-1 space-x-2">
-                              {(() => {
-                                const businessIcons = [
-                                  Briefcase,
-                                  BarChart3,
-                                  Rocket,
-                                  Cpu,
-                                  Building2,
-                                  TrendingUp,
-                                  Target,
-                                  Zap,
-                                ];
-                                const selectedIcons = businessIcons
-                                  .sort(() => Math.random() - 0.5)
-                                  .slice(0, 4);
-
-                                return selectedIcons.map((Icon, iconIndex) => (
-                                  <div
-                                    key={iconIndex}
-                                    className="w-7 h-7 sm:ml-2 sm:mr-1 bg-[#fdcc29] rounded-md flex items-center justify-center hover:bg-[#061F59]/20 transition-colors space-x-1"
-                                  >
-                                    <Icon className="w-4 h-4 text-[#061F59]" />
-                                  </div>
-                                ));
-                              })()}
-                            </div>
+                      {/* Rating */}
+                      <div className="flex flex-col space-y-1 mb-2">
+                        <div className="flex items-center justify-between w-full">
+                          <div className="text-md font-semibold text-[#2D3748]">
+                            {(idea.rating || 4.5).toFixed(1)}
                           </div>
 
-                          <div className="flex items-center space-x-1">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <Star
-                                key={star}
-                                className={`w-4 h-4 ${
-                                  star <= Math.floor(idea.rating || 4.5)
-                                    ? "text-[#FDCC29] fill-current"
-                                    : star === Math.ceil(idea.rating || 4.5) &&
-                                      (idea.rating || 4.5) % 1 !== 0
-                                    ? "text-[#FDCC29] fill-current opacity-50"
-                                    : "text-gray-300"
-                                }`}
+                          {/* 4 Random Business Icons - Spread evenly */}
+                          <div className="flex items-center justify-center flex-1 space-x-2">
+                            {(() => {
+                              const businessIcons = [
+                                Briefcase,
+                                BarChart3,
+                                Rocket,
+                                Cpu,
+                                Building2,
+                                TrendingUp,
+                                Target,
+                                Zap,
+                              ];
+                              const selectedIcons = businessIcons
+                                .sort(() => Math.random() - 0.5)
+                                .slice(0, 4);
+
+                              return selectedIcons.map((Icon, iconIndex) => (
+                                <div
+                                  key={iconIndex}
+                                  className="w-7 h-7 sm:ml-2 sm:mr-1 bg-[#fdcc29] rounded-md flex items-center justify-center hover:bg-[#061F59]/20 transition-colors space-x-1"
+                                >
+                                  <Icon className="w-4 h-4 text-[#061F59]" />
+                                </div>
+                              ));
+                            })()}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className={`w-4 h-4 ${
+                                star <= Math.floor(idea.rating || 4.5)
+                                  ? "text-[#FDCC29] fill-current"
+                                  : star === Math.ceil(idea.rating || 4.5) &&
+                                    (idea.rating || 4.5) % 1 !== 0
+                                  ? "text-[#FDCC29] fill-current opacity-50"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex items-center justify-between mt-auto">
+                        <div className="flex items-center space-x-2">
+                          {/* Lightbulb with count */}
+                          <div className="flex items-center space-x-1 rounded-full px-2 py-2 bg-gray-100">
+                            <Lightbulb className="w-4 h-4 text-[#2D3748]" />
+                            <span className="text-xs font-semibold text-[#2D3748]">
+                              {Math.floor(Math.random() * 100) + 20}
+                            </span>
+                          </div>
+
+                          {/* Heart */}
+                          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-red-50 transition-colors">
+                            <Heart className="w-5 h-5 text-[#2D3748] hover:text-red-500" />
+                          </div>
+
+                          {/* Comment */}
+                          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors">
+                            <svg
+                              className="w-5 h-5 text-[#2D3748]"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                               />
-                            ))}
+                            </svg>
                           </div>
-                        </div>
 
-                        {/* Action Buttons */}
-                        <div className="flex items-center justify-between mt-auto">
-                          <div className="flex items-center space-x-2">
-                            {/* Lightbulb with count */}
-                            <div className="flex items-center space-x-1 rounded-full px-2 py-2 bg-gray-100">
-                              <Lightbulb className="w-4 h-4 text-[#2D3748]" />
-                              <span className="text-xs font-semibold text-[#2D3748]">
-                                {Math.floor(Math.random() * 100) + 20}
-                              </span>
-                            </div>
-
-                            {/* Heart */}
-                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-red-50 transition-colors">
-                              <Heart className="w-5 h-5 text-[#2D3748] hover:text-red-500" />
-                            </div>
-
-                            {/* Comment */}
-                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors">
-                              <svg
-                                className="w-5 h-5 text-[#2D3748]"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                                />
-                              </svg>
-                            </div>
-
-                            {/* More options */}
-                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
-                              <svg
-                                className="w-5 h-5 text-[#2D3748]"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                              </svg>
-                            </div>
+                          {/* More options */}
+                          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
+                            <svg
+                              className="w-5 h-5 text-[#2D3748]"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                            </svg>
                           </div>
                         </div>
                       </div>
-                    </Card>
-                  </motion.div>
-                );
-              } else {
-                // List View
-                return (
-                  <motion.div
-                    key={idea._id || idea.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.03 }}
-                    className="group"
-                  >
-                    <Card
-                      className="bg-white border border-gray-200 shadow-sm cursor-pointer rounded-xl overflow-hidden transition-all duration-300 group-hover:shadow-lg group-hover:border-[#FDCC29]/30"
-                      onClick={() => handleCardClick(idea._id || idea.id)}
-                    >
-                      <div className="flex">
-                        {/* Image Section with Additional Info Below */}
-                        <div className="w-32 flex-shrink-0">
-                          {/* Main Image */}
-                          <div className="relative w-32 h-32 bg-gradient-to-br from-gray-100 to-gray-200 mx-auto">
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#FDCC29]/20 to-[#2D3748]/20"></div>
-
-                            {/* Investment Badge */}
-                            <div className="absolute top-2 left-2">
-                              <div className="bg-[#FDCC29] text-[#2D3748] px-2 py-1 rounded text-xs font-semibold shadow-md">
-                                {idea.investmentRange ||
-                                  idea.investment ||
-                                  "₹25L"}
-                              </div>
-                            </div>
-
-                            {/* Difficulty Badge */}
-                            <div className="absolute top-2 right-2">
-                              <div className="bg-white/95 text-[#2D3748] px-2 py-1 rounded text-xs font-semibold shadow-md border border-gray-200">
-                                {idea.difficulty || "Medium"}
-                              </div>
-                            </div>
-
-                            {/* Category Icon */}
-                            <div className="absolute bottom-2 right-2">
-                              <div className="w-8 h-8 bg-white/95 rounded-full flex items-center justify-center shadow-md border border-gray-200">
-                                <IconComponent className="w-4 h-4 text-[#2D3748]" />
-                              </div>
-                            </div>
-
-                            {/* Decorative Dots */}
-                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                              <div className="flex space-x-1">
-                                <div className="w-1.5 h-1.5 bg-[#FDCC29]/40 rounded-full"></div>
-                                <div className="w-1.5 h-1.5 bg-[#2D3748]/40 rounded-full"></div>
-                                <div className="w-1.5 h-1.5 bg-[#FDCC29]/40 rounded-full"></div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Additional Info Below Image */}
-                          <div className="mt-2 space-y-2">
-                            {/* Category Badge */}
-                            <div className="text-center">
-                              <span className="bg-[#FDCC29] text-[#2D3748] px-2 py-1 rounded-full text-xs font-semibold">
-                                {idea.category || "Business"}
-                              </span>
-                            </div>
-
-                            {/* Time to Market */}
-                            <div className="bg-gradient-to-r from-[#FDCC29]/10 to-[#2D3748]/10 p-2 rounded border border-[#FDCC29]/20">
-                              <div className="flex items-center justify-center space-x-1 text-[#2D3748] text-xs">
-                                <Clock className="w-3 h-3" />
-                                <span className="font-semibold">
-                                  {idea.timeToStart ||
-                                    idea.timeToMarket ||
-                                    "Immediately"}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Revenue Potential */}
-                            <div className="bg-gradient-to-r from-[#FDCC29]/10 to-[#2D3748]/10 p-2 rounded border border-[#FDCC29]/20">
-                              <div className="text-center">
-                                <div className="flex items-center justify-center space-x-1 text-[#2D3748] text-xs mb-1">
-                                  <TrendingUp className="w-3 h-3" />
-                                  <span className="font-medium">Revenue</span>
-                                </div>
-                                <span className="text-xs font-semibold text-[#2D3748]">
-                                  {idea.revenue || "High potential"}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Status Indicator */}
-                            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-2 rounded border border-green-200">
-                              <div className="flex items-center justify-center space-x-1 text-green-700 text-xs">
-                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                <span className="font-semibold">Active</span>
-                              </div>
-                            </div>
-
-                            {/* Quick Stats Row */}
-                            <div className="grid grid-cols-3 gap-1 pt-1">
-                              <div className="text-center">
-                                <div className="flex items-center justify-center space-x-1 text-[#FDCC29] text-xs mb-1">
-                                  <Star className="w-2.5 h-2.5" />
-                                  <span className="font-semibold">
-                                    {idea.rating || 4.5}
-                                  </span>
-                                </div>
-                                <span className="text-xs text-gray-600">
-                                  Rating
-                                </span>
-                              </div>
-                              <div className="text-center">
-                                <div className="flex items-center justify-center space-x-1 text-gray-600 text-xs mb-1">
-                                  <Eye className="w-2.5 h-2.5" />
-                                  <span className="font-semibold">
-                                    {idea.views || 0}
-                                  </span>
-                                </div>
-                                <span className="text-xs text-gray-600">
-                                  Views
-                                </span>
-                              </div>
-                              <div className="text-center">
-                                <div className="flex items-center justify-center space-x-1 text-red-500 text-xs mb-1">
-                                  <Heart className="w-2.5 h-2.5" />
-                                  <span className="font-semibold">
-                                    {idea.likes || 0}
-                                  </span>
-                                </div>
-                                <span className="text-xs text-gray-600">
-                                  Likes
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Main Content Section */}
-                        <div className="flex-1 p-6">
-                          {/* Header with Category and Rating */}
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-center space-x-4">
-                              <div className="flex items-center space-x-2">
-                                <div className="w-2 h-2 bg-[#FDCC29] rounded-full"></div>
-                                <span className="text-xs text-[#2D3748] uppercase tracking-wider font-semibold">
-                                  {idea.category}
-                                </span>
-                              </div>
-                              <div className="flex items-center space-x-1 bg-[#FDCC29]/10 px-3 py-1 rounded-full">
-                                <Star className="w-4 h-4 text-[#FDCC29] fill-current" />
-                                <span className="text-sm text-[#2D3748] font-semibold">
-                                  {idea.rating || 4.5}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Status Indicator */}
-                            <div className="flex items-center space-x-2">
-                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                              <span className="text-xs text-green-600 font-medium">
-                                Active
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Title and Description */}
-                          <div className="mb-6">
-                            <h3 className="text-2xl font-bold text-[#2D3748] leading-tight mb-3 group-hover:text-[#FDCC29] transition-colors duration-300">
-                              {idea.title}
-                            </h3>
-                            <p className="text-gray-600 leading-relaxed text-base line-clamp-2">
-                              {idea.description ||
-                                "A promising business opportunity with great potential for growth and success."}
-                            </p>
-                          </div>
-
-                          {/* Enhanced Tags */}
-                          <div className="flex flex-wrap gap-2 mb-6">
-                            {idea.tags?.slice(0, 5).map((tag, tagIndex) => (
-                              <span
-                                key={tagIndex}
-                                className="text-xs bg-gradient-to-r from-[#FDCC29]/10 to-[#2D3748]/10 text-[#2D3748] px-4 py-2 rounded-full font-medium border border-[#FDCC29]/20"
-                              >
-                                {tag}
-                              </span>
-                            )) || [
-                              <span
-                                key="0"
-                                className="text-xs bg-gradient-to-r from-[#FDCC29]/10 to-[#2D3748]/10 text-[#2D3748] px-4 py-2 rounded-full font-medium border border-[#FDCC29]/20"
-                              >
-                                Community
-                              </span>,
-                              <span
-                                key="1"
-                                className="text-xs bg-gradient-to-r from-[#FDCC29]/10 to-[#2D3748]/10 text-[#2D3748] px-4 py-2 rounded-full font-medium border border-[#FDCC29]/20"
-                              >
-                                Innovation
-                              </span>,
-                              <span
-                                key="2"
-                                className="text-xs bg-gradient-to-r from-[#FDCC29]/10 to-[#2D3748]/10 text-[#2D3748] px-4 py-2 rounded-full font-medium border border-[#FDCC29]/20"
-                              >
-                                Business
-                              </span>,
-                            ]}
-                          </div>
-
-                          {/* Enhanced Metrics Grid */}
-                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                            <div className="bg-gradient-to-br from-[#FDCC29]/5 to-[#2D3748]/5 p-3 rounded-xl border border-[#FDCC29]/20">
-                              <div className="flex items-center space-x-2 mb-2">
-                                <TrendingUp className="w-4 h-4 text-[#FDCC29]" />
-                                <p className="text-xs text-gray-600 font-medium uppercase tracking-wide">
-                                  Revenue Potential
-                                </p>
-                              </div>
-                              <p className="text-base text-[#2D3748] font-bold">
-                                {idea.revenue || "High potential"}
-                              </p>
-                            </div>
-
-                            <div className="bg-gradient-to-br from-[#FDCC29]/5 to-[#2D3748]/5 p-3 rounded-xl border border-[#FDCC29]/20">
-                              <div className="flex items-center space-x-2 mb-2">
-                                <Clock className="w-4 h-4 text-[#FDCC29]" />
-                                <p className="text-xs text-gray-600 font-medium uppercase tracking-wide">
-                                  Time to Market
-                                </p>
-                              </div>
-                              <p className="text-base text-[#2D3748] font-bold">
-                                {idea.timeToStart ||
-                                  idea.timeToMarket ||
-                                  "2-3 months"}
-                              </p>
-                            </div>
-
-                            <div className="bg-gradient-to-br from-[#FDCC29]/5 to-[#2D3748]/5 p-3 rounded-xl border border-[#FDCC29]/20">
-                              <div className="flex items-center space-x-2 mb-2">
-                                <Eye className="w-4 h-4 text-[#FDCC29]" />
-                                <p className="text-xs text-gray-600 font-medium uppercase tracking-wide">
-                                  Views
-                                </p>
-                              </div>
-                              <p className="text-base text-[#2D3748] font-bold">
-                                {idea.views || 0}
-                              </p>
-                            </div>
-
-                            <div className="bg-gradient-to-br from-[#FDCC29]/5 to-[#2D3748]/5 p-3 rounded-xl border border-[#FDCC29]/20">
-                              <div className="flex items-center space-x-2 mb-2">
-                                <Heart className="w-4 h-4 text-[#FDCC29]" />
-                                <p className="text-xs text-gray-600 font-medium uppercase tracking-wide">
-                                  Likes
-                                </p>
-                              </div>
-                              <p className="text-base text-[#2D3748] font-bold">
-                                {idea.likes || 0}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Enhanced Footer */}
-                          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-gradient-to-br from-[#FDCC29] to-[#2D3748] rounded-full flex items-center justify-center shadow-md">
-                                <User className="w-4 h-4 text-white" />
-                              </div>
-                              <div>
-                                <p className="text-sm text-[#2D3748] font-semibold">
-                                  {idea.uploadedByName?.split(" ")[0] ||
-                                    "Anonymous"}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                  Community Member
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center space-x-3">
-                              <div className="flex items-center space-x-4 text-sm text-gray-500">
-                                <div className="flex items-center space-x-1">
-                                  <Calendar className="w-4 h-4" />
-                                  <span>
-                                    {getTimeAgo(
-                                      idea.createdAt || idea.created_at
-                                    )}
-                                  </span>
-                                </div>
-                                <div className="flex items-center space-x-1">
-                                  <Zap className="w-4 h-4" />
-                                  <span>Trending</span>
-                                </div>
-                              </div>
-                              <Button
-                                variant="outline"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCardClick(idea._id || idea.id);
-                                }}
-                                className="text-sm font-semibold border-2 border-[#2D3748] text-[#2D3748] px-6 py-2 group-hover:bg-[#2D3748] group-hover:text-white transition-all duration-300 rounded-lg"
-                              >
-                                View Details
-                                <ArrowRight className="w-4 h-4 ml-2" />
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  </motion.div>
-                );
-              }
+                    </div>
+                  </Card>
+                </motion.div>
+              );
             })}
           </motion.div>
         )}
@@ -1142,6 +975,220 @@ export default function IdeasPage() {
           </motion.div>
         )}
       </div>
+
+      {/* AI Custom Ideas Modal */}
+      {showAIModal && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            className="relative bg-white rounded-2xl shadow-xl border border-gray-200 max-w-2xl w-full max-h-[85vh] overflow-hidden"
+          >
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-[#061F59] to-[#0A2A6B] p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-[#FDCC29] rounded-lg flex items-center justify-center">
+                    <Bot className="w-5 h-5 text-[#061F59]" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-semibold text-white">
+                      AI Business Ideas
+                    </h2>
+                    <p className="text-white/80 text-xs">
+                      Get personalized recommendations
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={closeAIModal}
+                  className="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-lg flex items-center justify-center transition-all duration-200"
+                >
+                  <X className="w-4 h-4 text-white" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="relative p-6 max-h-[calc(85vh-100px)] overflow-y-auto">
+              {aiStep < aiQuestions.length ? (
+                // Question Step
+                <div className="space-y-6">
+                  {/* Progress Bar */}
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-1 bg-gray-200 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-[#FDCC29] to-[#061F59] h-2 rounded-full transition-all duration-300 ease-out"
+                        style={{
+                          width: `${
+                            ((aiStep + 1) / aiQuestions.length) * 100
+                          }%`,
+                        }}
+                      ></div>
+                    </div>
+                    <span className="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded-full">
+                      {aiStep + 1}/{aiQuestions.length}
+                    </span>
+                  </div>
+
+                  {/* Question */}
+                  <div className="text-center space-y-4">
+                    <h3 className="text-xl font-semibold text-[#2D3748] leading-tight">
+                      {aiQuestions[aiStep].question}
+                    </h3>
+
+                    {/* Input Field */}
+                    {aiQuestions[aiStep].type === "text" ? (
+                      <input
+                        type="text"
+                        placeholder={aiQuestions[aiStep].placeholder}
+                        value={aiAnswers[aiQuestions[aiStep].id] || ""}
+                        onChange={(e) =>
+                          handleAIAnswer(aiQuestions[aiStep].id, e.target.value)
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29] transition-all duration-300 text-center text-sm text-gray-700 placeholder-gray-400"
+                        autoFocus
+                      />
+                    ) : (
+                      <select
+                        value={aiAnswers[aiQuestions[aiStep].id] || ""}
+                        onChange={(e) =>
+                          handleAIAnswer(aiQuestions[aiStep].id, e.target.value)
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FDCC29]/20 focus:border-[#FDCC29] transition-all duration-300 text-center text-sm text-gray-700 appearance-none"
+                        autoFocus
+                      >
+                        <option value="" className="text-gray-400">
+                          {aiQuestions[aiStep].placeholder}
+                        </option>
+                        {aiQuestions[aiStep].options.map((option) => (
+                          <option
+                            key={option}
+                            value={option}
+                            className="text-gray-700"
+                          >
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+
+                  {/* Navigation Buttons */}
+                  <div className="flex items-center justify-between pt-4">
+                    <Button
+                      onClick={prevAIQuestion}
+                      disabled={aiStep === 0}
+                      variant="outline"
+                      className="flex items-center space-x-2 disabled:opacity-50"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      <span>Previous</span>
+                    </Button>
+
+                    <Button
+                      onClick={nextAIQuestion}
+                      disabled={!aiAnswers[aiQuestions[aiStep].id]}
+                      className="bg-gradient-to-r from-[#061F59] to-[#0A2A6B] hover:from-[#0A2A6B] hover:to-[#061F59] text-white px-6 py-2 rounded-lg flex items-center space-x-2 disabled:opacity-50"
+                    >
+                      <span>
+                        {aiStep === aiQuestions.length - 1
+                          ? "Generate Ideas"
+                          : "Next"}
+                      </span>
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              ) : aiStep === aiQuestions.length + 1 ? (
+                // Loading Step
+                <div className="text-center space-y-6">
+                  <div className="w-16 h-16 bg-gradient-to-r from-[#FDCC29] to-[#061F59] rounded-full flex items-center justify-center mx-auto">
+                    <Loader2 className="w-8 h-8 text-white animate-spin" />
+                  </div>
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-semibold text-[#2D3748]">
+                      Generating Ideas...
+                    </h3>
+                    <div className="flex items-center justify-center space-x-1">
+                      <div className="w-2 h-2 bg-[#FDCC29] rounded-full animate-bounce"></div>
+                      <div
+                        className="w-2 h-2 bg-[#061F59] rounded-full animate-bounce"
+                        style={{ animationDelay: "0.1s" }}
+                      ></div>
+                      <div
+                        className="w-2 h-2 bg-[#FDCC29] rounded-full animate-bounce"
+                        style={{ animationDelay: "0.2s" }}
+                      ></div>
+                    </div>
+                    <p className="text-gray-600 text-sm max-w-sm mx-auto">
+                      Analyzing your preferences and creating personalized
+                      business ideas...
+                    </p>
+                  </div>
+                </div>
+              ) : aiStep === aiQuestions.length + 2 ? (
+                // Results Step
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gradient-to-r from-[#FDCC29] to-[#061F59] rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Sparkles className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-[#2D3748] mb-2">
+                      Your AI-Generated Ideas
+                    </h3>
+                    <p className="text-gray-600 text-sm max-w-lg mx-auto">
+                      Here are 3 personalized business ideas tailored
+                      specifically for you
+                    </p>
+                  </div>
+
+                  {/* AI Response */}
+                  <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 shadow-sm">
+                    <div className="flex items-center space-x-2 mb-4">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-xs text-gray-500 font-medium">
+                        AI Generated Ideas
+                      </span>
+                      <div className="flex-1 h-px bg-gradient-to-r from-gray-300 to-transparent ml-2"></div>
+                    </div>
+                    <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
+                      <div className="whitespace-pre-wrap font-sans">
+                        {aiResponse}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center justify-center space-x-4">
+                    <Button
+                      onClick={resetAIModal}
+                      variant="outline"
+                      className="flex items-center space-x-2"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>Generate New Ideas</span>
+                    </Button>
+                    <Button
+                      onClick={closeAIModal}
+                      className="bg-gradient-to-r from-[#061F59] to-[#0A2A6B] hover:from-[#0A2A6B] hover:to-[#061F59] text-white px-6 py-2 rounded-lg"
+                    >
+                      Close
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                // Fallback - should not reach here
+                <div className="text-center">
+                  <p>Something went wrong. Please try again.</p>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       <Footer />
     </div>

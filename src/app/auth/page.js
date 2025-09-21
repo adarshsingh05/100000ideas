@@ -254,109 +254,109 @@ export default function AuthPage() {
 
             {/* Form */}
             <Card className="shadow-lg border-0">
-              <CardContent className="p-4 sm:p-6">
-                <form onSubmit={handleSubmit} className="space-y-4">
+              <CardContent className="p-6 sm:p-8">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Step 1: Basic Information */}
                   {isSignUp && currentStep === 1 && (
                     <>
-                    <div>
-                      <Label
-                        htmlFor="name"
-                        className="text-gray-700 font-medium"
-                      >
-                        Full Name
-                      </Label>
-                      <div className="relative mt-1">
-                        <Input
-                          id="name"
-                          name="name"
-                          type="text"
-                          placeholder="Enter your full name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                            className="pl-10 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                      <div>
+                        <Label
+                          htmlFor="name"
+                          className="text-gray-700 font-medium text-sm"
+                        >
+                          Full Name
+                        </Label>
+                        <div className="relative mt-2">
+                          <Input
+                            id="name"
+                            name="name"
+                            type="text"
+                            placeholder="Enter your full name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="pl-10 py-3 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29] rounded-lg"
                             required
-                        />
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          />
+                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        </div>
                       </div>
-                    </div>
 
-                  <div>
-                    <Label
-                      htmlFor="email"
-                      className="text-gray-700 font-medium"
-                    >
-                      Email Address
-                    </Label>
-                    <div className="relative mt-1">
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="Enter your email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                            className="pl-10 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29]"
-                        required
-                      />
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label
-                      htmlFor="password"
-                      className="text-gray-700 font-medium"
-                    >
-                      Password
-                    </Label>
-                    <div className="relative mt-1">
-                      <Input
-                        id="password"
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Enter your password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                            className="pl-10 pr-10 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29]"
-                        required
-                      />
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        {showPassword ? (
-                          <EyeOff className="w-4 h-4" />
-                        ) : (
-                          <Eye className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                    <div>
-                      <Label
-                        htmlFor="confirmPassword"
-                        className="text-gray-700 font-medium"
-                      >
-                        Confirm Password
-                      </Label>
-                      <div className="relative mt-1">
-                        <Input
-                          id="confirmPassword"
-                          name="confirmPassword"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Confirm your password"
-                          value={formData.confirmPassword}
-                          onChange={handleInputChange}
-                            className="pl-10 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                      <div>
+                        <Label
+                          htmlFor="email"
+                          className="text-gray-700 font-medium text-sm"
+                        >
+                          Email Address
+                        </Label>
+                        <div className="relative mt-2">
+                          <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="Enter your email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="pl-10 py-3 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29] rounded-lg"
                             required
-                        />
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          />
+                          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        </div>
                       </div>
-                    </div>
+
+                      <div>
+                        <Label
+                          htmlFor="password"
+                          className="text-gray-700 font-medium text-sm"
+                        >
+                          Password
+                        </Label>
+                        <div className="relative mt-2">
+                          <Input
+                            id="password"
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Enter your password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            className="pl-10 pr-10 py-3 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29] rounded-lg"
+                            required
+                          />
+                          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          >
+                            {showPassword ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label
+                          htmlFor="confirmPassword"
+                          className="text-gray-700 font-medium text-sm"
+                        >
+                          Confirm Password
+                        </Label>
+                        <div className="relative mt-2">
+                          <Input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Confirm your password"
+                            value={formData.confirmPassword}
+                            onChange={handleInputChange}
+                            className="pl-10 py-3 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29] rounded-lg"
+                            required
+                          />
+                          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        </div>
+                      </div>
                     </>
                   )}
 
@@ -366,7 +366,7 @@ export default function AuthPage() {
                       <div>
                         <Label
                           htmlFor="age"
-                          className="text-gray-700 font-medium"
+                          className="text-gray-700 font-medium text-sm"
                         >
                           Age
                         </Label>
@@ -377,7 +377,7 @@ export default function AuthPage() {
                           placeholder="Enter your age"
                           value={formData.age}
                           onChange={handleInputChange}
-                          className="border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                          className="py-3 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29] rounded-lg"
                           required
                         />
                       </div>
@@ -385,7 +385,7 @@ export default function AuthPage() {
                       <div>
                         <Label
                           htmlFor="monthlyIncome"
-                          className="text-gray-700 font-medium"
+                          className="text-gray-700 font-medium text-sm"
                         >
                           Monthly Income
                         </Label>
@@ -394,7 +394,7 @@ export default function AuthPage() {
                           name="monthlyIncome"
                           value={formData.monthlyIncome}
                           onChange={handleInputChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                          className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:border-[#FDCC29] focus:ring-[#FDCC29] mt-2"
                           required
                         >
                           <option value="">Select income range</option>
@@ -413,7 +413,7 @@ export default function AuthPage() {
                       <div>
                         <Label
                           htmlFor="gender"
-                          className="text-gray-700 font-medium"
+                          className="text-gray-700 font-medium text-sm"
                         >
                           Gender
                         </Label>
@@ -422,7 +422,7 @@ export default function AuthPage() {
                           name="gender"
                           value={formData.gender}
                           onChange={handleInputChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                          className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:border-[#FDCC29] focus:ring-[#FDCC29] mt-2"
                           required
                         >
                           <option value="">Select gender</option>
@@ -443,7 +443,7 @@ export default function AuthPage() {
                       <div>
                         <Label
                           htmlFor="isPhysicallyDisabled"
-                          className="text-gray-700 font-medium"
+                          className="text-gray-700 font-medium text-sm"
                         >
                           Are you physically disabled?
                         </Label>
@@ -452,7 +452,7 @@ export default function AuthPage() {
                           name="isPhysicallyDisabled"
                           value={formData.isPhysicallyDisabled}
                           onChange={handleInputChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                          className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:border-[#FDCC29] focus:ring-[#FDCC29] mt-2"
                           required
                         >
                           <option value="">Select option</option>
@@ -467,7 +467,7 @@ export default function AuthPage() {
                       <div>
                         <Label
                           htmlFor="maritalStatus"
-                          className="text-gray-700 font-medium"
+                          className="text-gray-700 font-medium text-sm"
                         >
                           Marital Status
                         </Label>
@@ -476,7 +476,7 @@ export default function AuthPage() {
                           name="maritalStatus"
                           value={formData.maritalStatus}
                           onChange={handleInputChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                          className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:border-[#FDCC29] focus:ring-[#FDCC29] mt-2"
                           required
                         >
                           <option value="">Select marital status</option>
@@ -498,7 +498,7 @@ export default function AuthPage() {
                       <div>
                         <Label
                           htmlFor="area"
-                          className="text-gray-700 font-medium"
+                          className="text-gray-700 font-medium text-sm"
                         >
                           Area/Location
                         </Label>
@@ -509,7 +509,7 @@ export default function AuthPage() {
                           placeholder="Enter your city/area"
                           value={formData.area}
                           onChange={handleInputChange}
-                          className="border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                          className="py-3 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29] rounded-lg mt-2"
                           required
                         />
                       </div>
@@ -522,11 +522,11 @@ export default function AuthPage() {
                       <div>
                         <Label
                           htmlFor="email"
-                          className="text-gray-700 font-medium"
+                          className="text-gray-700 font-medium text-sm"
                         >
                           Email Address
                         </Label>
-                        <div className="relative mt-1">
+                        <div className="relative mt-2">
                           <Input
                             id="email"
                             name="email"
@@ -534,7 +534,7 @@ export default function AuthPage() {
                             placeholder="Enter your email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className="pl-10 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                            className="pl-10 py-3 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29] rounded-lg"
                             required
                           />
                           <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -544,11 +544,11 @@ export default function AuthPage() {
                       <div>
                         <Label
                           htmlFor="password"
-                          className="text-gray-700 font-medium"
+                          className="text-gray-700 font-medium text-sm"
                         >
                           Password
                         </Label>
-                        <div className="relative mt-1">
+                        <div className="relative mt-2">
                           <Input
                             id="password"
                             name="password"
@@ -556,7 +556,7 @@ export default function AuthPage() {
                             placeholder="Enter your password"
                             value={formData.password}
                             onChange={handleInputChange}
-                            className="pl-10 pr-10 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29]"
+                            className="pl-10 pr-10 py-3 border-gray-300 focus:border-[#FDCC29] focus:ring-[#FDCC29] rounded-lg"
                             required
                           />
                           <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -574,24 +574,24 @@ export default function AuthPage() {
                         </div>
                       </div>
 
-                    <div className="flex justify-end">
-                      <button
-                        type="button"
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
                           className="text-sm text-[#FDCC29] hover:text-[#2D3748] font-medium"
-                      >
-                        Forgot Password?
-                      </button>
-                    </div>
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
                     </>
                   )}
 
                   {/* Navigation Buttons */}
-                  <div className="flex space-x-3">
+                  <div className="flex space-x-4 mt-8">
                     {isSignUp && currentStep > 1 && (
                       <Button
                         type="button"
                         onClick={prevStep}
-                        className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-lg font-medium transition-all duration-300"
+                        className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-4 rounded-lg font-medium transition-all duration-300"
                       >
                         Previous
                       </Button>
@@ -602,30 +602,30 @@ export default function AuthPage() {
                         type="button"
                         onClick={nextStep}
                         disabled={!isStepValid(currentStep)}
-                        className="flex-1 bg-[#FDCC29] hover:bg-[#2D3748] disabled:bg-gray-400 disabled:cursor-not-allowed text-[#2D3748] hover:text-white py-3 rounded-lg font-medium transition-all duration-300"
+                        className="flex-1 bg-[#FDCC29] hover:bg-[#2D3748] disabled:bg-gray-400 disabled:cursor-not-allowed text-[#2D3748] hover:text-white py-4 rounded-lg font-medium transition-all duration-300"
                       >
                         Next
                       </Button>
                     ) : (
-                  <Button
-                    type="submit"
+                      <Button
+                        type="submit"
                         disabled={
                           loading || (isSignUp && !isStepValid(currentStep))
                         }
-                        className="flex-1 bg-[#FDCC29] hover:bg-[#2D3748] disabled:bg-gray-400 disabled:cursor-not-allowed text-[#2D3748] hover:text-white py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center"
-                  >
-                    {loading ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                        {isSignUp ? "Creating Account..." : "Signing In..."}
-                      </>
-                    ) : (
-                      <>
-                        {isSignUp ? "Create Account" : "Sign In"}
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </>
-                    )}
-                  </Button>
+                        className="flex-1 bg-[#FDCC29] hover:bg-[#2D3748] disabled:bg-gray-400 disabled:cursor-not-allowed text-[#2D3748] hover:text-white py-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center"
+                      >
+                        {loading ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                            {isSignUp ? "Creating Account..." : "Signing In..."}
+                          </>
+                        ) : (
+                          <>
+                            {isSignUp ? "Create Account" : "Sign In"}
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </>
+                        )}
+                      </Button>
                     )}
                   </div>
                 </form>
@@ -650,46 +650,34 @@ export default function AuthPage() {
         </div>
 
         {/* Right Section - Promotional Content */}
-        <div className="flex-1 bg-gradient-to-br from-[#2D3748] to-[#1A202C] relative overflow-hidden hidden lg:flex">
-          {/* Background Elements */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#FDCC29]/20 rounded-full -translate-y-48 translate-x-48"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FDCC29]/10 rounded-full translate-y-32 -translate-x-32"></div>
-          <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-[#FDCC29]/5 rounded-full -translate-x-16 -translate-y-16"></div>
-
-          {/* Decorative Icons */}
-          <div className="absolute top-20 right-20 w-16 h-16 opacity-20">
-            <img
-              src="/bulb.png"
-              alt="Decorative bulb"
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <div className="absolute bottom-20 left-20 w-12 h-12 opacity-15">
-            <img
-              src="/bulb (1).png"
-              alt="Decorative bulb"
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <div className="absolute top-1/3 right-1/3 w-8 h-8 opacity-10">
-            <img
-              src="/Group 482166.png"
-              alt="Decorative icon"
-              className="w-full h-full object-contain"
-            />
+        <div className="flex-1 bg-[#FDCC29] relative overflow-hidden hidden lg:flex">
+          {/* Decorative Circles - matching landing page style */}
+          <div className="absolute inset-0">
+            <div className="absolute top-4 left-8 w-16 h-16 bg-[#061F59] rounded-full opacity-20"></div>
+            <div className="absolute top-8 left-16 w-8 h-8 bg-[#061F59] rounded-full opacity-30"></div>
+            <div className="absolute bottom-6 left-12 w-12 h-12 bg-[#061F59] rounded-full opacity-25"></div>
+            <div className="absolute top-6 right-12 w-10 h-10 bg-[#061F59] rounded-full opacity-20"></div>
+            <div className="absolute bottom-8 right-8 w-6 h-6 bg-[#061F59] rounded-full opacity-30"></div>
+            <div className="absolute top-1/2 right-16 w-14 h-14 bg-[#061F59] rounded-full opacity-15"></div>
           </div>
 
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative z-10 flex flex-col justify-center h-full p-12 text-white"
+            className="relative z-10 flex flex-col justify-center h-full p-12 text-[#061F59]"
           >
             <div className="max-w-lg">
-              <h2 className="text-4xl font-bold mb-6 leading-tight">
+              <h2
+                className="text-4xl font-bold mb-6 leading-tight"
+                style={{ fontFamily: "Nunito, sans-serif" }}
+              >
                 Unlock Your Business Potential
               </h2>
-              <p className="text-lg text-gray-200 mb-8 leading-relaxed">
+              <p
+                className="text-lg text-[#061F59]/80 mb-8 leading-relaxed"
+                style={{ fontFamily: "Nunito, sans-serif" }}
+              >
                 Access comprehensive business plans, market research, and
                 funding guides for thousands of profitable business ideas.
               </p>
@@ -697,60 +685,66 @@ export default function AuthPage() {
               {/* Features List */}
               <div className="space-y-4 mb-8">
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-[#FDCC29] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 bg-[#061F59] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <img
                       src="/file.svg"
                       alt="Document"
                       className="w-4 h-4"
                       style={{
                         filter:
-                          "brightness(0) saturate(100%) invert(20%) sepia(8%) saturate(1038%) hue-rotate(169deg) brightness(95%) contrast(89%)",
+                          "brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)",
                       }}
                     />
                   </div>
-                  <p className="text-gray-200">
+                  <p className="text-[#061F59]/90">
                     Detailed market analysis and growth projections
                   </p>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-[#FDCC29] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <TrendingUp className="w-4 h-4 text-[#2D3748]" />
+                  <div className="w-6 h-6 bg-[#061F59] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <TrendingUp className="w-4 h-4 text-white" />
                   </div>
-                  <p className="text-gray-200">
+                  <p className="text-[#061F59]/90">
                     Investment breakdowns and funding options
                   </p>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-[#FDCC29] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 bg-[#061F59] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <img src="/bulb.png" alt="Lightbulb" className="w-4 h-4" />
                   </div>
-                  <p className="text-gray-200">
+                  <p className="text-[#061F59]/90">
                     Expert guidance and business plan templates
                   </p>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-[#FDCC29] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 bg-[#061F59] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <img src="/globe.svg" alt="Global" className="w-4 h-4" />
                   </div>
-                  <p className="text-gray-200">
+                  <p className="text-[#061F59]/90">
                     Government schemes and subsidy information
                   </p>
                 </div>
               </div>
 
               {/* Featured Business Ideas Card */}
-              <Card className="bg-[#FDCC29]/10 border-[#FDCC29]/30 backdrop-blur-sm">
+              <Card className="bg-white/90 border border-[#061F59]/20 shadow-lg">
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3
+                    className="text-xl font-semibold text-[#061F59] mb-2"
+                    style={{ fontFamily: "Nunito, sans-serif" }}
+                  >
                     Featured Business Ideas
                   </h3>
                   <div className="flex items-baseline space-x-2 mb-2">
-                    <span className="text-3xl font-bold text-[#FDCC29]">
+                    <span
+                      className="text-3xl font-bold text-[#FDCC29]"
+                      style={{ fontFamily: "Nunito, sans-serif" }}
+                    >
                       10,000+
                     </span>
-                    <span className="text-gray-300">ideas</span>
+                    <span className="text-[#061F59]/70">ideas</span>
                   </div>
-                  <p className="text-gray-200 text-sm">
+                  <p className="text-[#061F59]/80 text-sm">
                     From traditional bakeries to tech startups, discover
                     opportunities across all industries.
                   </p>

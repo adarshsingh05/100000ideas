@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const STORAGE_KEY = "ideaViews";
-const MAX_FREE_VIEWS = 10;
+const MAX_FREE_VIEWS = 5;
 
 export const useIdeaAccess = () => {
   const [viewCount, setViewCount] = useState(0);

@@ -77,7 +77,11 @@ const getRandomDifficulty = () => {
 };
 
 // Featured Ideas Carousel Component
-function FeaturedIdeasCarousel() {
+function FeaturedIdeasCarousel({
+  hasAccess,
+  incrementView,
+  onShowPremiumModal,
+}) {
   const [featuredIdeas, setFeaturedIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -105,6 +109,16 @@ function FeaturedIdeasCarousel() {
   }, []);
 
   const handleCardClick = (idea) => {
+    // Check if user has access to view featured ideas
+    if (!hasAccess) {
+      // Show premium modal if no free views left
+      onShowPremiumModal();
+      return;
+    }
+
+    // Count view only for featured ideas
+    incrementView();
+
     // Route based on whether it's a static idea or community idea
     if (idea.isStaticIdea) {
       // This is a static idea
@@ -1693,7 +1707,11 @@ export default function Home() {
                   </p>
                 </div>
 
-                <FeaturedIdeasCarousel />
+                <FeaturedIdeasCarousel
+                  hasAccess={hasAccess}
+                  incrementView={incrementView}
+                  onShowPremiumModal={() => setShowPremiumModal(true)}
+                />
               </div>
 
               {/* Separator with Description */}

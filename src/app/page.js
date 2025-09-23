@@ -25,6 +25,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DynamicBanner from "@/components/DynamicBanner";
+import TrendTicker from "@/components/TrendTicker";
 import {
   Building2,
   Smartphone,
@@ -1344,6 +1345,9 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedInvestment, setSelectedInvestment] = useState("");
+  const [selectedClassifiedTab, setSelectedClassifiedTab] =
+    useState("featured");
+  const [selectedResourceTab, setSelectedResourceTab] = useState("templates");
 
   const { viewCount, hasAccess, incrementView, remainingViews, isClient } =
     useIdeaAccess();
@@ -1363,8 +1367,8 @@ export default function Home() {
     <div className="min-h-screen bg-[#FCFCFC]">
       <Navbar />
 
-      {/* Hero Section with Integrated Banner */}
-      <div className="relative w-full bg-[#FDCC29] py-6 sm:py-12 overflow-hidden">
+      {/* Hero Section with Icon Cards and Banner */}
+      <div className="relative w-full bg-[#FDCC29] py-6 sm:py-8 overflow-hidden">
         {/* Decorative Circles */}
         <div className="absolute inset-0">
           <div className="absolute top-4 left-8 w-16 h-16 bg-[#061F59] rounded-full opacity-20"></div>
@@ -1375,155 +1379,240 @@ export default function Home() {
           <div className="absolute top-1/2 right-16 w-14 h-14 bg-[#061F59] rounded-full opacity-15"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 ">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Side - Main Content */}
-            <div className="text-center lg:text-left">
-              {/* Main Heading */}
-              <h1
-                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#061F59] mb-4 leading-tight"
-                style={{ fontFamily: "Nunito, sans-serif" }}
-              >
-                Discover 10,000+ Business Ideas
-              </h1>
-
-              {/* Subheading */}
-              <p
-                className="text-lg sm:text-xl text-[#061F59]/80 mb-6 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
-                style={{ fontFamily: "Nunito, sans-serif" }}
-              >
-                Find the perfect business opportunity that matches your skills
-                and investment capacity
-              </p>
-
-              {/* CTA Button */}
-              <div className="mb-6">
-                <Button
-                  onClick={() => (window.location.href = "/ideas")}
-                  className="bg-[#061F59] hover:bg-[#061F59]/90 text-white px-8 py-3 text-lg font-bold rounded-lg shadow-lg transition-all duration-300 hover:scale-105"
-                  style={{ fontFamily: "Nunito, sans-serif" }}
-                >
-                  Get Started
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
+        <div className="relative z-10 max-w-7xl mx-auto px-4">
+          {/* Icon Cards Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3 mb-6">
+            {/* Technology */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="group cursor-pointer"
+              onClick={() =>
+                (window.location.href = "/categories?filter=Technology")
+              }
+            >
+              <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center group-hover:from-[#061F59]/10 group-hover:to-[#061F59]/20 transition-all duration-300">
+                  <img
+                    src="/technology.png"
+                    alt="Technology"
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                  />
+                </div>
+                <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#061F59] transition-colors">
+                  Technology
+                </h3>
               </div>
+            </motion.div>
 
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm mb-6">
-                <div className="flex items-center space-x-1 bg-[#061F59]/10 rounded-full px-4 py-2">
-                  <Star className="w-4 h-4 text-[#061F59]" />
-                  <span className="text-[#061F59] font-medium">
-                    4.9/5 Rating
-                  </span>
+            {/* Food & Beverages */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="group cursor-pointer"
+              onClick={() =>
+                (window.location.href = "/categories?filter=Food & Beverages")
+              }
+            >
+              <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg flex items-center justify-center group-hover:from-[#061F59]/10 group-hover:to-[#061F59]/20 transition-all duration-300">
+                  <img
+                    src="/foodandbeverages.png"
+                    alt="Food & Beverages"
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                  />
                 </div>
-                <div className="flex items-center space-x-1 bg-[#061F59]/10 rounded-full px-4 py-2">
-                  <Users className="w-4 h-4 text-[#061F59]" />
-                  <span className="text-[#061F59] font-medium">50K+ Users</span>
+                <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#061F59] transition-colors">
+                  Food & Beverages
+                </h3>
+              </div>
+            </motion.div>
+
+            {/* Fashion */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="group cursor-pointer"
+              onClick={() =>
+                (window.location.href = "/categories?filter=Fashion")
+              }
+            >
+              <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg flex items-center justify-center group-hover:from-[#061F59]/10 group-hover:to-[#061F59]/20 transition-all duration-300">
+                  <img
+                    src="/fashion.png"
+                    alt="Fashion"
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                  />
                 </div>
-                <div className="flex items-center space-x-1 bg-[#061F59]/10 rounded-full px-4 py-2">
-                  <Award className="w-4 h-4 text-[#061F59]" />
-                  <span className="text-[#061F59] font-medium">
-                    Success Stories
-                  </span>
+                <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#061F59] transition-colors">
+                  Fashion
+                </h3>
+              </div>
+            </motion.div>
+
+            {/* Agriculture */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="group cursor-pointer"
+              onClick={() =>
+                (window.location.href = "/categories?filter=Agriculture")
+              }
+            >
+              <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center group-hover:from-[#061F59]/10 group-hover:to-[#061F59]/20 transition-all duration-300">
+                  <img
+                    src="/agriculture.png"
+                    alt="Agriculture"
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                  />
+                </div>
+                <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#061F59] transition-colors">
+                  Agriculture
+                </h3>
+              </div>
+            </motion.div>
+
+            {/* Manufacturing */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="group cursor-pointer"
+              onClick={() =>
+                (window.location.href = "/categories?filter=Manufacturing")
+              }
+            >
+              <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg flex items-center justify-center group-hover:from-[#061F59]/10 group-hover:to-[#061F59]/20 transition-all duration-300">
+                  <img
+                    src="/manufacturing.png"
+                    alt="Manufacturing"
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                  />
+                </div>
+                <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#061F59] transition-colors">
+                  Manufacturing
+                </h3>
+              </div>
+            </motion.div>
+
+            {/* For Women */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="group cursor-pointer"
+              onClick={() =>
+                (window.location.href = "/categories?filter=For Women")
+              }
+            >
+              <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg flex items-center justify-center group-hover:from-[#061F59]/10 group-hover:to-[#061F59]/20 transition-all duration-300">
+                  <img
+                    src="/forwomen.png"
+                    alt="For Women"
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                  />
+                </div>
+                <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#061F59] transition-colors">
+                  For Women
+                </h3>
+              </div>
+            </motion.div>
+
+            {/* Startup Ideas */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="group cursor-pointer"
+              onClick={() => (window.location.href = "/ideas")}
+            >
+              <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg flex items-center justify-center group-hover:from-[#061F59]/10 group-hover:to-[#061F59]/20 transition-all duration-300">
+                  <img
+                    src="/startupideas.png"
+                    alt="Startup Ideas"
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                  />
+                </div>
+                <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#061F59] transition-colors">
+                  Startup Ideas
+                </h3>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative mb-4">
+            {/* Sleek Search Bar */}
+            <div className="bg-white rounded-xl p-3 shadow-lg border border-[#061F59]/20 max-w-2xl mx-auto">
+              <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                {/* Search Input */}
+                <div className="flex-1 w-full">
+                  <div className="bg-gray-50 rounded-full shadow-sm overflow-hidden">
+                    <div className="flex items-center px-4 py-2">
+                      <img
+                        src="/searchicon.png"
+                        alt="Search"
+                        className="w-4 h-4 mr-3"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Search business ideas, categories, or keywords..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="flex-1 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none text-sm font-medium"
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                            handleSearch();
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Filter Icons */}
+                <div className="flex items-center space-x-3">
+                  <Filter className="w-4 h-4 text-[#061F59] opacity-70 hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
+                  <SlidersHorizontal className="w-4 h-4 text-[#061F59] opacity-70 hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
                 </div>
               </div>
-            </div>
-
-            {/* Right Side - Dynamic Banner */}
-            <div className="relative">
-              <DynamicBanner />
             </div>
           </div>
 
-          {/* Search Section Inside Hero Banner */}
-          <div className="mt-8 pb-1 sm:pb-[-30px]">
-            <div className="relative max-w-4xl mx-auto">
-              {/* Sleek Tilted Banner - Crown Effect */}
-              {isClient && (
-                <div className="absolute -top-1 -left-10 z-20">
-                  <div
-                    className="bg-gradient-to-r from-[#061F59] to-[#0A2A6B] text-white px-4 py-2 text-xs font-bold shadow-xl transform -rotate-12 rounded-md border border-[#FDCC29]/30"
-                    style={{
-                      clipPath: "polygon(0 0, 90% 0, 100% 100%, 10% 100%)",
-                      minWidth: "110px",
-                    }}
-                  >
-                    {viewCount > 0 ? (
-                      hasAccess ? (
-                        <span className="flex items-center justify-center">
-                          <span className="text-white font-bold text-xs">
-                            {remainingViews}
-                          </span>
-                          <span className="ml-1 text-white/90 text-xs">
-                            Views remaining
-                          </span>
-                        </span>
-                      ) : (
-                        <span className="flex items-center justify-center px-1">
-                          <span className="text-white font-bold text-xs">
-                            No free views left
-                          </span>
-                          <span className="ml-1 text-[#FDCC29] font-bold text-xs">
-                            - Upgrade now
-                          </span>
-                        </span>
-                      )
-                    ) : (
-                      <span className="flex items-center justify-center px-1">
-                        <span className="text-white font-bold text-xs">
-                          Free Access
-                        </span>
-                        <span className="ml-1 text-white/90 text-xs">
-                          - Start exploring
-                        </span>
+          {/* Free Views Banner */}
+          {isClient && (
+            <div className="flex justify-center mb-6">
+              <div className="bg-gradient-to-r from-[#061F59] to-[#0A2A6B] text-white px-4 py-2 text-sm font-bold shadow-lg rounded-lg border border-[#FDCC29]/30">
+                {viewCount > 0 ? (
+                  hasAccess ? (
+                    <span className="flex items-center justify-center">
+                      <span className="text-white font-bold">
+                        {remainingViews}
                       </span>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Search Component Inside Hero */}
-              <div className="bg-white rounded-2xl p-4 shadow-lg border-2 border-[#061F59]/20">
-                <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                  {/* Search Input */}
-                  <div className="flex-1 w-full">
-                    <div className="bg-gray-50 rounded-full shadow-sm overflow-hidden">
-                      <div className="flex items-center px-4 sm:px-6 py-3 sm:py-4">
-                        <img
-                          src="/searchicon.png"
-                          alt="Search"
-                          className="w-4 h-4 sm:w-5 sm:h-5 mr-3 sm:mr-4"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Search business ideas, categories, or keywords..."
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="flex-1 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none text-sm sm:text-base font-medium"
-                          onKeyPress={(e) => {
-                            if (e.key === "Enter") {
-                              handleSearch();
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Filter Icons */}
-                  <div className="flex items-center space-x-4">
-                    <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-[#061F59] opacity-70 hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
-                    <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5 text-[#061F59] opacity-70 hover:opacity-100 transition-opacity duration-300 cursor-pointer" />
-                  </div>
-                </div>
-
-                {/* Category Quick Filters */}
+                      <span className="ml-2 text-white/90">
+                        Views remaining
+                      </span>
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center">
+                      <span className="text-white font-bold">
+                        No free views left
+                      </span>
+                      <span className="ml-2 text-[#FDCC29] font-bold">
+                        - Upgrade now
+                      </span>
+                    </span>
+                  )
+                ) : (
+                  <span className="flex items-center justify-center">
+                    <span className="text-white font-bold">Free Access</span>
+                    <span className="ml-2 text-white/90">
+                      - Start exploring
+                    </span>
+                  </span>
+                )}
               </div>
-
-              {/* Decorative Elements */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#061F59]/20 rounded-full"></div>
-              <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-[#061F59]/20 rounded-full"></div>
             </div>
+          )}
+
+          {/* Banner Carousel - Full Width */}
+          <div className="w-full">
+            <DynamicBanner />
           </div>
         </div>
       </div>
@@ -1532,169 +1621,6 @@ export default function Home() {
       {/* Main Content Container */}
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="w-full">
-          {/* Categories Section */}
-          <div className="mb-12">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              {/* Categories Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
-                {/* Technology */}
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="group cursor-pointer"
-                  onClick={() =>
-                    (window.location.href = "/categories?filter=Technology")
-                  }
-                >
-                  <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#FDCC29]/30">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl flex items-center justify-center group-hover:from-[#FDCC29]/10 group-hover:to-[#FDCC29]/20 transition-all duration-300">
-                      <img
-                        src="/technology.png"
-                        alt="Technology"
-                        className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                      />
-                    </div>
-                    <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                      Technology
-                    </h3>
-                  </div>
-                </motion.div>
-
-                {/* For Women */}
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="group cursor-pointer"
-                  onClick={() =>
-                    (window.location.href = "/categories?filter=For Women")
-                  }
-                >
-                  <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#FDCC29]/30">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl flex items-center justify-center group-hover:from-[#FDCC29]/10 group-hover:to-[#FDCC29]/20 transition-all duration-300">
-                      <img
-                        src="/forwomen.png"
-                        alt="For Women"
-                        className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                      />
-                    </div>
-                    <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                      For Women
-                    </h3>
-                  </div>
-                </motion.div>
-
-                {/* Startup Ideas */}
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="group cursor-pointer"
-                  onClick={() =>
-                    (window.location.href = "/categories?filter=Startup Ideas")
-                  }
-                >
-                  <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#FDCC29]/30">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 bg-gradient-to-br from-green-50 to-green-100 rounded-xl flex items-center justify-center group-hover:from-[#FDCC29]/10 group-hover:to-[#FDCC29]/20 transition-all duration-300">
-                      <img
-                        src="/startupideas.png"
-                        alt="Startup Ideas"
-                        className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                      />
-                    </div>
-                    <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                      Startup Ideas
-                    </h3>
-                  </div>
-                </motion.div>
-
-                {/* Manufacturing */}
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="group cursor-pointer"
-                  onClick={() =>
-                    (window.location.href = "/categories?filter=Manufacturing")
-                  }
-                >
-                  <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#FDCC29]/30">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center group-hover:from-[#FDCC29]/10 group-hover:to-[#FDCC29]/20 transition-all duration-300">
-                      <img
-                        src="/manufacturing.png"
-                        alt="Manufacturing"
-                        className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                      />
-                    </div>
-                    <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                      Manufacturing
-                    </h3>
-                  </div>
-                </motion.div>
-
-                {/* Agriculture */}
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="group cursor-pointer"
-                  onClick={() =>
-                    (window.location.href = "/categories?filter=Agriculture")
-                  }
-                >
-                  <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#FDCC29]/30">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 bg-gradient-to-br from-green-50 to-green-100 rounded-xl flex items-center justify-center group-hover:from-[#FDCC29]/10 group-hover:to-[#FDCC29]/20 transition-all duration-300">
-                      <img
-                        src="/agriculture.png"
-                        alt="Agriculture"
-                        className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                      />
-                    </div>
-                    <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                      Agriculture
-                    </h3>
-                  </div>
-                </motion.div>
-
-                {/* Food & Beverage */}
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="group cursor-pointer"
-                  onClick={() =>
-                    (window.location.href =
-                      "/categories?filter=Food & Beverage")
-                  }
-                >
-                  <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#FDCC29]/30">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl flex items-center justify-center group-hover:from-[#FDCC29]/10 group-hover:to-[#FDCC29]/20 transition-all duration-300">
-                      <img
-                        src="/foodandbeverages.png"
-                        alt="Food & Beverage"
-                        className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                      />
-                    </div>
-                    <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                      Food & Beverage
-                    </h3>
-                  </div>
-                </motion.div>
-
-                {/* Fashion - Hidden on mobile */}
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="group cursor-pointer hidden sm:block"
-                  onClick={() =>
-                    (window.location.href = "/categories?filter=Fashion")
-                  }
-                >
-                  <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#FDCC29]/30">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl flex items-center justify-center group-hover:from-[#FDCC29]/10 group-hover:to-[#FDCC29]/20 transition-all duration-300">
-                      <img
-                        src="/fashion.png"
-                        alt="Fashion"
-                        className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                      />
-                    </div>
-                    <h3 className="text-xs font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                      Fashion
-                    </h3>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-
           {/* Main Content with Sidebar Layout */}
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Left Content - 75% width */}
@@ -1712,6 +1638,11 @@ export default function Home() {
                   incrementView={incrementView}
                   onShowPremiumModal={() => setShowPremiumModal(true)}
                 />
+              </div>
+
+              {/* Live Market Trend Ticker */}
+              <div className="mb-8">
+                <TrendTicker />
               </div>
 
               {/* Separator with Description */}
@@ -1772,92 +1703,213 @@ export default function Home() {
                       Buy, sell, and trade business opportunities
                     </p>
                   </CardHeader>
-                  <CardContent className="p-4">
-                    <div className="space-y-3">
-                      {/* Featured Classified */}
-                      <div className="bg-gradient-to-r from-[#FDCC29]/10 to-[#FFD700]/10 rounded-xl p-3 border border-[#FDCC29]/20">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <div className="w-6 h-6 bg-[#FDCC29] rounded-lg flex items-center justify-center">
-                            <Star className="w-3 h-3 text-[#2D3748]" />
-                          </div>
-                          <span className="text-sm font-bold text-[#2D3748]">
-                            Featured
-                          </span>
-                          <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
-                            Hot
-                          </span>
-                        </div>
-                        <h4 className="text-sm font-semibold text-[#2D3748] mb-1">
-                          Tech Partnership Opportunity
-                        </h4>
-                        <p className="text-xs text-gray-600 mb-2">
-                          Looking for AI/ML developers for startup collaboration
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-[#FDCC29] font-medium">
-                            2 hours ago
-                          </span>
-                          <span className="text-xs bg-[#FDCC29] text-[#2D3748] px-2 py-1 rounded-full font-semibold">
-                            ₹50K+
-                          </span>
-                        </div>
-                      </div>
+                  <CardContent className="p-0">
+                    {/* Toggle Tabs */}
+                    <div className="flex border-b border-gray-200">
+                      <button
+                        className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                          selectedClassifiedTab === "featured"
+                            ? "bg-gray-100 text-[#2D3748] border-b-2 border-[#FDCC29]"
+                            : "text-gray-600 hover:text-[#2D3748] hover:bg-gray-50"
+                        }`}
+                        onClick={() => setSelectedClassifiedTab("featured")}
+                      >
+                        Featured
+                      </button>
+                      <button
+                        className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                          selectedClassifiedTab === "recent"
+                            ? "bg-gray-100 text-[#2D3748] border-b-2 border-[#FDCC29]"
+                            : "text-gray-600 hover:text-[#2D3748] hover:bg-gray-50"
+                        }`}
+                        onClick={() => setSelectedClassifiedTab("recent")}
+                      >
+                        Recent
+                      </button>
+                      <button
+                        className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                          selectedClassifiedTab === "popular"
+                            ? "bg-gray-100 text-[#2D3748] border-b-2 border-[#FDCC29]"
+                            : "text-gray-600 hover:text-[#2D3748] hover:bg-gray-50"
+                        }`}
+                        onClick={() => setSelectedClassifiedTab("popular")}
+                      >
+                        Popular
+                      </button>
+                    </div>
 
-                      {/* Regular Classifieds */}
-                      {sidebarLinks.classifieds
-                        .slice(0, 3)
-                        .map((item, index) => {
-                          const IconComponent = item.icon;
-                          const statusColors = [
-                            "bg-green-100 text-green-800",
-                            "bg-blue-100 text-blue-800",
-                            "bg-orange-100 text-orange-800",
-                          ];
-                          const statusTexts = ["Active", "New", "Urgent"];
-                          return (
-                            <motion.div
-                              key={index}
-                              whileHover={{ scale: 1.02 }}
-                              className="flex items-start space-x-3 p-3 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#FDCC29]/30"
-                            >
-                              <div className="w-8 h-8 bg-[#FDCC29]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#FDCC29]/30 transition-colors">
-                                <IconComponent className="w-4 h-4 text-[#FDCC29]" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between mb-1">
-                                  <h4 className="text-sm font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                                    {item.title}
-                                  </h4>
-                                  <span
-                                    className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[index]}`}
-                                  >
-                                    {statusTexts[index]}
-                                  </span>
-                                </div>
-                                <p className="text-xs text-gray-600 mb-2 leading-relaxed">
-                                  {item.description}
-                                </p>
-                                <div className="flex items-center justify-between">
-                                  <span className="text-xs text-[#FDCC29] font-medium">
-                                    {item.time}
-                                  </span>
-                                  <div className="flex items-center space-x-1">
-                                    <Eye className="w-3 h-3 text-gray-400" />
-                                    <span className="text-xs text-gray-500">
-                                      {Math.floor(Math.random() * 50) + 10}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </motion.div>
-                          );
-                        })}
+                    {/* Classified Listings */}
+                    <div className="p-4">
+                      {selectedClassifiedTab === "featured" && (
+                        <div className="space-y-0">
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() =>
+                              window.open("/ideas/featured", "_blank")
+                            }
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Tech Partnership Opportunity - AI/ML Startup
+                              Collaboration
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              E-commerce Platform for Local Artisans -
+                              Investment Opportunity
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() =>
+                              window.open("/community-ideas", "_blank")
+                            }
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Sustainable Agriculture Business Model - Community
+                              Driven
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/categories", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Food Delivery Service for Rural Areas - Franchise
+                              Available
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Digital Marketing Agency - Partnership Opportunity
+                            </div>
+                          </motion.div>
+                        </div>
+                      )}
+
+                      {selectedClassifiedTab === "recent" && (
+                        <div className="space-y-0">
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Mobile App Development - Looking for Co-founder
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() =>
+                              window.open("/community-ideas", "_blank")
+                            }
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Online Education Platform - Seeking Investors
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Health Tech Startup - Partnership Available
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/categories", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Renewable Energy Solutions - Business Opportunity
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Fintech Innovation - Investment Round Open
+                            </div>
+                          </motion.div>
+                        </div>
+                      )}
+
+                      {selectedClassifiedTab === "popular" && (
+                        <div className="space-y-0">
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() =>
+                              window.open("/ideas/featured", "_blank")
+                            }
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              AI-Powered Business Analytics - Hot Opportunity
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              E-commerce Automation Tools - High Demand
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() =>
+                              window.open("/community-ideas", "_blank")
+                            }
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Social Media Marketing Agency - Trending
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/categories", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Cloud Computing Services - Growing Market
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Blockchain Technology Solutions - Popular Choice
+                            </div>
+                          </motion.div>
+                        </div>
+                      )}
 
                       {/* View All Button */}
-                      <div className="pt-2 border-t border-gray-200">
+                      <div className="pt-3 mt-3 border-t border-gray-200">
                         <motion.div
                           whileHover={{ scale: 1.02 }}
                           className="flex items-center justify-center space-x-2 p-2 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group"
+                          onClick={() => window.open("/ideas", "_blank")}
                         >
                           <span className="text-sm font-medium text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
                             View All Classifieds
@@ -1890,127 +1942,262 @@ export default function Home() {
                       Free templates, guides, and tools for entrepreneurs
                     </p>
                   </CardHeader>
-                  <CardContent className="p-4">
-                    <div className="space-y-3">
-                      {/* Quick Stats */}
-                      <div className="bg-gradient-to-r from-[#061F59]/10 to-[#0A2A6B]/10 rounded-xl p-3 border border-[#061F59]/20">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <BarChart3 className="w-4 h-4 text-[#061F59]" />
-                          <span className="text-sm font-bold text-[#2D3748]">
-                            Quick Stats
-                          </span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-[#FDCC29]">
-                              150+
-                            </div>
-                            <div className="text-xs text-gray-600">
-                              Templates
-                            </div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-[#FDCC29]">
-                              25K+
-                            </div>
-                            <div className="text-xs text-gray-600">
-                              Downloads
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                  <CardContent className="p-0">
+                    {/* Toggle Tabs */}
+                    <div className="flex border-b border-gray-200">
+                      <button
+                        className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                          selectedResourceTab === "templates"
+                            ? "bg-gray-100 text-[#2D3748] border-b-2 border-[#FDCC29]"
+                            : "text-gray-600 hover:text-[#2D3748] hover:bg-gray-50"
+                        }`}
+                        onClick={() => setSelectedResourceTab("templates")}
+                      >
+                        Templates
+                      </button>
+                      <button
+                        className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                          selectedResourceTab === "guides"
+                            ? "bg-gray-100 text-[#2D3748] border-b-2 border-[#FDCC29]"
+                            : "text-gray-600 hover:text-[#2D3748] hover:bg-gray-50"
+                        }`}
+                        onClick={() => setSelectedResourceTab("guides")}
+                      >
+                        Guides
+                      </button>
+                      <button
+                        className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                          selectedResourceTab === "tools"
+                            ? "bg-gray-100 text-[#2D3748] border-b-2 border-[#FDCC29]"
+                            : "text-gray-600 hover:text-[#2D3748] hover:bg-gray-50"
+                        }`}
+                        onClick={() => setSelectedResourceTab("tools")}
+                      >
+                        Tools
+                      </button>
+                      <button
+                        className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                          selectedResourceTab === "stories"
+                            ? "bg-gray-100 text-[#2D3748] border-b-2 border-[#FDCC29]"
+                            : "text-gray-600 hover:text-[#2D3748] hover:bg-gray-50"
+                        }`}
+                        onClick={() => setSelectedResourceTab("stories")}
+                      >
+                        Stories
+                      </button>
+                    </div>
 
-                      {/* Featured Resource */}
-                      <div className="bg-gradient-to-r from-[#FDCC29]/10 to-[#FFD700]/10 rounded-xl p-3 border border-[#FDCC29]/20">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <div className="w-6 h-6 bg-[#FDCC29] rounded-lg flex items-center justify-center">
-                            <FileText className="w-3 h-3 text-[#2D3748]" />
-                          </div>
-                          <span className="text-sm font-bold text-[#2D3748]">
-                            Featured
-                          </span>
-                          <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">
-                            New
-                          </span>
-                        </div>
-                        <h4 className="text-sm font-semibold text-[#2D3748] mb-1">
-                          Business Plan Template 2024
-                        </h4>
-                        <p className="text-xs text-gray-600 mb-2">
-                          Complete startup business plan with financial
-                          projections
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-1">
-                            <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                            <span className="text-xs text-gray-600">
-                              4.9 (120)
-                            </span>
-                          </div>
-                          <span className="text-xs bg-[#FDCC29] text-[#2D3748] px-2 py-1 rounded-full font-semibold">
-                            Free
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Regular Resources */}
-                      {sidebarLinks.resources.slice(0, 2).map((item, index) => {
-                        const IconComponent = item.icon;
-                        const resourceTypes = [
-                          "PDF",
-                          "Template",
-                          "Guide",
-                          "Tool",
-                        ];
-                        const ratings = [4.8, 4.6, 4.7, 4.9];
-                        return (
+                    {/* Resource Listings */}
+                    <div className="p-4">
+                      {selectedResourceTab === "templates" && (
+                        <div className="space-y-0">
                           <motion.div
-                            key={index}
-                            whileHover={{ scale: 1.02 }}
-                            className="flex items-start space-x-3 p-3 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-[#FDCC29]/30"
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
                           >
-                            <div className="w-8 h-8 bg-[#FDCC29]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#FDCC29]/30 transition-colors">
-                              <IconComponent className="w-4 h-4 text-[#FDCC29]" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between mb-1">
-                                <h4 className="text-sm font-semibold text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                                  {item.title}
-                                </h4>
-                                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-semibold">
-                                  {resourceTypes[index]}
-                                </span>
-                              </div>
-                              <p className="text-xs text-gray-600 mb-2 leading-relaxed">
-                                {item.description}
-                              </p>
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-1">
-                                  <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                                  <span className="text-xs text-gray-600">
-                                    {ratings[index]} (45)
-                                  </span>
-                                </div>
-                                <div className="flex items-center space-x-1">
-                                  <Download className="w-3 h-3 text-gray-400" />
-                                  <span className="text-xs text-gray-500">
-                                    {Math.floor(Math.random() * 500) + 50}
-                                  </span>
-                                </div>
-                              </div>
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Business Plan Template - Complete Startup Guide
                             </div>
                           </motion.div>
-                        );
-                      })}
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Financial Projection Template - Revenue Models
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Pitch Deck Template - Investor Presentation
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Marketing Strategy Template - Growth Plans
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Legal Document Templates - Contracts & Agreements
+                            </div>
+                          </motion.div>
+                        </div>
+                      )}
+
+                      {selectedResourceTab === "guides" && (
+                        <div className="space-y-0">
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Startup Funding Guide - Investment Strategies
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Market Research Guide - Customer Analysis
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Product Development Guide - MVP Creation
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Digital Marketing Guide - Online Growth
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Scaling Business Guide - Growth Strategies
+                            </div>
+                          </motion.div>
+                        </div>
+                      )}
+
+                      {selectedResourceTab === "tools" && (
+                        <div className="space-y-0">
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Business Model Canvas Tool - Strategy Planning
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Financial Calculator - Revenue Projections
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Competitor Analysis Tool - Market Research
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Customer Persona Builder - Target Audience
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              ROI Calculator - Investment Analysis
+                            </div>
+                          </motion.div>
+                        </div>
+                      )}
+
+                      {selectedResourceTab === "stories" && (
+                        <div className="space-y-0">
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Success Story - From Idea to $1M Revenue
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Failure Lessons - What Went Wrong & Why
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Pivot Success - How We Changed Direction
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Funding Journey - From Bootstrap to Series A
+                            </div>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ backgroundColor: "#f8f9fa" }}
+                            className="py-3 px-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => window.open("/ideas", "_blank")}
+                          >
+                            <div className="text-sm font-medium text-[#2D3748] leading-relaxed">
+                              Team Building - Finding the Right Co-founders
+                            </div>
+                          </motion.div>
+                        </div>
+                      )}
 
                       {/* View All Button */}
-                      <div className="pt-2 border-t border-gray-200">
+                      <div className="pt-3 mt-3 border-t border-gray-200">
                         <motion.div
                           whileHover={{ scale: 1.02 }}
                           className="flex items-center justify-center space-x-2 p-2 rounded-lg hover:bg-[#FDCC29]/10 transition-all duration-300 cursor-pointer group"
+                          onClick={() => window.open("/ideas", "_blank")}
                         >
                           <span className="text-sm font-medium text-[#2D3748] group-hover:text-[#FDCC29] transition-colors">
-                            Browse All Resources
+                            View All Resources
                           </span>
                           <ArrowRight className="w-3 h-3 text-[#FDCC29] group-hover:translate-x-1 transition-transform" />
                         </motion.div>

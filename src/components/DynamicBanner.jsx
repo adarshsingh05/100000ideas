@@ -41,8 +41,8 @@ export default function DynamicBanner() {
 
   if (loading) {
     return (
-      <div className="relative">
-        <div className="bg-gradient-to-br from-[#061F59] to-[#0A2A6B] rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl border border-[#FDCC29]/20 overflow-hidden relative min-h-[300px] lg:min-h-[400px] w-[calc(100%+80px)] -mx-9 sm:-mx-11 lg:-mx-13 ring-1 ring-[#FDCC29]/10 animate-pulse">
+      <div className="relative w-full">
+        <div className="bg-gradient-to-br from-[#061F59] to-[#0A2A6B] rounded-3xl p-6 lg:p-8 shadow-2xl border border-[#FDCC29]/20 overflow-hidden relative min-h-[280px] lg:min-h-[350px] w-full ring-1 ring-[#FDCC29]/10 animate-pulse">
           <div className="flex items-center justify-center h-full">
             <div className="text-white text-lg">Loading banner...</div>
           </div>
@@ -54,8 +54,8 @@ export default function DynamicBanner() {
   if (banners.length === 0) {
     // Fallback banner if no banners in database
     return (
-      <div className="relative">
-        <div className="bg-gradient-to-br from-[#061F59] to-[#0A2A6B] rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl border border-[#FDCC29]/20 overflow-hidden relative min-h-[300px] lg:min-h-[400px] w-[calc(100%+80px)] -mx-9 sm:-mx-11 lg:-mx-13 ring-1 ring-[#FDCC29]/10">
+      <div className="relative w-full">
+        <div className="bg-gradient-to-br from-[#061F59] to-[#0A2A6B] rounded-3xl p-6 lg:p-8 shadow-2xl border border-[#FDCC29]/20 overflow-hidden relative min-h-[280px] lg:min-h-[350px] w-full ring-1 ring-[#FDCC29]/10">
           {/* Decorative Spotlights */}
           <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-[#FDCC29]/15 to-transparent"></div>
           <div className="absolute top-2 left-4 w-12 h-12 bg-[#FDCC29]/20 rounded-full blur-sm"></div>
@@ -75,7 +75,7 @@ export default function DynamicBanner() {
             <div className="absolute top-24 left-0 w-full h-px bg-[#FDCC29]"></div>
           </div>
 
-          <div className="relative z-10 text-center">
+          <div className="relative z-10 flex flex-col items-center justify-center h-full text-center">
             {/* Logo Section */}
             <div className="mb-6">
               <div className="flex items-center justify-center space-x-2 mb-2">
@@ -93,7 +93,7 @@ export default function DynamicBanner() {
 
             {/* Main Headline */}
             <div className="mb-6">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 drop-shadow-lg">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 drop-shadow-lg">
                 <span className="text-white">WELCOME</span>
                 <span className="text-[#FDCC29]">DAY</span>
               </h2>
@@ -103,7 +103,7 @@ export default function DynamicBanner() {
             </div>
 
             {/* Sub-headline */}
-            <p className="text-white text-base sm:text-lg lg:text-xl mb-8 leading-relaxed">
+            <p className="text-white text-base sm:text-lg lg:text-xl mb-8 leading-relaxed max-w-2xl">
               Collect your First day rewards at Reward Shelf
             </p>
 
@@ -127,9 +127,9 @@ export default function DynamicBanner() {
   const currentBanner = banners[currentIndex];
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <div
-        className="rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xl sm:ml-2 border border-[#FDCC29]/20 overflow-hidden relative min-h-[300px] lg:min-h-[400px] w-[calc(100%+80px)] -mx-9 sm:-mx-11 lg:-mx-12 ring-1 ring-[#FDCC29]/10"
+        className="rounded-3xl p-6 lg:p-8 shadow-xl border border-[#FDCC29]/20 overflow-hidden relative min-h-[280px] lg:min-h-[350px] w-full ring-1 ring-[#FDCC29]/10"
         style={{
           backgroundImage: currentBanner.backgroundImage
             ? `linear-gradient(rgba(6, 31, 89, 0.8), rgba(10, 42, 107, 0.8)), url(${currentBanner.backgroundImage})`
@@ -200,7 +200,7 @@ export default function DynamicBanner() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="relative z-10 text-center"
+            className="relative z-10 flex flex-col items-center justify-center h-full text-center"
           >
             {/* Logo Section */}
             <div className="mb-6">
@@ -219,13 +219,13 @@ export default function DynamicBanner() {
 
             {/* Main Headline */}
             <div className="mb-6">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 drop-shadow-lg">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 drop-shadow-lg">
                 {currentBanner.title}
               </h2>
             </div>
 
             {/* Description */}
-            <p className="text-white text-base sm:text-lg lg:text-xl mb-8 leading-relaxed">
+            <p className="text-white text-base sm:text-lg lg:text-xl mb-8 leading-relaxed max-w-2xl">
               {currentBanner.description}
             </p>
 

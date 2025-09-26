@@ -25,6 +25,10 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DynamicBanner from "@/components/DynamicBanner";
+import HoverInsightPopover from "@/components/HoverInsightPopover";
+import IdeaHoverPopover from "@/components/IdeaHoverPopover";
+import insightsData from "@/data/iconInsights.json";
+import ideaInsightsData from "@/data/ideaHoverInsights.json";
 import TrendTicker from "@/components/TrendTicker";
 import {
   Building2,
@@ -82,6 +86,9 @@ function FeaturedIdeasCarousel({
   hasAccess,
   incrementView,
   onShowPremiumModal,
+  onIdeaHover,
+  onIdeaHoverOut,
+  resolveIdeaInsight,
 }) {
   const [featuredIdeas, setFeaturedIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -168,7 +175,16 @@ function FeaturedIdeasCarousel({
               >
                 <Card className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full">
                   {/* Image Section */}
-                  <div className="relative h-[192px] sm:mt-[-25px]">
+                  <div
+                    className="relative h-[192px] sm:mt-[-25px]"
+                    onMouseEnter={(e) =>
+                      onIdeaHover?.(
+                        idea,
+                        e.currentTarget.getBoundingClientRect()
+                      )
+                    }
+                    onMouseLeave={() => onIdeaHoverOut?.()}
+                  >
                     <img
                       src={`/demo${(index % 7) + 1}.jpeg`}
                       alt={idea.title}
@@ -540,7 +556,18 @@ function StaticIdeas() {
             >
               <Card className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full">
                 {/* Image Section */}
-                <div className="relative h-40 sm:mt-[-25px]">
+                <div
+                  className="relative h-40 sm:mt-[-25px]"
+                  onMouseEnter={(e) =>
+                    setIdeaHover({
+                      insight: resolveIdeaInsight(idea),
+                      rect: e.currentTarget.getBoundingClientRect(),
+                    })
+                  }
+                  onMouseLeave={() =>
+                    setIdeaHover({ insight: null, rect: null })
+                  }
+                >
                   <img
                     src={`/demo${(index % 7) + 1}.jpeg`}
                     alt={idea.title}
@@ -755,7 +782,7 @@ function StaticIdeas() {
 }
 
 // Explore More Ideas Component (includes all ideas)
-function ExploreMoreIdeas() {
+function ExploreMoreIdeas({ onIdeaHover, onIdeaHoverOut, resolveIdeaInsight }) {
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -844,7 +871,13 @@ function ExploreMoreIdeas() {
             >
               <Card className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full">
                 {/* Image Section */}
-                <div className="relative h-40 sm:mt-[-25px]">
+                <div
+                  className="relative h-40 sm:mt-[-25px]"
+                  onMouseEnter={(e) =>
+                    onIdeaHover?.(idea, e.currentTarget.getBoundingClientRect())
+                  }
+                  onMouseLeave={() => onIdeaHoverOut?.()}
+                >
                   <img
                     src={`/demo${(index % 7) + 1}.jpeg`}
                     alt={idea.title}
@@ -1048,7 +1081,11 @@ function ExploreMoreIdeas() {
 }
 
 // User Uploaded Ideas Component (Community Ideas Only)
-function UserUploadedIdeas() {
+function UserUploadedIdeas({
+  onIdeaHover,
+  onIdeaHoverOut,
+  resolveIdeaInsight,
+}) {
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -1129,7 +1166,13 @@ function UserUploadedIdeas() {
             >
               <Card className="bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl overflow-hidden h-full">
                 {/* Image Section */}
-                <div className="relative h-40 sm:mt-[-25px]">
+                <div
+                  className="relative h-40 sm:mt-[-25px]"
+                  onMouseEnter={(e) =>
+                    onIdeaHover?.(idea, e.currentTarget.getBoundingClientRect())
+                  }
+                  onMouseLeave={() => onIdeaHoverOut?.()}
+                >
                   <img
                     src={`/demo${(index % 7) + 1}.jpeg`}
                     alt={idea.title}
@@ -1360,6 +1403,44 @@ export default function Home() {
     }
   };
 
+  // Hover insight popover state for icon cards
+  const [iconHover, setIconHover] = useState({ key: null, rect: null });
+
+  useEffect(() => {
+    const onHover = (e) =>
+      setIconHover({ key: e.detail.key, rect: e.detail.rect });
+    const onOut = () => setIconHover({ key: null, rect: null });
+    window.addEventListener("icon-hover", onHover);
+    window.addEventListener("icon-hover-out", onOut);
+    return () => {
+      window.removeEventListener("icon-hover", onHover);
+      window.removeEventListener("icon-hover-out", onOut);
+    };
+  }, []);
+
+  const currentInsight = useMemo(() => {
+    if (!iconHover.key) return null;
+    const match = insightsData.find((d) => d.key === iconHover.key);
+    return match || null;
+  }, [iconHover.key]);
+
+  // Idea hover insights (featured, explore, community)
+  const [ideaHover, setIdeaHover] = useState({ insight: null, rect: null });
+  const resolveIdeaInsight = (idea) => {
+    const title = (idea?.title || "").toLowerCase();
+    const category = (idea?.category || "").toLowerCase();
+    const text = `${title} ${category}`;
+    const match = ideaInsightsData.find((d) => {
+      try {
+        const re = new RegExp(d.match);
+        return re.test(text);
+      } catch (e) {
+        return false;
+      }
+    });
+    return match || ideaInsightsData[ideaInsightsData.length - 1];
+  };
+
   // Note: Static ideas are now handled by the StaticIdeas component
   // The old filtering logic has been removed since we're fetching from API
 
@@ -1389,6 +1470,17 @@ export default function Home() {
               onClick={() =>
                 (window.location.href = "/categories?filter=Technology")
               }
+              onMouseEnter={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                window.dispatchEvent(
+                  new CustomEvent("icon-hover", {
+                    detail: { key: "Technology", rect },
+                  })
+                );
+              }}
+              onMouseLeave={() =>
+                window.dispatchEvent(new CustomEvent("icon-hover-out"))
+              }
             >
               <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center group-hover:from-[#061F59]/10 group-hover:to-[#061F59]/20 transition-all duration-300">
@@ -1410,6 +1502,17 @@ export default function Home() {
               className="group cursor-pointer"
               onClick={() =>
                 (window.location.href = "/categories?filter=Food & Beverages")
+              }
+              onMouseEnter={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                window.dispatchEvent(
+                  new CustomEvent("icon-hover", {
+                    detail: { key: "Food & Beverages", rect },
+                  })
+                );
+              }}
+              onMouseLeave={() =>
+                window.dispatchEvent(new CustomEvent("icon-hover-out"))
               }
             >
               <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
@@ -1433,6 +1536,17 @@ export default function Home() {
               onClick={() =>
                 (window.location.href = "/categories?filter=Fashion")
               }
+              onMouseEnter={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                window.dispatchEvent(
+                  new CustomEvent("icon-hover", {
+                    detail: { key: "Fashion", rect },
+                  })
+                );
+              }}
+              onMouseLeave={() =>
+                window.dispatchEvent(new CustomEvent("icon-hover-out"))
+              }
             >
               <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg flex items-center justify-center group-hover:from-[#061F59]/10 group-hover:to-[#061F59]/20 transition-all duration-300">
@@ -1454,6 +1568,17 @@ export default function Home() {
               className="group cursor-pointer"
               onClick={() =>
                 (window.location.href = "/categories?filter=Agriculture")
+              }
+              onMouseEnter={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                window.dispatchEvent(
+                  new CustomEvent("icon-hover", {
+                    detail: { key: "Agriculture", rect },
+                  })
+                );
+              }}
+              onMouseLeave={() =>
+                window.dispatchEvent(new CustomEvent("icon-hover-out"))
               }
             >
               <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-3 sm:p-4 text-center border border-gray-100 group-hover:border-[#061F59]/30 h-20 sm:h-24">
@@ -1534,6 +1659,21 @@ export default function Home() {
               </div>
             </motion.div>
           </div>
+
+          {/* Hover insight popover render */}
+          <HoverInsightPopover
+            show={!!currentInsight}
+            anchorRect={iconHover.rect}
+            insight={currentInsight}
+          />
+
+          {/* Idea hover popover render */}
+          <IdeaHoverPopover
+            show={!!ideaHover.insight}
+            anchorRect={ideaHover.rect}
+            insight={ideaHover.insight}
+            idea={ideaHover.idea}
+          />
 
           {/* Search Bar */}
           <div className="relative mb-4">
@@ -1637,6 +1777,17 @@ export default function Home() {
                   hasAccess={hasAccess}
                   incrementView={incrementView}
                   onShowPremiumModal={() => setShowPremiumModal(true)}
+                  onIdeaHover={(idea, rect) =>
+                    setIdeaHover({
+                      insight: resolveIdeaInsight(idea),
+                      rect,
+                      idea,
+                    })
+                  }
+                  onIdeaHoverOut={() =>
+                    setIdeaHover({ insight: null, rect: null })
+                  }
+                  resolveIdeaInsight={resolveIdeaInsight}
                 />
               </div>
 
@@ -1660,7 +1811,19 @@ export default function Home() {
 
               {/* Explore More Ideas Component */}
               <div id="explore-ideas">
-                <ExploreMoreIdeas />
+                <ExploreMoreIdeas
+                  onIdeaHover={(idea, rect) =>
+                    setIdeaHover({
+                      insight: resolveIdeaInsight(idea),
+                      rect,
+                      idea,
+                    })
+                  }
+                  onIdeaHoverOut={() =>
+                    setIdeaHover({ insight: null, rect: null })
+                  }
+                  resolveIdeaInsight={resolveIdeaInsight}
+                />
               </div>
 
               {/* User Uploaded Ideas Section */}
@@ -1675,7 +1838,19 @@ export default function Home() {
                   </p>
                 </div>
 
-                <UserUploadedIdeas />
+                <UserUploadedIdeas
+                  onIdeaHover={(idea, rect) =>
+                    setIdeaHover({
+                      insight: resolveIdeaInsight(idea),
+                      rect,
+                      idea,
+                    })
+                  }
+                  onIdeaHoverOut={() =>
+                    setIdeaHover({ insight: null, rect: null })
+                  }
+                  resolveIdeaInsight={resolveIdeaInsight}
+                />
               </div>
             </div>
 

@@ -1,0 +1,51 @@
+[
+  {
+    "key": "Technology",
+    "spark": [12, 18, 16, 22, 28, 25, 30, 34, 29, 36, 40, 44],
+    "stat": "+18.4% YoY",
+    "label": "AI tools adoption",
+    "note": "Developer tooling and AI copilots accelerating."
+  },
+  {
+    "key": "E-commerce",
+    "spark": [20, 22, 21, 24, 26, 29, 31, 30, 33, 35, 37, 39],
+    "stat": "+12.1% QoQ",
+    "label": "Cross-border growth",
+    "note": "Logistics and BNPL fueling conversions."
+  },
+  {
+    "key": "Healthcare",
+    "spark": [10, 11, 12, 13, 15, 17, 19, 18, 21, 23, 24, 26],
+    "stat": "+9.7% YoY",
+    "label": "Telehealth usage",
+    "note": "Regulatory clarity improving remote care."
+  },
+  {
+    "key": "Finance",
+    "spark": [14, 16, 15, 18, 20, 23, 22, 24, 27, 29, 31, 33],
+    "stat": "+10.3% QoQ",
+    "label": "Fintech infra",
+    "note": "Embedded finance and risk APIs rising."
+  },
+  {
+    "key": "Food & Beverages",
+    "spark": [8, 9, 11, 10, 12, 14, 13, 15, 17, 18, 20, 22],
+    "stat": "+7.2% YoY",
+    "label": "D2C snacking",
+    "note": "Better-for-you categories trending."
+  },
+  {
+    "key": "Fashion",
+    "spark": [9, 10, 9, 11, 13, 12, 14, 16, 15, 17, 19, 21],
+    "stat": "+6.5% YoY",
+    "label": "Athleisure demand",
+    "note": "Sustainable fabrics and D2C brands scale."
+  },
+  {
+    "key": "Agriculture",
+    "spark": [7, 8, 8, 9, 11, 12, 13, 13, 14, 16, 17, 18],
+    "stat": "+5.1% YoY",
+    "label": "AgriTech adoption",
+    "note": "Sensors and marketplaces improving yields."
+  }
+]

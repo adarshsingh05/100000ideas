@@ -1,0 +1,37 @@
+[
+  {
+    "match": "ai|technology|saas|copilot",
+    "title": "Adoption Momentum",
+    "stat": "+22.4% QoQ",
+    "spark": [14, 16, 18, 22, 21, 25, 28, 32, 31, 35, 38, 43],
+    "note": "Developer platforms and AI workflows scaling across SMBs."
+  },
+  {
+    "match": "e-?commerce|marketplace|d2c|retail",
+    "title": "Conversion Lift",
+    "stat": "+11.2% YoY",
+    "spark": [18, 17, 19, 21, 24, 27, 29, 30, 33, 36, 38, 40],
+    "note": "BNPL and cross-border logistics improve checkout efficiency."
+  },
+  {
+    "match": "health|telemed|clinic|care",
+    "title": "Telehealth Uptake",
+    "stat": "+9.9% YoY",
+    "spark": [9, 10, 12, 13, 15, 16, 18, 19, 21, 22, 24, 26],
+    "note": "Remote diagnostics and e-prescriptions see steady gains."
+  },
+  {
+    "match": "fintech|finance|payment|invoice|lending",
+    "title": "Embedded Finance",
+    "stat": "+12.7% QoQ",
+    "spark": [12, 13, 14, 16, 18, 21, 23, 24, 26, 29, 31, 33],
+    "note": "Risk APIs and automated onboarding reduce drop-offs."
+  },
+  {
+    "match": ".*",
+    "title": "Engagement Trend",
+    "stat": "+6.1% YoY",
+    "spark": [8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20],
+    "note": "Steady traction across early-adopter segments."
+  }
+]

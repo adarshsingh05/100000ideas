@@ -1,4 +1,4 @@
-# Vercel Deployment Guide for 1000ideas
+# Vercel Deployment Guide for IdeaForge
 
 ## 🚀 Quick Deployment Steps
 
@@ -48,7 +48,7 @@ vercel env add NODE_ENV
 Go to your project → Settings → Environment Variables and add:
 
 ```
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/1000ideas?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ideaforge?retryWrites=true&w=majority
 JWT_SECRET=your-super-secret-jwt-key-here-make-it-long-and-random
 JWT_EXPIRE=7d
 NODE_ENV=production

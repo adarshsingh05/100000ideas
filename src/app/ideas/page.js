@@ -484,8 +484,8 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
           transition={{ duration: 0.6 }}
           className="text-center mb-6"
         >
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#2D3748] mb-2 tracking-tight">
-            Discover 10000+ Ideas
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-700 mb-2 tracking-tight">
+            Discover 10,000+ Ideas
           </h1>
         </motion.div>
 
@@ -525,7 +525,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                   onClick={() => setShowFilters(!showFilters)}
                   variant="outline"
                   size="sm"
-                  className="border-[#2D3748]/30 text-[#2D3748] hover:bg-[#2D3748]/10 text-xs px-3 py-2"
+                  className="border-slate-300/30 text-slate-700 hover:bg-slate-800/10 text-xs px-3 py-2"
                 >
                   <Filter className="w-3 h-3 mr-1" />
                   Filters
@@ -578,7 +578,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                     onClick={clearFilters}
                     variant="ghost"
                     size="sm"
-                    className="text-gray-500 hover:text-[#2D3748] text-xs px-2 py-1"
+                    className="text-gray-500 hover:text-slate-700 text-xs px-2 py-1"
                   >
                     Clear
                   </Button>
@@ -597,7 +597,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
               >
                 {/* Category Filter */}
                 <div>
-                  <label className="block text-xs font-medium text-[#2D3748] mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Category
                   </label>
                   <select
@@ -616,7 +616,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
 
                 {/* Difficulty Filter */}
                 <div>
-                  <label className="block text-xs font-medium text-[#2D3748] mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Difficulty
                   </label>
                   <select
@@ -635,7 +635,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
 
                 {/* Investment Filter */}
                 <div>
-                  <label className="block text-xs font-medium text-[#2D3748] mb-1">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
                     Investment
                   </label>
                   <select
@@ -664,7 +664,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
           className="mb-4"
         >
           <div className="flex items-center justify-between">
-            <p className="text-[#2D3748] font-medium text-sm">
+            <p className="text-slate-700 font-medium text-sm">
               {filteredAndSortedIdeas.length} ideas found
               {searchQuery && (
                 <span className="text-gray-500 ml-2">
@@ -694,7 +694,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Search className="w-10 h-10 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-[#2D3748] mb-3">
+            <h3 className="text-xl font-semibold text-slate-700 mb-3">
               No ideas found
             </h3>
             <p className="text-gray-500 mb-6 max-w-md mx-auto">
@@ -708,7 +708,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
               selectedInvestment) && (
               <Button
                 onClick={clearFilters}
-                className="bg-[#FDCC29] hover:bg-[#2D3748] text-white hover:text-white"
+                className="bg-emerald-600 hover:bg-slate-800 text-white hover:text-white"
               >
                 Clear Filters
               </Button>
@@ -746,7 +746,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
 
                       {/* Top Left Banner - Price Range */}
                       <div className="absolute top-0 left-0">
-                        <div className="bg-[#FDCC29] text-[#2D3748] px-4 py-4 text-sm font-bold shadow-md rounded-br-xl">
+                        <div className="bg-emerald-600 text-slate-700 px-4 py-4 text-sm font-bold shadow-md rounded-br-xl">
                           {idea.investmentRange ||
                             idea.investment ||
                             "< ₹ 3Lakhs"}
@@ -755,7 +755,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
 
                       {/* Top Right Banner - Discount Corner Ribbon */}
                       <div className="absolute top-0 right-0">
-                        <div className="bg-[#2D3748] text-white p-4 text-sm font-bold shadow-md rounded-bl-xl">
+                        <div className="bg-slate-800 text-white p-4 text-sm font-bold shadow-md rounded-bl-xl">
                           <span
                             style={{
                               transform: "rotate(-45deg)",
@@ -779,7 +779,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-lg font-bold text-[#2D3748] mb-2 leading-tight">
+                      <h3 className="text-lg font-bold text-slate-700 mb-2 leading-tight">
                         {idea.title}
                       </h3>
 
@@ -791,7 +791,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                       {/* Rating */}
                       <div className="flex flex-col space-y-1 mb-2">
                         <div className="flex items-center justify-between w-full">
-                          <div className="text-md font-semibold text-[#2D3748]">
+                          <div className="text-md font-semibold text-slate-700">
                             {(idea.rating || 4.5).toFixed(1)}
                           </div>
 
@@ -815,9 +815,9 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                               return selectedIcons.map((Icon, iconIndex) => (
                                 <div
                                   key={iconIndex}
-                                  className="w-7 h-7 sm:ml-2 sm:mr-1 bg-[#fdcc29] rounded-md flex items-center justify-center hover:bg-[#061F59]/20 transition-colors space-x-1"
+                                  className="w-7 h-7 sm:ml-2 sm:mr-1 bg-[#fdcc29] rounded-md flex items-center justify-center hover:bg-emerald-200 transition-colors space-x-1"
                                 >
-                                  <Icon className="w-4 h-4 text-[#061F59]" />
+                                  <Icon className="w-4 h-4 text-emerald-600" />
                                 </div>
                               ));
                             })()}
@@ -830,10 +830,10 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                               key={star}
                               className={`w-4 h-4 ${
                                 star <= Math.floor(idea.rating || 4.5)
-                                  ? "text-[#FDCC29] fill-current"
+                                  ? "text-emerald-500 fill-current"
                                   : star === Math.ceil(idea.rating || 4.5) &&
                                     (idea.rating || 4.5) % 1 !== 0
-                                  ? "text-[#FDCC29] fill-current opacity-50"
+                                  ? "text-emerald-500 fill-current opacity-50"
                                   : "text-gray-300"
                               }`}
                             />
@@ -846,21 +846,21 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                         <div className="flex items-center space-x-2">
                           {/* Lightbulb with count */}
                           <div className="flex items-center space-x-1 rounded-full px-2 py-2 bg-gray-100">
-                            <Lightbulb className="w-4 h-4 text-[#2D3748]" />
-                            <span className="text-xs font-semibold text-[#2D3748]">
+                            <Lightbulb className="w-4 h-4 text-slate-700" />
+                            <span className="text-xs font-semibold text-slate-700">
                               {Math.floor(Math.random() * 100) + 20}
                             </span>
                           </div>
 
                           {/* Heart */}
                           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-red-50 transition-colors">
-                            <Heart className="w-5 h-5 text-[#2D3748] hover:text-red-500" />
+                            <Heart className="w-5 h-5 text-slate-700 hover:text-red-500" />
                           </div>
 
                           {/* Comment */}
                           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-blue-50 transition-colors">
                             <svg
-                              className="w-5 h-5 text-[#2D3748]"
+                              className="w-5 h-5 text-slate-700"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -877,7 +877,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                           {/* More options */}
                           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
                             <svg
-                              className="w-5 h-5 text-[#2D3748]"
+                              className="w-5 h-5 text-slate-700"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -909,7 +909,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                 size="sm"
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="bg-transparent border-[#2D3748]/30 text-[#2D3748] disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-medium text-xs sm:text-sm"
+                className="bg-transparent border-slate-300/30 text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-medium text-xs sm:text-sm"
               >
                 <span className="hidden sm:inline">Previous</span>
                 <span className="sm:hidden">Prev</span>
@@ -933,8 +933,8 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                         onClick={() => handlePageChange(pageNum)}
                         className={
                           pageNum === currentPage
-                            ? "bg-[#2D3748] hover:bg-[#2D3748]/90 text-white border-[#2D3748] px-2 sm:px-3 py-2 font-light tracking-wide shadow-md text-xs sm:text-sm"
-                            : "bg-transparent border-[#2D3748]/30 text-[#2D3748] px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
+                            ? "bg-slate-800 hover:bg-slate-800/90 text-white border-slate-300 px-2 sm:px-3 py-2 font-light tracking-wide shadow-md text-xs sm:text-sm"
+                            : "bg-transparent border-slate-300/30 text-slate-700 px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
                         }
                       >
                         {pageNum}
@@ -950,7 +950,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                 size="sm"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage >= Math.ceil(totalIdeas / ideasPerPage)}
-                className="bg-transparent border-[#2D3748]/30 text-[#2D3748] disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
+                className="bg-transparent border-slate-300/30 text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed px-2 sm:px-3 py-2 font-light tracking-wide text-xs sm:text-sm"
               >
                 <span className="hidden sm:inline">Next</span>
                 <span className="sm:hidden">Next</span>
@@ -967,7 +967,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
             transition={{ duration: 0.6, delay: 0.6 }}
             className="mt-4 text-center"
           >
-            <p className="text-[#2D3748] text-base font-bold tracking-wide">
+            <p className="text-slate-700 text-base font-bold tracking-wide">
               Showing {(currentPage - 1) * ideasPerPage + 1}-
               {Math.min(currentPage * ideasPerPage, totalIdeas)} of {totalIdeas}{" "}
               ideas
@@ -990,8 +990,8 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
             <div className="bg-gradient-to-r from-[#061F59] to-[#0A2A6B] p-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-[#FDCC29] rounded-lg flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-[#061F59]" />
+                  <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+                    <Bot className="w-5 h-5 text-emerald-600" />
                   </div>
                   <div>
                     <h2 className="text-lg font-semibold text-white">
@@ -1035,7 +1035,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
 
                   {/* Question */}
                   <div className="text-center space-y-4">
-                    <h3 className="text-xl font-semibold text-[#2D3748] leading-tight">
+                    <h3 className="text-xl font-semibold text-slate-700 leading-tight">
                       {aiQuestions[aiStep].question}
                     </h3>
 
@@ -1109,17 +1109,17 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                     <Loader2 className="w-8 h-8 text-white animate-spin" />
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-xl font-semibold text-[#2D3748]">
+                    <h3 className="text-xl font-semibold text-slate-700">
                       Generating Ideas...
                     </h3>
                     <div className="flex items-center justify-center space-x-1">
-                      <div className="w-2 h-2 bg-[#FDCC29] rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-emerald-600 rounded-full animate-bounce"></div>
                       <div
                         className="w-2 h-2 bg-[#061F59] rounded-full animate-bounce"
                         style={{ animationDelay: "0.1s" }}
                       ></div>
                       <div
-                        className="w-2 h-2 bg-[#FDCC29] rounded-full animate-bounce"
+                        className="w-2 h-2 bg-emerald-600 rounded-full animate-bounce"
                         style={{ animationDelay: "0.2s" }}
                       ></div>
                     </div>
@@ -1136,7 +1136,7 @@ Make sure each idea is practical, actionable, and tailored to the provided infor
                     <div className="w-12 h-12 bg-gradient-to-r from-[#FDCC29] to-[#061F59] rounded-full flex items-center justify-center mx-auto mb-4">
                       <Sparkles className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-semibold text-[#2D3748] mb-2">
+                    <h3 className="text-xl font-semibold text-slate-700 mb-2">
                       Your AI-Generated Ideas
                     </h3>
                     <p className="text-gray-600 text-sm max-w-lg mx-auto">

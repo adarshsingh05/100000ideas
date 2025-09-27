@@ -11,17 +11,15 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#2D3748] border-t border-[#FDCC29]/20">
+    <footer className="bg-slate-800 border-t border-[#FDCC29]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <img
-                src="/logos.png"
-                alt="10000Ideas Logo"
-                className="w-8 h-8 sm:w-[200px] sm:h-[40px] object-contain"
-              />
+              <div className="text-white font-extrabold text-2xl tracking-tight">
+                IdeaForge
+              </div>
             </div>
             <p className="text-[#FCFCFC] font-light tracking-wide mb-6 leading-relaxed">
               Follow us on social media
@@ -29,33 +27,33 @@ export default function Footer() {
             <div className="flex space-x-4">
               <a
                 href="#"
-                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-emerald-600/20 hover:bg-emerald-600/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Facebook className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
+                <Facebook className="w-5 h-5 text-emerald-500 group-hover:text-slate-700 transition-colors" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-emerald-600/20 hover:bg-emerald-600/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Twitter className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
+                <Twitter className="w-5 h-5 text-emerald-500 group-hover:text-slate-700 transition-colors" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-emerald-600/20 hover:bg-emerald-600/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Youtube className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
+                <Youtube className="w-5 h-5 text-emerald-500 group-hover:text-slate-700 transition-colors" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-emerald-600/20 hover:bg-emerald-600/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Instagram className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
+                <Instagram className="w-5 h-5 text-emerald-500 group-hover:text-slate-700 transition-colors" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-[#FDCC29]/20 hover:bg-[#FDCC29]/30 rounded-lg flex items-center justify-center transition-colors group"
+                className="w-10 h-10 bg-emerald-600/20 hover:bg-emerald-600/30 rounded-lg flex items-center justify-center transition-colors group"
               >
-                <Linkedin className="w-5 h-5 text-[#FDCC29] group-hover:text-[#2D3748] transition-colors" />
+                <Linkedin className="w-5 h-5 text-emerald-500 group-hover:text-slate-700 transition-colors" />
               </a>
             </div>
           </div>
@@ -69,7 +67,7 @@ export default function Footer() {
               <li>
                 <a
                   href="/categories"
-                  className="text-[#FCFCFC]/70 hover:text-[#FDCC29] transition-colors font-light tracking-wide text-sm"
+                  className="text-[#FCFCFC]/70 hover:text-emerald-500 transition-colors font-light tracking-wide text-sm"
                 >
                   All Categories
                 </a>
@@ -84,7 +82,7 @@ export default function Footer() {
                 <li key={category}>
                   <a
                     href="/categories"
-                    className="text-[#FCFCFC]/70 hover:text-[#FDCC29] transition-colors font-light tracking-wide text-sm"
+                    className="text-[#FCFCFC]/70 hover:text-emerald-500 transition-colors font-light tracking-wide text-sm"
                   >
                     {category}
                   </a>
@@ -110,7 +108,7 @@ export default function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="text-[#FCFCFC]/70 hover:text-[#FDCC29] transition-colors font-light tracking-wide text-sm"
+                    className="text-[#FCFCFC]/70 hover:text-emerald-500 transition-colors font-light tracking-wide text-sm"
                   >
                     {item}
                   </a>
@@ -135,7 +133,7 @@ export default function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="text-[#FCFCFC]/70 hover:text-[#FDCC29] transition-colors font-light tracking-wide text-sm"
+                    className="text-[#FCFCFC]/70 hover:text-emerald-500 transition-colors font-light tracking-wide text-sm"
                   >
                     {item}
                   </a>
@@ -147,12 +145,12 @@ export default function Footer() {
 
         {/* Disclaimer */}
         <div className="mt-12 pt-8 border-t border-[#FDCC29]/20">
-          <div className="bg-[#FDCC29]/10 border border-[#FDCC29]/20 rounded-lg p-6 backdrop-blur-sm">
+          <div className="bg-emerald-600/10 border border-[#FDCC29]/20 rounded-lg p-6 backdrop-blur-sm">
             <h4 className="text-[#FCFCFC] font-light tracking-wide mb-3">
               DISCLAIMER:
             </h4>
             <p className="text-[#FCFCFC]/70 font-light tracking-wide leading-relaxed text-sm">
-              10000Ideas is only an intermediary offering its exchange of
+              IdeaForge is only an intermediary offering its exchange of
               ideas...offers a platform to advertise products of seller for a
               subscriber (please seeked User concerning on its website and is
               not and cannot be a party to or any way be control or any dealing
@@ -164,11 +162,11 @@ export default function Footer() {
               shall and any of them...that when these businesses involve any
               deposits or disqualifications between the subscriber/buyer/owner
               and the seller and any or all of both sellers or/and subscriber/
-              shall swear the such deposits amount involving 10000 ideas or its
+              shall swear the such deposits amount involving IdeaForge or its
               parent companies in any manner any disclosure to disqualifications
               between the subscriber/buyer and the seller and both sellers and
               subscriber document shall swear the such deposits amount involving
-              10000 ideas or its parent companies...
+              IdeaForge or its parent companies...
             </p>
           </div>
         </div>

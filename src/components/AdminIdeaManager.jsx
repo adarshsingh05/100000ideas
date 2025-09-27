@@ -105,7 +105,7 @@ export default function AdminIdeaManager() {
     marketSize: "",
     requiredSkills: [""],
     contactInfo: {
-      email: "admin@1000ideas.com",
+      email: "admin@ideaforge.com",
       phone: "",
     },
     imageUrl: "",
@@ -157,7 +157,7 @@ export default function AdminIdeaManager() {
         ),
         tags: formData.tags.filter((item) => item.trim() !== ""),
         uploadedBy: "admin",
-        uploadedByEmail: "admin@1000ideas.com",
+        uploadedByEmail: "admin@ideaforge.com",
         uploadedByName: "Admin",
         isAdmin: true,
         source: "admin",
@@ -227,7 +227,7 @@ export default function AdminIdeaManager() {
           ? idea.requiredSkills
           : [""],
       contactInfo: {
-        email: idea.contactInfo?.email || "admin@1000ideas.com",
+        email: idea.contactInfo?.email || "admin@ideaforge.com",
         phone: idea.contactInfo?.phone || "",
       },
       imageUrl: idea.imageUrl || "",
@@ -277,7 +277,7 @@ export default function AdminIdeaManager() {
       marketSize: "",
       requiredSkills: [""],
       contactInfo: {
-        email: "admin@1000ideas.com",
+        email: "admin@ideaforge.com",
         phone: "",
       },
       imageUrl: "",
@@ -343,14 +343,14 @@ export default function AdminIdeaManager() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-[#2D3748]">Idea Management</h2>
+          <h2 className="text-2xl font-bold text-slate-700">Idea Management</h2>
           <p className="text-gray-600">
             Manage business ideas for the platform
           </p>
         </div>
         <Button
           onClick={() => setShowForm(true)}
-          className="bg-[#FDCC29] hover:bg-[#FDCC29]/90 text-[#061F59] px-6 py-2"
+          className="bg-emerald-600 hover:bg-emerald-600/90 text-slate-800 px-6 py-2"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add New Idea
@@ -621,7 +621,7 @@ export default function AdminIdeaManager() {
                   variant="outline"
                   size="sm"
                   onClick={() => addArrayItem("keyFeatures")}
-                  className="text-[#FDCC29] border-[#FDCC29] hover:bg-[#FDCC29]/10"
+                  className="text-emerald-500 border-[#FDCC29] hover:bg-emerald-600/10"
                 >
                   <Plus className="w-4 h-4 mr-1" />
                   Add Feature
@@ -722,7 +722,7 @@ export default function AdminIdeaManager() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-[#061F59] hover:bg-[#061F59]/90 text-white"
+                  className="bg-slate-800 hover:bg-slate-800/90 text-white"
                 >
                   <Save className="w-4 h-4 mr-2" />
                   {loading
@@ -742,7 +742,7 @@ export default function AdminIdeaManager() {
 
       {/* Ideas List */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-[#2D3748]">
+        <h3 className="text-lg font-semibold text-slate-700">
           Current Ideas ({ideas.length})
         </h3>
 

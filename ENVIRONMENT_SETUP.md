@@ -7,7 +7,7 @@ You need to set these environment variables in your Vercel dashboard:
 ### 1. Database Configuration
 
 ```
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/1000ideas?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/ideaforge?retryWrites=true&w=majority
 ```
 
 ### 2. JWT Configuration

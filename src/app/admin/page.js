@@ -75,13 +75,13 @@ export default function AdminPage() {
         <Card className="w-full max-w-md bg-white border border-gray-200 shadow-xl">
           <div className="p-8">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-[#FDCC29] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lock className="w-8 h-8 text-[#2D3748]" />
+              <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-8 h-8 text-slate-700" />
               </div>
-              <h1 className="text-2xl font-bold text-[#2D3748] mb-2">
+              <h1 className="text-2xl font-bold text-slate-700 mb-2">
                 Admin Access
               </h1>
-              <p className="text-[#2D3748]/60">
+              <p className="text-slate-700/60">
                 Enter admin password to continue
               </p>
             </div>
@@ -90,7 +90,7 @@ export default function AdminPage() {
               <div>
                 <Label
                   htmlFor="password"
-                  className="text-[#2D3748] font-medium"
+                  className="text-slate-700 font-medium"
                 >
                   Password
                 </Label>
@@ -112,7 +112,7 @@ export default function AdminPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[#FDCC29] hover:bg-[#FDCC29]/90 text-[#2D3748] font-semibold py-2"
+                className="w-full bg-emerald-600 hover:bg-emerald-600/90 text-slate-700 font-semibold py-2"
               >
                 {isLoading ? "Verifying..." : "Access Admin Panel"}
               </Button>
@@ -130,14 +130,14 @@ export default function AdminPage() {
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-[#FDCC29] rounded-full flex items-center justify-center">
-                <Lightbulb className="w-6 h-6 text-[#2D3748]" />
+              <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center">
+                <Lightbulb className="w-6 h-6 text-slate-700" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-[#2D3748]">
+                <h1 className="text-2xl font-bold text-slate-700">
                   Admin Panel
                 </h1>
-                <p className="text-[#2D3748]/60">
+                <p className="text-slate-700/60">
                   Manage ideas and banners for the platform
                 </p>
               </div>
@@ -159,8 +159,8 @@ export default function AdminPage() {
               onClick={() => setActiveTab("ideas")}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
                 activeTab === "ideas"
-                  ? "bg-white text-[#2D3748] shadow-sm"
-                  : "text-gray-600 hover:text-[#2D3748]"
+                  ? "bg-white text-slate-700 shadow-sm"
+                  : "text-gray-600 hover:text-slate-700"
               }`}
             >
               <Lightbulb className="w-4 h-4 inline mr-2" />
@@ -170,8 +170,8 @@ export default function AdminPage() {
               onClick={() => setActiveTab("banners")}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
                 activeTab === "banners"
-                  ? "bg-white text-[#2D3748] shadow-sm"
-                  : "text-gray-600 hover:text-[#2D3748]"
+                  ? "bg-white text-slate-700 shadow-sm"
+                  : "text-gray-600 hover:text-slate-700"
               }`}
             >
               <ImageIcon className="w-4 h-4 inline mr-2" />

@@ -21,7 +21,7 @@ const verifyMigration = async () => {
 
     // Connect to database
     await mongoose.connect(
-      process.env.MONGODB_URI || "mongodb://localhost:27017/1000ideas"
+      process.env.MONGODB_URI || "mongodb://localhost:27017/ideaforge"
     );
     console.log("✅ Connected to MongoDB");
 
@@ -61,4 +61,3 @@ if (require.main === module) {
 }
 
 module.exports = { verifyMigration };
-

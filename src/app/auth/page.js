@@ -175,13 +175,11 @@ export default function AuthPage() {
             {/* Header */}
             <div className="text-center mb-6 sm:mb-8">
               <div className="flex justify-center mb-4">
-                <img
-                  src="/logos.png"
-                  alt="10000Ideas Logo"
-                  className="h-12 sm:h-16 w-auto object-contain"
-                />
+                <div className="text-slate-800 font-extrabold text-2xl sm:text-3xl tracking-tight">
+                  IdeaForge
+                </div>
               </div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-[#2D3748] mb-2">
+              <h2 className="text-xl sm:text-2xl font-semibold text-slate-700 mb-2">
                 {isSignUp ? "Create Your Account" : "Welcome Back"}
               </h2>
               <p className="text-sm sm:text-base text-gray-600">
@@ -197,8 +195,8 @@ export default function AuthPage() {
                 onClick={() => setIsSignUp(false)}
                 className={`flex-1 py-2 px-3 sm:px-4 rounded-md font-medium transition-all duration-300 text-sm sm:text-base ${
                   !isSignUp
-                    ? "bg-[#FDCC29] text-[#2D3748] shadow-sm"
-                    : "text-gray-600 hover:text-[#2D3748]"
+                    ? "bg-emerald-600 text-slate-700 shadow-sm"
+                    : "text-gray-600 hover:text-slate-700"
                 }`}
               >
                 Sign In
@@ -207,8 +205,8 @@ export default function AuthPage() {
                 onClick={() => setIsSignUp(true)}
                 className={`flex-1 py-2 px-3 sm:px-4 rounded-md font-medium transition-all duration-300 text-sm sm:text-base ${
                   isSignUp
-                    ? "bg-[#FDCC29] text-[#2D3748] shadow-sm"
-                    : "text-gray-600 hover:text-[#2D3748]"
+                    ? "bg-emerald-600 text-slate-700 shadow-sm"
+                    : "text-gray-600 hover:text-slate-700"
                 }`}
               >
                 Sign Up
@@ -219,13 +217,13 @@ export default function AuthPage() {
             {isSignUp && (
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-[#2D3748]">
+                  <span className="text-sm font-medium text-slate-700">
                     Step {currentStep} of {totalSteps}
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className="bg-[#FDCC29] h-2 rounded-full transition-all duration-300"
+                    className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${(currentStep / totalSteps) * 100}%` }}
                   ></div>
                 </div>
@@ -577,7 +575,7 @@ export default function AuthPage() {
                       <div className="flex justify-end">
                         <button
                           type="button"
-                          className="text-sm text-[#FDCC29] hover:text-[#2D3748] font-medium"
+                          className="text-sm text-emerald-500 hover:text-slate-700 font-medium"
                         >
                           Forgot Password?
                         </button>
@@ -602,7 +600,7 @@ export default function AuthPage() {
                         type="button"
                         onClick={nextStep}
                         disabled={!isStepValid(currentStep)}
-                        className="flex-1 bg-[#FDCC29] hover:bg-[#2D3748] disabled:bg-gray-400 disabled:cursor-not-allowed text-[#2D3748] hover:text-white py-4 rounded-lg font-medium transition-all duration-300"
+                        className="flex-1 bg-emerald-600 hover:bg-slate-800 disabled:bg-gray-400 disabled:cursor-not-allowed text-slate-700 hover:text-white py-4 rounded-lg font-medium transition-all duration-300"
                       >
                         Next
                       </Button>
@@ -612,7 +610,7 @@ export default function AuthPage() {
                         disabled={
                           loading || (isSignUp && !isStepValid(currentStep))
                         }
-                        className="flex-1 bg-[#FDCC29] hover:bg-[#2D3748] disabled:bg-gray-400 disabled:cursor-not-allowed text-[#2D3748] hover:text-white py-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center"
+                        className="flex-1 bg-emerald-600 hover:bg-slate-800 disabled:bg-gray-400 disabled:cursor-not-allowed text-slate-700 hover:text-white py-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center"
                       >
                         {loading ? (
                           <>
@@ -638,7 +636,7 @@ export default function AuthPage() {
                     <button
                       type="button"
                       onClick={() => setIsSignUp(!isSignUp)}
-                      className="text-[#FDCC29] hover:text-[#2D3748] font-medium"
+                      className="text-emerald-500 hover:text-slate-700 font-medium"
                     >
                       {isSignUp ? "Sign in here" : "Sign up here"}
                     </button>
@@ -650,22 +648,22 @@ export default function AuthPage() {
         </div>
 
         {/* Right Section - Promotional Content */}
-        <div className="flex-1 bg-[#FDCC29] relative overflow-hidden hidden lg:flex">
+        <div className="flex-1 bg-emerald-600 relative overflow-hidden hidden lg:flex">
           {/* Decorative Circles - matching landing page style */}
           <div className="absolute inset-0">
-            <div className="absolute top-4 left-8 w-16 h-16 bg-[#061F59] rounded-full opacity-20"></div>
-            <div className="absolute top-8 left-16 w-8 h-8 bg-[#061F59] rounded-full opacity-30"></div>
-            <div className="absolute bottom-6 left-12 w-12 h-12 bg-[#061F59] rounded-full opacity-25"></div>
-            <div className="absolute top-6 right-12 w-10 h-10 bg-[#061F59] rounded-full opacity-20"></div>
-            <div className="absolute bottom-8 right-8 w-6 h-6 bg-[#061F59] rounded-full opacity-30"></div>
-            <div className="absolute top-1/2 right-16 w-14 h-14 bg-[#061F59] rounded-full opacity-15"></div>
+            <div className="absolute top-4 left-8 w-16 h-16 bg-slate-800 rounded-full opacity-20"></div>
+            <div className="absolute top-8 left-16 w-8 h-8 bg-slate-800 rounded-full opacity-30"></div>
+            <div className="absolute bottom-6 left-12 w-12 h-12 bg-slate-800 rounded-full opacity-25"></div>
+            <div className="absolute top-6 right-12 w-10 h-10 bg-slate-800 rounded-full opacity-20"></div>
+            <div className="absolute bottom-8 right-8 w-6 h-6 bg-slate-800 rounded-full opacity-30"></div>
+            <div className="absolute top-1/2 right-16 w-14 h-14 bg-slate-800 rounded-full opacity-15"></div>
           </div>
 
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative z-10 flex flex-col justify-center h-full p-12 text-[#061F59]"
+            className="relative z-10 flex flex-col justify-center h-full p-12 text-slate-800"
           >
             <div className="max-w-lg">
               <h2
@@ -675,7 +673,7 @@ export default function AuthPage() {
                 Unlock Your Business Potential
               </h2>
               <p
-                className="text-lg text-[#061F59]/80 mb-8 leading-relaxed"
+                className="text-lg text-slate-800/80 mb-8 leading-relaxed"
                 style={{ fontFamily: "Nunito, sans-serif" }}
               >
                 Access comprehensive business plans, market research, and
@@ -685,7 +683,7 @@ export default function AuthPage() {
               {/* Features List */}
               <div className="space-y-4 mb-8">
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-[#061F59] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <img
                       src="/file.svg"
                       alt="Document"
@@ -696,31 +694,31 @@ export default function AuthPage() {
                       }}
                     />
                   </div>
-                  <p className="text-[#061F59]/90">
+                  <p className="text-slate-800/90">
                     Detailed market analysis and growth projections
                   </p>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-[#061F59] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <TrendingUp className="w-4 h-4 text-white" />
                   </div>
-                  <p className="text-[#061F59]/90">
+                  <p className="text-slate-800/90">
                     Investment breakdowns and funding options
                   </p>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-[#061F59] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <img src="/bulb.png" alt="Lightbulb" className="w-4 h-4" />
                   </div>
-                  <p className="text-[#061F59]/90">
+                  <p className="text-slate-800/90">
                     Expert guidance and business plan templates
                   </p>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-[#061F59] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <img src="/globe.svg" alt="Global" className="w-4 h-4" />
                   </div>
-                  <p className="text-[#061F59]/90">
+                  <p className="text-slate-800/90">
                     Government schemes and subsidy information
                   </p>
                 </div>
@@ -730,21 +728,21 @@ export default function AuthPage() {
               <Card className="bg-white/90 border border-[#061F59]/20 shadow-lg">
                 <CardContent className="p-6">
                   <h3
-                    className="text-xl font-semibold text-[#061F59] mb-2"
+                    className="text-xl font-semibold text-slate-800 mb-2"
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
                     Featured Business Ideas
                   </h3>
                   <div className="flex items-baseline space-x-2 mb-2">
                     <span
-                      className="text-3xl font-bold text-[#FDCC29]"
+                      className="text-3xl font-bold text-emerald-500"
                       style={{ fontFamily: "Nunito, sans-serif" }}
                     >
                       10,000+
                     </span>
-                    <span className="text-[#061F59]/70">ideas</span>
+                    <span className="text-slate-800/70">ideas</span>
                   </div>
-                  <p className="text-[#061F59]/80 text-sm">
+                  <p className="text-slate-800/80 text-sm">
                     From traditional bakeries to tech startups, discover
                     opportunities across all industries.
                   </p>

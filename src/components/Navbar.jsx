@@ -52,11 +52,9 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <img
-                src="/pureyellowlogo.png"
-                alt="10000Ideas Logo"
-                className="h-10 w-auto object-contain"
-              />
+              <div className="text-slate-800 font-extrabold text-xl tracking-tight">
+                IdeaForge
+              </div>
             </div>
           </div>
 
@@ -64,19 +62,19 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             <a
               href="/ideas"
-              className="text-[#061F59] hover:text-[#FDCC29] transition-colors font-semibold text-base"
+              className="text-slate-700 hover:text-emerald-600 transition-colors font-semibold text-base"
             >
               Ideas
             </a>
             <a
               href="#"
-              className="text-[#061F59] hover:text-[#FDCC29] transition-colors font-semibold text-base"
+              className="text-slate-700 hover:text-emerald-600 transition-colors font-semibold text-base"
             >
               About
             </a>
             <a
               href="/admin"
-              className="text-[#061F59] hover:text-[#FDCC29] transition-colors font-semibold text-base"
+              className="text-slate-700 hover:text-emerald-600 transition-colors font-semibold text-base"
             >
               Admin Panel
             </a>

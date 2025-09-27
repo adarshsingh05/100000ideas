@@ -1,4 +1,4 @@
-# 10000Ideas - Full Stack Setup Guide
+# IdeaForge - Full Stack Setup Guide
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ PORT=5000
 FRONTEND_URL=http://localhost:3000
 
 # Database - Replace with your actual MongoDB connection string
-MONGODB_URI=mongodb://localhost:27017/10000ideas
+MONGODB_URI=mongodb://localhost:27017/ideaforge
 
 # JWT Configuration - Replace with a strong secret key
 JWT_SECRET=your_super_secret_jwt_key_here_make_it_long_and_random_at_least_32_characters

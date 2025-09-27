@@ -13,9 +13,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "10000Ideas - Discover Business Opportunities",
+  title: "IdeaForge - Professional Business Ideas Platform",
   description:
-    "Find the perfect business opportunity that matches your skills and investment capacity. Browse 10,000+ curated business ideas with detailed insights.",
+    "Discover 10,000+ curated business ideas with AI-powered market analysis. Professional platform for entrepreneurs, investors, and business consultants. Complete with market insights, investment requirements, and growth opportunities.",
+  keywords:
+    "business ideas, entrepreneurship, startup opportunities, market analysis, AI-powered insights, business planning, investment opportunities, professional platform",
+  authors: [{ name: "IdeaForge Team" }],
+  creator: "IdeaForge",
+  publisher: "IdeaForge",
+  robots: "index, follow",
+  openGraph: {
+    title: "IdeaForge - Professional Business Ideas Platform",
+    description:
+      "Discover 10,000+ curated business ideas with AI-powered market analysis",
+    type: "website",
+    locale: "en_US",
+    siteName: "IdeaForge",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "IdeaForge - Professional Business Ideas Platform",
+    description:
+      "Discover 10,000+ curated business ideas with AI-powered market analysis",
+  },
+  viewport: "width=device-width, initial-scale=1",
+  themeColor: "#10b981", // Emerald-500
 };
 
 export default function RootLayout({ children }) {
@@ -24,9 +46,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

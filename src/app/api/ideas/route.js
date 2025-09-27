@@ -110,12 +110,12 @@ export async function POST(request) {
         marketSize: marketSize || "Not specified",
         requiredSkills: requiredSkills || [],
         contactInfo: contactInfo || {
-          email: "admin@1000ideas.com",
+          email: "admin@ideaforge.com",
           phone: "",
         },
         imageUrl: imageUrl || "/bulb.png",
         uploadedBy: new mongoose.Types.ObjectId(), // Create a new ObjectId for admin
-        uploadedByEmail: "admin@1000ideas.com",
+        uploadedByEmail: "admin@ideaforge.com",
         uploadedByName: "Admin",
         tags: tags || [],
         status: "published",

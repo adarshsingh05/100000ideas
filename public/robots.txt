@@ -6,3 +6,4 @@ Sitemap: https://ideaforge.com/sitemap.xml
 # Disallow admin areas
 Disallow: /admin
 Disallow: /api/
+
